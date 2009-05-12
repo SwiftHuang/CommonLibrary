@@ -1,5 +1,0 @@
-E:\Vinson\CommonLibrary\CommonLibrary\bin\Debug\CommonLibrary.dll
-E:\Vinson\CommonLibrary\CommonLibrary\bin\Debug\CommonLibrary.pdb
-E:\Vinson\CommonLibrary\CommonLibrary\obj\Debug\ResolveAssemblyReference.cache
-E:\Vinson\CommonLibrary\CommonLibrary\obj\Debug\CommonLibrary.dll
-E:\Vinson\CommonLibrary\CommonLibrary\obj\Debug\CommonLibrary.pdb
