@@ -7,11 +7,10 @@ using System.Text;
 using System.IO;
 using Microsoft.Win32;
 
-namespace hwj.CommonLibrary
+namespace hwj.CommonLibrary.Object
 {
     public class FileHelper
     {
-
         public static bool RegisterFile(string fileName, bool displayMessage)
         {
             try
@@ -54,6 +53,25 @@ namespace hwj.CommonLibrary
                 string strConn = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\"" + fi.DirectoryName + "\";Extended Properties='text;HDR=NO;FMT=TabDelimited';";
                 OleDbConnection conn = new OleDbConnection(strConn);
                 OleDbDataAdapter oada = new OleDbDataAdapter(string.Format("SELECT * FROM [{0}]", fi.Name), conn);
+                DataSet ds = new DataSet();
+                oada.Fill(ds);
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static DataSet ExcelToDataSet(string path, string selectCommand, bool hasHeader)
+        {
+            try
+            {
+                string strConn = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties='Excel 8.0;HDR={1};IMEX=1'",
+                            path,
+                            hasHeader ? "YES" : "NO");
+                string select = string.IsNullOrEmpty(selectCommand) ? "select * from [Sheet1$]" : selectCommand;
+                OleDbConnection conn = new OleDbConnection(strConn);
+                OleDbDataAdapter oada = new OleDbDataAdapter(select, strConn);
                 DataSet ds = new DataSet();
                 oada.Fill(ds);
                 return ds;
