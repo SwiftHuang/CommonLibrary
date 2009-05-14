@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace hwj.CommonLibrary
+namespace hwj.CommonLibrary.Object
 {
     public class NumberHelper
     {
