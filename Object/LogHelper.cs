@@ -76,7 +76,7 @@ namespace hwj.CommonLibrary.Object
             if (LogError.IsErrorEnabled)
             {
                 LogError.Error(log, ex);
-                Email(EmailSubject + " <Error Info>", log, ex);
+                Email(EmailSubject + " <Error>", log, ex);
             }
         }
 
@@ -100,7 +100,7 @@ namespace hwj.CommonLibrary.Object
                     LogWarn.Warn(log);
                 else
                     LogWarn.Warn(log, ex);
-                Email(EmailSubject + " <Warn Info>", log, ex);
+                Email(EmailSubject + " <Warn>", log, ex);
             }
         }
 
