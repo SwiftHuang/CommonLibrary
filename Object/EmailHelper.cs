@@ -8,7 +8,7 @@ namespace hwj.CommonLibrary.Object
 {
     public class EmailHelper
     {
-        public static bool Send(string SmtpServer, string EmailFrom, string EmailFromPassword, string EmailTo, string Subject, string Body)
+        public static bool Send(string SmtpServer, string EmailFrom, string EmailFromPassword, string EmailTo, string Subject, string Body, bool isBodyHtml)
         {
             System.Net.Mail.SmtpClient client = new SmtpClient(SmtpServer);
             client.UseDefaultCredentials = false;
@@ -18,7 +18,7 @@ namespace hwj.CommonLibrary.Object
 
             System.Net.Mail.MailMessage message = new MailMessage(EmailFrom, EmailTo, Subject, Body);
             message.BodyEncoding = System.Text.Encoding.UTF8;
-            message.IsBodyHtml = true;
+            message.IsBodyHtml = isBodyHtml;
             client.Send(message);
             return true;
         }

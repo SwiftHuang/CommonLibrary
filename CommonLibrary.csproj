@@ -54,11 +54,22 @@
   <ItemGroup>
     <Compile Include="Object\EmailHelper.cs" />
     <Compile Include="Object\FileHelper.cs" />
-    <Compile Include="Base\BaseLogHelper.cs" />
+    <Compile Include="Object\Base\BaseLogHelper.cs" />
     <Compile Include="Object\LogHelper.cs" />
     <Compile Include="Object\NumberHelper.cs" />
+    <Compile Include="WebSite\ErrorInfo.cs" />
     <Compile Include="Object\StringHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebSite\Base\BaseEntity.cs" />
+    <Compile Include="WebSite\Base\BaseMaster.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebSite\Base\BasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebSite\Base\BasePrintControl.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="WebSite\JSHelper.cs" />
     <Compile Include="WebSite\LogHelper.cs" />
     <Compile Include="WebSite\WebLogInfo.cs" />
