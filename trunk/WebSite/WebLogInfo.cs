@@ -9,15 +9,15 @@ namespace hwj.CommonLibrary.WebSite
     public class WebLogInfo
     {
         #region Property
-        private const string _LogTimeFmt = "DateTime: {0}<br>";
-        private const string _LogServerFmt = "Machine Name: {0}<br>";
-        private const string _LogRequestFmt = "User Agent</span>: {0}<br>" +
-                                              "User Host</span>: {1}<br>" +
-                                              "Url Referrer</span>: {2}<br>" +
-                                              "Page Url</span>: {3}<br>" +
-                                              "Page Path</span>: {4}<br>" +
-                                              "RequestType</span>: {5}<br>" +
-                                              "Params</span>: {6}<br>";
+        private const string _LogTimeFmt = "DateTime: {0}\r\n";
+        private const string _LogServerFmt = "Machine Name: {0}\r\n";
+        private const string _LogRequestFmt = "User Agent: {0}\r\n" +
+                                              "User Host: {1}\r\n" +
+                                              "Url Referrer: {2}\r\n" +
+                                              "Page Url: {3}\r\n" +
+                                              "Page Path: {4}\r\n" +
+                                              "RequestType: {5}\r\n" +
+                                              "Params: {6}";
         public string UserAgent { get; set; }
         public string PhysicalPath { get; set; }
         public string Url { get; set; }
@@ -32,6 +32,7 @@ namespace hwj.CommonLibrary.WebSite
         public WebLogInfo()
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine("---------------------------------------------------------------------");
             sb.AppendFormat(_LogTimeFmt, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
             if (HttpContext.Current != null)
