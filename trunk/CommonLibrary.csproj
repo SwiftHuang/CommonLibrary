@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Object\DateHelper.cs" />
     <Compile Include="Object\EmailHelper.cs" />
     <Compile Include="Object\FileHelper.cs" />
     <Compile Include="Object\Base\BaseLogHelper.cs" />
