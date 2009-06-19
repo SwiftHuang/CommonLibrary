@@ -31,6 +31,14 @@ namespace hwj.CommonLibrary.WebSite
 
         public WebLogInfo()
         {
+            Initialization(null);
+        }
+        public WebLogInfo(HttpRequest request)
+        {
+            Initialization(request);
+        }
+        public void Initialization(HttpRequest rq)
+        {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("---------------------------------------------------------------------");
             sb.AppendFormat(_LogTimeFmt, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
@@ -43,32 +51,36 @@ namespace hwj.CommonLibrary.WebSite
                     ServerMachineName = sr.MachineName;
                     sb.AppendFormat(_LogServerFmt, ServerMachineName);
                 }
-                if (HttpContext.Current.Request != null)
-                {
-                    HttpRequest rq = HttpContext.Current.Request;
-                    UserAgent = rq.UserAgent;
-                    PhysicalPath = rq.PhysicalPath;
-                    UrlReferrer = rq.UrlReferrer == null ? "" : rq.UrlReferrer.ToString();
-                    UserHostAddress = rq.UserHostAddress;
-                    RequestType = rq.RequestType;
-                    Url = rq.Url == null ? "" : rq.Url.ToString().Split('?')[0];
-                    if (RequestType == "POST")
-                        Params = rq.Form == null ? "" : rq.Form.ToString();
-                    else
-                        Params = rq.QueryString == null ? "" : rq.QueryString.ToString();
-
-                    sb.AppendFormat(_LogRequestFmt,
-                                        UserAgent,
-                                        UserHostAddress,
-                                        UrlReferrer,
-                                        Url,
-                                        PhysicalPath,
-                                        RequestType,
-                                        Params);
-                }
-
             }
+
+            if (rq != null)
+                SetRequest(rq);
+            else if (HttpContext.Current != null && HttpContext.Current.Request != null)
+                SetRequest(HttpContext.Current.Request);
+
+            sb.AppendFormat(_LogRequestFmt,
+                UserAgent,
+                UserHostAddress,
+                UrlReferrer,
+                Url,
+                PhysicalPath,
+                RequestType,
+                Params);
+
             HTML = sb.ToString();
+        }
+        private void SetRequest(HttpRequest rq)
+        {
+            UserAgent = rq.UserAgent;
+            PhysicalPath = rq.PhysicalPath;
+            UrlReferrer = rq.UrlReferrer == null ? "" : rq.UrlReferrer.ToString();
+            UserHostAddress = rq.UserHostAddress;
+            RequestType = rq.RequestType;
+            Url = rq.Url == null ? "" : rq.Url.ToString().Split('?')[0];
+            if (RequestType == "POST")
+                Params = rq.Form == null ? "" : rq.Form.ToString();
+            else
+                Params = rq.QueryString == null ? "" : rq.QueryString.ToString();
         }
     }
 }

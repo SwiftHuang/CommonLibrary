@@ -49,19 +49,19 @@ namespace hwj.CommonLibrary.Object.Base
             EmailBodyFormat = "{0}\r\n{1}\r\n{2}";
         }
 
-        public void Info(string log)
+        public void Info(string log, bool sendEmail)
         {
-            InfoAction(log, null, null);
+            InfoAction(log, null, null, sendEmail);
         }
-        public void Info(string log, string EmailSubject)
+        public void Info(string log, string EmailSubject, bool sendEmail)
         {
-            InfoAction(log, null, EmailSubject);
+            InfoAction(log, null, EmailSubject, sendEmail);
         }
-        public void Info(string log, Exception ex)
+        public void Info(string log, Exception ex, bool sendEmail)
         {
-            InfoAction(log, ex, null);
+            InfoAction(log, ex, null, sendEmail);
         }
-        public void InfoAction(string log, Exception ex, string EmailSubject)
+        public void InfoAction(string log, Exception ex, string EmailSubject, bool sendEmail)
         {
             if (LogInfo.IsInfoEnabled)
             {
@@ -69,7 +69,9 @@ namespace hwj.CommonLibrary.Object.Base
                     LogInfo.Info(log);
                 else
                     LogInfo.Info(log, ex);
-                Email(EmailSubject + " <Info>", log, ex);
+
+                if (sendEmail)
+                    Email(EmailSubject + " <Info>", log, ex);
             }
         }
 

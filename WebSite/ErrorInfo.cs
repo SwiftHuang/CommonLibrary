@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace hwj.CommonLibrary.WebSite
 {
@@ -17,6 +18,7 @@ namespace hwj.CommonLibrary.WebSite
         public ErrorTypes ErrorType { get; set; }
         public Exception Exceptions { get; set; }
         public string RedirectUrl { get; set; }
+        public HttpRequest ErrorRequest { get; set; }
 
         #endregion
         public ErrorInfo()
