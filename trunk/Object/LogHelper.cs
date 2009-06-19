@@ -11,9 +11,9 @@ namespace hwj.CommonLibrary.Object
         {
             base.Initialization(null);
         }
-        public void Info(string log, Exception ex, string EmailSubject)
+        public void Info(string log, Exception ex, string EmailSubject, bool sendEmail)
         {
-            base.InfoAction(log, ex, EmailSubject);
+            base.InfoAction(log, ex, EmailSubject, sendEmail);
         }
         public void Warn(string log, Exception ex, string EmailSubject)
         {

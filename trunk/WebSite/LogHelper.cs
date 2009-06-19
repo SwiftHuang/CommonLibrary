@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 
 namespace hwj.CommonLibrary.WebSite
 {
@@ -11,29 +12,28 @@ namespace hwj.CommonLibrary.WebSite
         {
             base.Initialization(fileName);
         }
-        private string GetWebInfo(string log)
+        private string GetWebInfo(string log, HttpRequest request)
         {
-            WebLogInfo w = new WebLogInfo();
+            WebLogInfo w = new WebLogInfo(request);
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine();
             sb.Append(w.HTML);
             sb.AppendLine();
             sb.Append(log);
             return sb.ToString();
         }
-        public void Info(string log, Exception ex, string EmailSubject)
+        public void Info(string log, Exception ex, string EmailSubject, HttpRequest request, bool sendEmail)
         {
-            base.InfoAction(GetWebInfo(log), ex, EmailSubject);
+            base.InfoAction(GetWebInfo(log, request), ex, EmailSubject, sendEmail);
         }
 
-        public void Error(string log, Exception ex, string EmailSubject)
+        public void Error(string log, Exception ex, string EmailSubject, HttpRequest request)
         {
-            base.ErrorAction(GetWebInfo(log), ex, EmailSubject);
+            base.ErrorAction(GetWebInfo(log, request), ex, EmailSubject);
         }
 
-        public void Warn(string log, Exception ex, string EmailSubject)
+        public void Warn(string log, Exception ex, string EmailSubject, HttpRequest request)
         {
-            base.WarnAction(GetWebInfo(log), ex, EmailSubject);
+            base.WarnAction(GetWebInfo(log, request), ex, EmailSubject);
         }
     }
 }

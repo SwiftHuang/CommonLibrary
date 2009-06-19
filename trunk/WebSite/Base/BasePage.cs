@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Globalization;
-using System.Web.UI;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Web;
+using System.Web.UI;
 using hwj.CommonLibrary.WebSite;
 
 namespace hwj.CommonLibrary.WebSite.Base
@@ -101,16 +102,18 @@ namespace hwj.CommonLibrary.WebSite.Base
         {
             if (EnabledLoginCheck)
             {
-                ErrorInfo err = new ErrorInfo();
-                err.RedirectUrl = RedirectLoginUrl;
                 if (InvalidProfiles)
                 {
+                    ErrorInfo err = new ErrorInfo();
+                    err.RedirectUrl = RedirectLoginUrl;
                     err.ErrorType = ErrorInfo.ErrorTypes.Login;
                     err.SetSession();
                     Response.Redirect(RedirectErrorUrl);
                 }
                 if (!InvalidProfiles && InvalidPermissions)
                 {
+                    ErrorInfo err = new ErrorInfo();
+                    err.RedirectUrl = RedirectLoginUrl;
                     err.ErrorType = ErrorInfo.ErrorTypes.Unauthorized;
                     err.SetSession();
                     Response.Redirect(RedirectErrorUrl);
@@ -132,6 +135,9 @@ namespace hwj.CommonLibrary.WebSite.Base
                 {
                     err.ErrorType = ErrorInfo.ErrorTypes.Exception;
                 }
+
+                if (HttpContext.Current != null && HttpContext.Current.Request != null)
+                    err.ErrorRequest = HttpContext.Current.Request;
                 err.RedirectUrl = RedirectLoginUrl;
                 err.Exceptions = objErr;
                 err.SetSession();
