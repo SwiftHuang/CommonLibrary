@@ -81,5 +81,27 @@ namespace hwj.CommonLibrary.Object
                 throw ex;
             }
         }
+        public static List<string> ReadFileList(string fileName)
+        {
+            using (StreamReader sr = new StreamReader(fileName))
+            {
+                List<string> lines = new List<string>();
+                String line;
+                // Read and display lines from the file until the end of 
+                // the file is reached.
+                while ((line = sr.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+                return lines;
+            }
+        }
+        public static string ReadFile(string fileName)
+        {
+            using (StreamReader sr = new StreamReader(fileName))
+            {
+                return sr.ReadToEnd();
+            }
+        }
     }
 }

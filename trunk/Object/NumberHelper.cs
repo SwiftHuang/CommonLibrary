@@ -22,14 +22,20 @@ namespace hwj.CommonLibrary.Object
 
         public static bool IsNumeric(string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return false;
             return Regex.IsMatch(value, @"^[+-]?\d*[.]?\d*$");
         }
         public static bool IsInt(string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return false;
             return Regex.IsMatch(value, @"^[+-]?\d*$");
         }
         public static bool IsUnsign(string value)
         {
+            if (string.IsNullOrEmpty(value))
+                return false;
             return Regex.IsMatch(value, @"^\d*[.]?\d*$");
         }
     }
