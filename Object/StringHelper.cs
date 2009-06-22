@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace hwj.CommonLibrary.Object
 {
@@ -374,5 +374,28 @@ namespace hwj.CommonLibrary.Object
 
 
         #endregion
+
+        /// <summary>
+        /// 是否字母和数字
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsLetterOrNumeric(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return false;
+            return Regex.IsMatch(value, @"^[A-Za-z0-9]+$");
+        }
+        /// <summary>
+        /// 是否不含任何符号的数字
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static bool IsNumeric(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return false;
+            return Regex.IsMatch(value, @"^[0-9]+$");
+        }
     }
 }
