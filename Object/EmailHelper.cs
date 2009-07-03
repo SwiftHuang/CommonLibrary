@@ -22,5 +22,16 @@ namespace hwj.CommonLibrary.Object
             client.Send(message);
             return true;
         }
+        public static bool isValidEmail(string xEmailAddress)
+        {
+            bool myIsEmail = false;
+            string myRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+            System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex(myRegex);
+            if (reg.IsMatch(xEmailAddress))
+            {
+                myIsEmail = true;
+            }
+            return myIsEmail;
+        }
     }
 }
