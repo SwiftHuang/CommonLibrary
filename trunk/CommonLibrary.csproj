@@ -38,6 +38,7 @@
       <HintPath>..\HPMIS\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -55,12 +56,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Object\ConfigHelper.cs" />
     <Compile Include="Object\DateHelper.cs" />
     <Compile Include="Object\EmailHelper.cs" />
     <Compile Include="Object\FileHelper.cs" />
     <Compile Include="Object\Base\BaseLogHelper.cs" />
     <Compile Include="Object\LogHelper.cs" />
     <Compile Include="Object\NumberHelper.cs" />
+    <Compile Include="Object\SerializationHelper.cs" />
     <Compile Include="WebSite\ErrorInfo.cs" />
     <Compile Include="Object\StringHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
