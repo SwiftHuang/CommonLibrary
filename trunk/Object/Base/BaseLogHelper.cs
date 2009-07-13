@@ -17,7 +17,7 @@ namespace hwj.CommonLibrary.Object.Base
         public string EmailTo { get; set; }
         public string EmailFrom { get; set; }
         public string EmailPassword { get; set; }
-        public string EmailBodyFormat { get; set; }
+        internal string EmailBodyFormat { get; set; }
         public bool EmailOpened { get; set; }
         public string EmailSMTPServer { get; set; }
         #endregion
