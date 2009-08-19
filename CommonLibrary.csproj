@@ -34,7 +34,7 @@
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\log4net\log4net.dll</HintPath>
+      <HintPath>..\..\HPMIS\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -61,6 +61,7 @@
     <Compile Include="Object\FileHelper.cs" />
     <Compile Include="Object\Base\BaseLogHelper.cs" />
     <Compile Include="Object\LogHelper.cs" />
+    <Compile Include="Object\NetHelper.cs" />
     <Compile Include="Object\NumberHelper.cs" />
     <Compile Include="Object\SecurityHelper.cs" />
     <Compile Include="Object\SerializationHelper.cs" />
