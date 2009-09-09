@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Function\DecimalToChinese.cs" />
     <Compile Include="Object\ConfigHelper.cs" />
     <Compile Include="Object\DateHelper.cs" />
     <Compile Include="Object\EmailHelper.cs" />

@@ -128,5 +128,15 @@ namespace hwj.CommonLibrary.Object
             return ((value % 2) == 1);
         }
 
+        private static Function.DecimalToChinese dtc = new hwj.CommonLibrary.Function.DecimalToChinese();
+        /// <summary>
+        /// 将阿拉伯数字转为大写中文数字
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetChinese(decimal value)
+        {
+            return dtc.ConvertToChinese(Math.Round(value, 2), false);
+        }
     }
 }
