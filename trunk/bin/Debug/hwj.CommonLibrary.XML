@@ -4,6 +4,18 @@
         <name>hwj.CommonLibrary</name>
     </assembly>
     <members>
+        <member name="M:hwj.CommonLibrary.Object.NetHelper.GetHostName">
+            <summary>
+            获取本机名称
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.NetHelper.GetHostIPAddress">
+            <summary>
+            获取本机IP地址(多个)
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:hwj.CommonLibrary.WebSite.JSHelper">
             <summary>
             JavaScript Helper
@@ -25,94 +37,88 @@
             <param name="sKey"></param> 
             <returns></returns> 
         </member>
-        <member name="T:hwj.CommonLibrary.WebSite.WebCache">
+        <member name="F:hwj.CommonLibrary.Function.DecimalToChinese.EndOfInt">
             <summary>
-            设置Cache操作类
+            整(当没有 角分 时)
             </summary>
         </member>
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Clear">
+        <member name="F:hwj.CommonLibrary.Function.DecimalToChinese.NumLevelExponent">
             <summary>
-            清除所有缓存
+            数位的指数
             </summary>
         </member>
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.GetCache(System.String)">
+        <member name="F:hwj.CommonLibrary.Function.DecimalToChinese.NumLeverChineseSign">
             <summary>
-            得到缓存实例
+            数位的中文字符
             </summary>
-            <param name="key">缓存实例名称</param>
-            <returns>返回缓存实例</returns>
         </member>
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object)">
+        <member name="F:hwj.CommonLibrary.Function.DecimalToChinese.NumChineseCharacter">
             <summary>
-            缓存实例插入(默认缓存20分钟)
+            大写字符
             </summary>
-            <param name="key">缓存实例名称</param>
-            <param name="obj">要缓存的对象</param>
         </member>
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.Int32)">
+        <member name="M:hwj.CommonLibrary.Function.DecimalToChinese.IsValidated``1(``0)">
             <summary>
-            缓存实例插入
+            正则表达验证数字是否合法
             </summary>
-            <param name="key">缓存实例名称</param>
-            <param name="obj">要缓存的对象</param>
-            <param name="seconds">缓存的时间</param>
+            <param name="Num"></param>
+            <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.Web.Caching.CacheDependency)">
+        <member name="M:hwj.CommonLibrary.Function.DecimalToChinese.GetNumLevel(System.Double)">
             <summary>
-            缓存实例插入(缓存过期时间是一天)
+            获取数字的数位　使用log
             </summary>
-            <param name="key">缓存实例名称</param>
-            <param name="obj">要缓存的对象</param>
-            <param name="dep">缓存的依赖项</param>
+            <param name="Num"></param>
+            <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.String)">
+        <member name="M:hwj.CommonLibrary.Function.DecimalToChinese.IsDumpLevel(System.Double)">
             <summary>
-            缓存实例插入(缓存过期时间是一天)
+            是否跳位
             </summary>
-            <param name="key">缓存实例名称</param>
-            <param name="obj">要缓存的对象</param>
-            <param name="xmlPath">缓存的依赖项xml文件的路径（绝对路径）</param>
+            <returns></returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.Int32,System.Web.Caching.CacheItemPriority)" -->
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.Web.Caching.CacheDependency,System.Int32)">
+        <member name="M:hwj.CommonLibrary.Function.DecimalToChinese.IsBigThanTillion(System.String)">
             <summary>
-            缓存实例插入
+            是否大于兆，如果大于就把字符串分为两部分，
+            一部分是兆以前的数字
+            另一部分是兆以后的数字
             </summary>
-            <param name="key">用于引用该对象的缓存键</param>
-            <param name="obj">要插入缓存中的对象</param>
-            <param name="dep">该项的文件依赖项或缓存键依赖项。当任何依赖项更改时，该对象即无效，并从缓存中移除。如果没有依赖项，则此参数包含空引用（Visual Basic 中为 Nothing）</param>
-            <param name="seconds">所插入对象将过期并被从缓存中移除的时间。</param>
+            <param name="Num"></param>
+            <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.String,System.Int32)">
+        <member name="M:hwj.CommonLibrary.Function.DecimalToChinese.SplitNum(System.String)">
             <summary>
-            缓存实例插入
+            把数字字符串由‘兆’分开两个
             </summary>
-            <param name="key">用于引用该对象的缓存键</param>
-            <param name="obj">要插入缓存中的对象</param>
-            <param name="xmlPath">缓存的依赖项xml文件的路径（绝对路径）</param>
-            <param name="seconds">所插入对象将过期并被从缓存中移除的时间。</param>
+            <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.Web.Caching.CacheDependency,System.Int32,System.Web.Caching.CacheItemPriority)">
+        <member name="M:hwj.CommonLibrary.Function.DecimalToChinese.ContactNumChinese(System.Double[])">
             <summary>
-            缓存实例插入
+            合并分开的数组中文货币字符
             </summary>
-            <param name="key">用于引用该对象的缓存键</param>
-            <param name="obj">要插入缓存中的对象</param>
-            <param name="dep">该项的文件依赖项或缓存键依赖项。当任何依赖项更改时，该对象即无效，并从缓存中移除。如果没有依赖项，则此参数包含空引用（Visual Basic 中为 Nothing）。</param>
-            <param name="seconds">所插入对象将过期并被从缓存中移除的时间。</param>
-            <param name="priority">该对象相对于缓存中存储的其他项的成本，由 CacheItemPriority 枚举表示。该值由缓存在退出对象时使用；具有较低成本的对象在具有较高成本的对象之前被从缓存移除。 </param>
+            <param name="tillionNums"></param>
+            <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Remove(System.String)">
+        <member name="M:hwj.CommonLibrary.Function.DecimalToChinese.CalculateChineseSign(System.Double,System.Nullable{hwj.CommonLibrary.Function.DecimalToChinese.NumLevel},System.Boolean,System.Boolean)">
             <summary>
-            移出单个缓存
+            计算中文字符串
             </summary>
-            <param name="key">缓存实例名称</param>
+            <param name="Num">数字</param>
+            <param name="NL">数位级别 比如1000万的 数位级别为万</param>
+            <param name="IsExceptTen">是否以‘壹拾’开头</param>
+            <returns>中文大写</returns>
         </member>
-        <member name="M:hwj.CommonLibrary.WebSite.WebCache.GetAllCacheKey">
+        <member name="M:hwj.CommonLibrary.Function.DecimalToChinese.ConvertToChinese(System.Decimal,System.Boolean)">
             <summary>
-            得到所有使用的Cache键值
+            外部调用的转换方法
             </summary>
-            <returns>返回所有的Cache键值</returns>
+            <param name="Num"></param>
+            <returns></returns>
+        </member>
+        <member name="T:hwj.CommonLibrary.Function.DecimalToChinese.NumLevel">
+            <summary>
+            数位
+            </summary>
         </member>
         <member name="F:hwj.CommonLibrary.Object.StringHelper.strChineseCharList">
             <summary> 
@@ -139,51 +145,6 @@
             </summary>
             <param name="value"></param>
             <returns></returns>
-        </member>
-        <member name="T:hwj.CommonLibrary.WebSite.Base.BasePage">
-            <summary>
-            所有页面的基类
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.InvalidPermissions">
-            <summary>
-            无效的权限
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.InvalidProfiles">
-            <summary>
-            无效的用户信息
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.UserCode">
-            <summary>
-            登录用户编号
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.EnabledLoginCheck">
-            <summary>
-            开启检查登录信息
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.EnabledErrorHandle">
-            <summary>
-            开启错误处理
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.RedirectLoginUrl">
-            <summary>
-            设置登录页面
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.RedirectErrorUrl">
-            <summary>
-            设置错误页面
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.PageNumber">
-            <summary>
-            分页页码
-            </summary>
         </member>
         <member name="M:hwj.CommonLibrary.Object.NumberHelper.IsNumeric(System.String)">
             <summary>
@@ -254,6 +215,156 @@
             </summary>
             <param name="value"></param>
             <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.NumberHelper.GetChinese(System.Decimal)">
+            <summary>
+            将阿拉伯数字转为大写中文数字
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.NumberHelper.GetBreakSeqNum(System.Collections.Generic.List{System.Int32},System.Int32,System.Int32)">
+            <summary>
+            计算断号
+            </summary>
+            <param name="CurrentSeqList">当前的序号列表</param>
+            <param name="MinSeqNum">最小序号</param>
+            <param name="MaxSeqNum">最大序号</param>
+            <returns></returns>
+        </member>
+        <member name="T:hwj.CommonLibrary.WebSite.Base.BasePage">
+            <summary>
+            所有页面的基类
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.InvalidPermissions">
+            <summary>
+            无效的权限
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.InvalidProfiles">
+            <summary>
+            无效的用户信息
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.UserCode">
+            <summary>
+            登录用户编号
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.EnabledLoginCheck">
+            <summary>
+            开启检查登录信息
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.EnabledErrorHandle">
+            <summary>
+            开启错误处理
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.RedirectLoginUrl">
+            <summary>
+            设置登录页面
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.RedirectErrorUrl">
+            <summary>
+            设置错误页面
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.WebSite.Base.BasePage.PageNumber">
+            <summary>
+            分页页码
+            </summary>
+        </member>
+        <member name="T:hwj.CommonLibrary.WebSite.WebCache">
+            <summary>
+            设置Cache操作类
+            </summary>
+        </member>
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Clear">
+            <summary>
+            清除所有缓存
+            </summary>
+        </member>
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.GetCache(System.String)">
+            <summary>
+            得到缓存实例
+            </summary>
+            <param name="key">缓存实例名称</param>
+            <returns>返回缓存实例</returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object)">
+            <summary>
+            缓存实例插入(默认缓存20分钟)
+            </summary>
+            <param name="key">缓存实例名称</param>
+            <param name="obj">要缓存的对象</param>
+        </member>
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.Int32)">
+            <summary>
+            缓存实例插入
+            </summary>
+            <param name="key">缓存实例名称</param>
+            <param name="obj">要缓存的对象</param>
+            <param name="seconds">缓存的时间</param>
+        </member>
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.Web.Caching.CacheDependency)">
+            <summary>
+            缓存实例插入(缓存过期时间是一天)
+            </summary>
+            <param name="key">缓存实例名称</param>
+            <param name="obj">要缓存的对象</param>
+            <param name="dep">缓存的依赖项</param>
+        </member>
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.String)">
+            <summary>
+            缓存实例插入(缓存过期时间是一天)
+            </summary>
+            <param name="key">缓存实例名称</param>
+            <param name="obj">要缓存的对象</param>
+            <param name="xmlPath">缓存的依赖项xml文件的路径（绝对路径）</param>
+        </member>
+        <!-- 对于成员“M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.Int32,System.Web.Caching.CacheItemPriority)”忽略有格式错误的 XML 注释 -->
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.Web.Caching.CacheDependency,System.Int32)">
+            <summary>
+            缓存实例插入
+            </summary>
+            <param name="key">用于引用该对象的缓存键</param>
+            <param name="obj">要插入缓存中的对象</param>
+            <param name="dep">该项的文件依赖项或缓存键依赖项。当任何依赖项更改时，该对象即无效，并从缓存中移除。如果没有依赖项，则此参数包含空引用（Visual Basic 中为 Nothing）</param>
+            <param name="seconds">所插入对象将过期并被从缓存中移除的时间。</param>
+        </member>
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.String,System.Int32)">
+            <summary>
+            缓存实例插入
+            </summary>
+            <param name="key">用于引用该对象的缓存键</param>
+            <param name="obj">要插入缓存中的对象</param>
+            <param name="xmlPath">缓存的依赖项xml文件的路径（绝对路径）</param>
+            <param name="seconds">所插入对象将过期并被从缓存中移除的时间。</param>
+        </member>
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Insert(System.String,System.Object,System.Web.Caching.CacheDependency,System.Int32,System.Web.Caching.CacheItemPriority)">
+            <summary>
+            缓存实例插入
+            </summary>
+            <param name="key">用于引用该对象的缓存键</param>
+            <param name="obj">要插入缓存中的对象</param>
+            <param name="dep">该项的文件依赖项或缓存键依赖项。当任何依赖项更改时，该对象即无效，并从缓存中移除。如果没有依赖项，则此参数包含空引用（Visual Basic 中为 Nothing）。</param>
+            <param name="seconds">所插入对象将过期并被从缓存中移除的时间。</param>
+            <param name="priority">该对象相对于缓存中存储的其他项的成本，由 CacheItemPriority 枚举表示。该值由缓存在退出对象时使用；具有较低成本的对象在具有较高成本的对象之前被从缓存移除。 </param>
+        </member>
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.Remove(System.String)">
+            <summary>
+            移出单个缓存
+            </summary>
+            <param name="key">缓存实例名称</param>
+        </member>
+        <member name="M:hwj.CommonLibrary.WebSite.WebCache.GetAllCacheKey">
+            <summary>
+            得到所有使用的Cache键值
+            </summary>
+            <returns>返回所有的Cache键值</returns>
         </member>
     </members>
 </doc>

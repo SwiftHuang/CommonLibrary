@@ -138,5 +138,24 @@ namespace hwj.CommonLibrary.Object
         {
             return dtc.ConvertToChinese(Math.Round(value, 2), false);
         }
+
+        /// <summary>
+        /// 计算断号
+        /// </summary>
+        /// <param name="CurrentSeqList">当前的序号列表</param>
+        /// <param name="MinSeqNum">最小序号</param>
+        /// <param name="MaxSeqNum">最大序号</param>
+        /// <returns></returns>
+        public static List<int> GetBreakSeqNum(List<int> CurrentSeqList, int MinSeqNum, int MaxSeqNum)
+        {
+            List<int> lst = new List<int>();
+            for (int i = MinSeqNum; i <= MaxSeqNum; i++)
+            {
+                Predicate<int> FindValues = delegate(int value) { return value == i; };
+                if (!CurrentSeqList.Exists(FindValues))
+                    lst.Add(i);
+            }
+            return lst;
+        }
     }
 }
