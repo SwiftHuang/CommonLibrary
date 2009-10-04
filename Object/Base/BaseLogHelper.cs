@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using log4net;
 using hwj.CommonLibrary.Object;
+using System.Net.Mail;
 
 namespace hwj.CommonLibrary.Object.Base
 {
@@ -14,13 +15,25 @@ namespace hwj.CommonLibrary.Object.Base
         private ILog LogInfo { get; set; }
         private ILog LogError { get; set; }
         private ILog LogWarn { get; set; }
-        public string EmailTo { get; set; }
-        public string EmailFrom { get; set; }
-        public string EmailPassword { get; set; }
-        internal string EmailBodyFormat { get; set; }
+
         public bool EmailOpened { get; set; }
+
+        public string EmailFrom { get; set; }
+        /// <summary>
+        /// 多个收件人请用逗号分隔
+        /// </summary>
+        public string EmailTo { get; set; }
+        /// <summary>
+        /// 多个抄送人请用逗号分隔
+        /// </summary>
+        public string EmailCC { get; set; }
+        internal string EmailBodyFormat { get; set; }
+
+        public string EmailPassword { get; set; }
         public string EmailSMTPServer { get; set; }
+
         #endregion
+
         public LogHelper()
         {
             //log4net.Config.DOMConfigurator.Configure(new FileInfo("LogHelper.Config"));
@@ -49,6 +62,7 @@ namespace hwj.CommonLibrary.Object.Base
             EmailBodyFormat = "{0}\r\n{1}\r\n{2}";
         }
 
+        #region Info Function
         public void Info(string log, bool sendEmail)
         {
             InfoAction(log, null, null, sendEmail);
@@ -74,7 +88,9 @@ namespace hwj.CommonLibrary.Object.Base
                     Email(EmailSubject + " <Info>", log, ex);
             }
         }
+        #endregion
 
+        #region Error Function
         public void Error(string log, Exception ex)
         {
             ErrorAction(log, ex, null);
@@ -87,7 +103,9 @@ namespace hwj.CommonLibrary.Object.Base
                 Email(EmailSubject + " <Error>", log, ex);
             }
         }
+        #endregion
 
+        #region Warn Function
         public void Warn(string log)
         {
             WarnAction(log, null, null);
@@ -111,6 +129,7 @@ namespace hwj.CommonLibrary.Object.Base
                 Email(EmailSubject + " <Warn>", log, ex);
             }
         }
+        #endregion
 
         public void Email(string subject, string log, Exception ex)
         {
@@ -128,11 +147,11 @@ namespace hwj.CommonLibrary.Object.Base
             {
                 try
                 {
-                    EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, EmailTo, subject, body, false);
+                    EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, EmailTo, EmailCC, subject, body, false);
                 }
                 catch
                 {
-                    EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, EmailTo, subject, body, false);
+                    EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, EmailTo, EmailCC, subject, body, false);
                 }
             }
         }
