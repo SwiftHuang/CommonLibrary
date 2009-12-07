@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using log4net;
-using hwj.CommonLibrary.Object;
+using System.Linq;
 using System.Net.Mail;
+using System.Text;
+using hwj.CommonLibrary.Object;
+using log4net;
 
 namespace hwj.CommonLibrary.Object.Base
 {
@@ -27,7 +28,7 @@ namespace hwj.CommonLibrary.Object.Base
         /// 多个抄送人请用逗号分隔
         /// </summary>
         public string EmailCC { get; set; }
-        internal string EmailBodyFormat { get; set; }
+        internal string EmailBodyFormat { get; private set; }
 
         public string EmailPassword { get; set; }
         public string EmailSMTPServer { get; set; }
@@ -59,7 +60,7 @@ namespace hwj.CommonLibrary.Object.Base
             EmailFrom = "hpmis@sohu.com";
             EmailSMTPServer = "smtp.sohu.com";
             EmailPassword = "123456";
-            EmailBodyFormat = "{0}\r\n{1}\r\n{2}";
+            EmailBodyFormat = "{0}\r\n{1}";
         }
 
         #region Info Function
@@ -138,7 +139,7 @@ namespace hwj.CommonLibrary.Object.Base
                 if (ex == null)
                     Email(subject, log);
                 else
-                    Email(subject, string.Format(EmailBodyFormat, log, ex.Message, ex.StackTrace.ToString()));
+                    Email(subject, string.Format(EmailBodyFormat, log, FormatException(ex)));
             }
         }
         public void Email(string subject, string body)
@@ -154,6 +155,39 @@ namespace hwj.CommonLibrary.Object.Base
                     EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, EmailTo, EmailCC, subject, body, false);
                 }
             }
+        }
+        private string FormatException(Exception ex)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (ex.Data != null && ex.Data.Count > 0)
+            {
+                sb.AppendLine("----------------Exception.Data List----------------");
+                foreach (DictionaryEntry obj in ex.Data)
+                {
+                    try
+                    {
+                        sb.AppendLine(string.Format("Key:[{0}]  Value:[{1}]", obj.Key, obj.Value));
+                    }
+                    catch
+                    {
+                        sb.AppendLine("Exception.Data Error");
+                    }
+                }
+            }
+            if (ex.GetBaseException() != null)
+            {
+                sb.AppendLine();
+                sb.AppendLine("----------------Base Exception----------------");
+                sb.AppendLine(ex.GetBaseException().Message);
+                sb.AppendLine(ex.GetBaseException().StackTrace);
+            }
+            sb.AppendLine();
+            sb.AppendLine("----------------Current Exception----------------");
+            sb.AppendLine(ex.Message);
+            sb.AppendLine(ex.StackTrace);
+
+            return sb.ToString();
         }
     }
 }
