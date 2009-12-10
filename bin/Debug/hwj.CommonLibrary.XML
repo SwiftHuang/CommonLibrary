@@ -47,6 +47,26 @@
             <param name="sKey"></param> 
             <returns></returns> 
         </member>
+        <member name="M:hwj.CommonLibrary.Object.FileHelper.StreamToBytes(System.IO.Stream)">
+            <summary>
+            将 Stream 转成 byte[]
+            </summary>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.FileHelper.BytesToStream(System.Byte[])">
+            <summary>
+            将 byte[] 转成 Stream
+            </summary>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.FileHelper.StreamToFile(System.IO.Stream,System.String)">
+            <summary>
+            将 Stream 写入文件
+            </summary>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.FileHelper.FileToStream(System.String)">
+            <summary>
+            从文件读取 Stream
+            </summary>
+        </member>
         <member name="F:hwj.CommonLibrary.Function.DecimalToChinese.EndOfInt">
             <summary>
             整(当没有 角分 时)
