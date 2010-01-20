@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Web.UI;
 
@@ -32,26 +31,26 @@ namespace hwj.CommonLibrary.WebSite
             }
         }
 
-        public static void AjaxAlert(Control control, string text)
-        {
-            AjaxAlert(control, text);
-        }
-        public static void AjaxAlert(Control control, string text, string key)
-        {
-            ScriptManager.RegisterStartupScript(control, control.GetType(), GeneralScriptKey(key), "alert('" + text + "');", true);
-        }
+        //public static void AjaxAlert(Control control, string text)
+        //{
+        //    AjaxAlert(control, text);
+        //}
+        //public static void AjaxAlert(Control control, string text, string key)
+        //{
+        //    ScriptManager.RegisterStartupScript(control, control.GetType(), GeneralScriptKey(key), "alert('" + text + "');", true);
+        //}
 
-        public static void AjaxExecScript(Control control, string script)
-        {
-            AjaxExecScript(control, script, null);
-        }
-        public static void AjaxExecScript(Control control, string script, string key)
-        {
-            if (!string.IsNullOrEmpty(script))
-            {
-                ScriptManager.RegisterStartupScript(control, control.GetType(), GeneralScriptKey(key), script, true);
-            }
-        }
+        //public static void AjaxExecScript(Control control, string script)
+        //{
+        //    AjaxExecScript(control, script, null);
+        //}
+        //public static void AjaxExecScript(Control control, string script, string key)
+        //{
+        //    if (!string.IsNullOrEmpty(script))
+        //    {
+        //        ScriptManager.RegisterStartupScript(control, control.GetType(), GeneralScriptKey(key), script, true);
+        //    }
+        //}
 
         public static string GeneralScriptKey(string key)
         {
