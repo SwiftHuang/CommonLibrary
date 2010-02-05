@@ -81,7 +81,10 @@ namespace hwj.CommonLibrary.Object
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.InnerException.Message, new Exception(ex.InnerException.StackTrace));
+                if (ex.InnerException != null)
+                    throw new Exception(ex.InnerException.Message, new Exception(ex.InnerException.StackTrace));
+                else
+                    throw ex;
             }
         }
 
