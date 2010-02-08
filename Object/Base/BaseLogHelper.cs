@@ -151,7 +151,14 @@ namespace hwj.CommonLibrary.Object.Base
                 }
                 catch
                 {
-                    EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, EmailTo, EmailCC, subject, body, false);
+                    try
+                    {
+                        EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, EmailTo, EmailCC, subject, body, false);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogError.Error(ex.Message);
+                    }
                 }
             }
         }
