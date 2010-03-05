@@ -16,6 +16,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:hwj.CommonLibrary.Object.NetHelper.GetFirstHostIPAddress">
+            <summary>
+            获取本机IP地址(第一个)
+            </summary>
+            <returns></returns>
+        </member>
         <member name="F:hwj.CommonLibrary.Function.DecimalToChinese.EndOfInt">
             <summary>
             整(当没有 角分 时)
