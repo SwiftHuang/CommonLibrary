@@ -1,28 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Net;
 using System.CodeDom;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Reflection;
+using System.Text;
 using System.Web.Services.Description;
 using Microsoft.CSharp;
-
 
 namespace hwj.CommonLibrary.Object
 {
     public class WebServiceHelper
     {
         #region InvokeWebService
+        private const string @namespace = "EnterpriseServerBase.WebService.DynamicWebCalling";
         //动态调用web服务
         public static object InvokeWebService(string url, string methodname, object[] args)
         {
             return WebServiceHelper.InvokeWebService(url, null, methodname, args);
         }
-
         public static object InvokeWebService(string url, string classname, string methodname, object[] args)
         {
-            string @namespace = "EnterpriseServerBase.WebService.DynamicWebCalling";
+            return InvokeWebService(url, classname, methodname, args);
+        }
+        public static object InvokeWebService(string url, string classname, string methodname, string fileName, object[] args)
+        {
+
             if ((classname == null) || (classname == ""))
             {
                 classname = GetWsClassName(url);
@@ -51,6 +55,8 @@ namespace hwj.CommonLibrary.Object
                         CompilerParameters cplist = new CompilerParameters();
                         cplist.GenerateExecutable = false;
                         cplist.GenerateInMemory = true;
+                        if (!string.IsNullOrEmpty(fileName))
+                            cplist.OutputAssembly = fileName;
                         cplist.ReferencedAssemblies.Add("System.dll");
                         cplist.ReferencedAssemblies.Add("System.XML.dll");
                         cplist.ReferencedAssemblies.Add("System.Web.Services.dll");
@@ -71,10 +77,10 @@ namespace hwj.CommonLibrary.Object
                         }
 
                         //生成代理实例，并调用方法
-                        System.Reflection.Assembly assembly = cr.CompiledAssembly;
+                        Assembly assembly = cr.CompiledAssembly;
                         Type t = assembly.GetType(@namespace + "." + classname, true, true);
                         object obj = Activator.CreateInstance(t);
-                        System.Reflection.MethodInfo mi = t.GetMethod(methodname);
+                        MethodInfo mi = t.GetMethod(methodname);
 
                         if (args == null)
                             return mi.Invoke(obj, null);
@@ -91,7 +97,37 @@ namespace hwj.CommonLibrary.Object
                     throw ex;
             }
         }
+        public static object InvokeWebServiceByDLL(string fileName, string url, string classname, string methodname, object[] args)
+        {
+            try
+            {
+                if ((classname == null) || (classname == ""))
+                {
+                    classname = GetWsClassName(url);
+                }
+                Assembly assembly = Assembly.LoadFrom(fileName);
+                Type t = assembly.GetType(@namespace + "." + classname, true, true);
 
+                object obj = Activator.CreateInstance(t);
+                MethodInfo mi = t.GetMethod(methodname);
+
+                if (args == null)
+                    return mi.Invoke(obj, null);
+                else
+                    return mi.Invoke(obj, args);
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null)
+                    throw new Exception(ex.InnerException.Message, new Exception(ex.InnerException.StackTrace));
+                else
+                    throw ex;
+            }
+        }
+        public static bool CreateWebServiceDLL()
+        {
+            return false;
+        }
         private static string GetWsClassName(string wsUrl)
         {
             string[] parts = wsUrl.Split('/');
