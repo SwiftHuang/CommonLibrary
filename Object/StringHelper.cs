@@ -342,5 +342,43 @@ namespace hwj.CommonLibrary.Object
                 return false;
             return Regex.IsMatch(value, @"^[0-9]+$");
         }
+
+        public class SpaceString
+        {
+            StringBuilder sb = null;
+            public SpaceString()
+            {
+                sb = new StringBuilder();
+            }
+            public void AppendLine(string text)
+            {
+                AppendLine(0, text);
+            }
+            public void AppendLine(int spaceNum, string text)
+            {
+                string tmpStr = string.Empty;
+                for (int i = 0; i < spaceNum; i++)
+                {
+                    tmpStr += "    ";
+                }
+                sb.AppendLine(tmpStr + text);
+            }
+            public void Append(string text)
+            {
+                sb.Append(text);
+            }
+            public string ToString()
+            {
+                return sb.ToString();
+            }
+        }
+
+        public static string GetMSSQLConnectionString(string server, string database, string user, string password, bool isWindowsVerification)
+        {
+            string tmpStr = string.Format("Data Source={0};Initial Catalog={1};Persist Security Info=True;", server, database);
+            if (!isWindowsVerification)
+                tmpStr += string.Format("User ID={0};Password={1}", user, password);
+            return tmpStr;
+        }
     }
 }
