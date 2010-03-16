@@ -32,6 +32,8 @@ namespace hwj.CommonLibrary.Object.Base
         public string EmailPassword { get; set; }
         public string EmailSMTPServer { get; set; }
 
+        public string Subject { get; set; }
+        public string Body { get; set; }
         #endregion
 
         public LogHelper()
@@ -77,6 +79,10 @@ namespace hwj.CommonLibrary.Object.Base
         }
         public void InfoAction(string log, Exception ex, string EmailSubject, bool sendEmail)
         {
+            InfoAction(log, ex, EmailSubject, sendEmail, EmailTo, EmailCC);
+        }
+        public void InfoAction(string log, Exception ex, string EmailSubject, bool sendEmail, string emailTo, string emailCC)
+        {
             if (LogInfo.IsInfoEnabled)
             {
                 if (ex == null)
@@ -85,7 +91,7 @@ namespace hwj.CommonLibrary.Object.Base
                     LogInfo.Info(log, ex);
 
                 if (sendEmail)
-                    Email(EmailSubject + " <Info>", log, ex);
+                    Email(EmailSubject + " <Info>", log, ex, EmailTo, EmailCC);
             }
         }
         #endregion
@@ -93,14 +99,18 @@ namespace hwj.CommonLibrary.Object.Base
         #region Error Function
         public void Error(string log, Exception ex)
         {
-            ErrorAction(log, ex, null);
+            ErrorAction(log, ex, null, EmailTo, EmailCC);
         }
         public void ErrorAction(string log, Exception ex, string EmailSubject)
+        {
+            ErrorAction(log, ex, EmailSubject, EmailTo, EmailCC);
+        }
+        public void ErrorAction(string log, Exception ex, string EmailSubject, string emailTo, string emailCC)
         {
             if (LogError.IsErrorEnabled)
             {
                 LogError.Error(log, ex);
-                Email(EmailSubject + " <Error>", log, ex);
+                Email(EmailSubject + " <Error>", log, ex, emailTo, emailCC);
             }
         }
         #endregion
@@ -120,40 +130,55 @@ namespace hwj.CommonLibrary.Object.Base
         }
         public void WarnAction(string log, Exception ex, string EmailSubject)
         {
+            WarnAction(log, ex, EmailSubject, EmailTo, EmailCC);
+        }
+        public void WarnAction(string log, Exception ex, string EmailSubject, string emailTo, string emailCC)
+        {
             if (LogWarn.IsWarnEnabled)
             {
                 if (ex == null)
                     LogWarn.Warn(log);
                 else
                     LogWarn.Warn(log, ex);
-                Email(EmailSubject + " <Warn>", log, ex);
+                Email(EmailSubject + " <Warn>", log, ex, emailTo, emailCC);
             }
         }
         #endregion
 
-        public void Email(string subject, string log, Exception ex)
+        #region Email Function
+        //public void Email(string subject, string log, Exception ex)
+        //{
+        //    Email(subject, log, ex);
+        //}
+        public void Email(string subject, string log, Exception ex, string emailTo, string emailCC)
         {
             if (!string.IsNullOrEmpty(subject))
             {
                 if (ex == null)
-                    Email(subject, log);
+                    Email(subject, log, emailTo, emailCC);
                 else
-                    Email(subject, string.Format(EmailBodyFormat, log, FormatException(ex)));
+                    Email(subject, string.Format(EmailBodyFormat, log, FormatException(ex)), emailTo, emailCC);
             }
         }
-        public void Email(string subject, string body)
+        //public void Email(string subject, string body)
+        //{
+        //    Email(subject, body, EmailTo, EmailCC);
+        //}
+        public void Email(string subject, string body, string emailTo, string emailCC)
         {
+            Subject = subject;
+            Body = body;
             if (EmailOpened)
             {
                 try
                 {
-                    EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, EmailTo, EmailCC, subject, body, false);
+                    EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false);
                 }
                 catch
                 {
                     try
                     {
-                        EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, EmailTo, EmailCC, subject, body, false);
+                        EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false);
                     }
                     catch (Exception ex)
                     {
@@ -162,6 +187,7 @@ namespace hwj.CommonLibrary.Object.Base
                 }
             }
         }
+
         private string FormatException(Exception ex)
         {
             StringBuilder sb = new StringBuilder();
@@ -195,5 +221,6 @@ namespace hwj.CommonLibrary.Object.Base
 
             return sb.ToString();
         }
+        #endregion
     }
 }
