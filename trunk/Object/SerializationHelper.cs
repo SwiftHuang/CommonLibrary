@@ -178,7 +178,6 @@ namespace hwj.CommonLibrary.Object
 
                 if (info.PropertyType.IsArray)
                 {
-                    reader.Read();
                     Array list = GetArrayObject(info, reader, reader.Name);
                     info.SetValue(e.ObjectBeingDeserialized, Convert.ChangeType(list, info.PropertyType), null);
                 }
@@ -188,17 +187,10 @@ namespace hwj.CommonLibrary.Object
                     object tmpObj = null;
                     while (reader.Read())
                     {
-                        if (reader.IsStartElement())
+                        if (reader.IsStartElement() && !reader.IsEmptyElement)
                         {
-                            if (reader.IsEmptyElement)
-                                Console.WriteLine("<{0}/>", reader.Name);
-                            else
-                            {
-
-                                Console.Write("<{0}> ", reader.Name);
-                                tmpObj = GetObject(obj, reader);
-                                reader.Read();
-                            }
+                            tmpObj = GetObject(obj, reader, reader.Name);
+                            reader.Read();
                         }
                         if (reader.NodeType == XmlNodeType.EndElement)
                         {
@@ -210,7 +202,7 @@ namespace hwj.CommonLibrary.Object
                 }
             }
         }
-        static object GetObject(object obj, XmlReader reader)
+        static object GetObject(object obj, XmlReader reader, string name)
         {
             PropertyInfo info = obj.GetType().GetProperty(reader.Name);
             if (info != null)
@@ -227,17 +219,17 @@ namespace hwj.CommonLibrary.Object
                     if (tmpObj != null)
                     {
                         reader.Read();
-                        if (reader.NodeType == XmlNodeType.EndElement)
+                        if (reader.NodeType == XmlNodeType.EndElement && reader.Name == name)
                             return obj;
                         else
-                            return GetObject(tmpObj, reader);
+                            return GetObject(tmpObj, reader, reader.Name);
                     }
                 }
                 else
                 {
                     info.SetValue(obj, Convert.ChangeType(reader.ReadString(), info.PropertyType), null);
                     reader.Read();
-                    return GetObject(obj, reader);
+                    return GetObject(obj, reader, reader.Name);
                 }
             }
             return obj;
@@ -252,8 +244,29 @@ namespace hwj.CommonLibrary.Object
                     break;
                 if (info.PropertyType.GetElementType().FullName != "System.String")
                 {
-                    object obj = Activator.CreateInstance(info.PropertyType.GetElementType());
-                    list.Add(GetObject(obj, reader));
+
+                    if (reader.IsStartElement())
+                    {
+                        object obj = Activator.CreateInstance(info.PropertyType.GetElementType());
+                        object tmpObj = null;
+                        string tmpName = reader.Name;
+                        while (reader.Read())
+                        {
+                            if (reader.IsStartElement() && !reader.IsEmptyElement)
+                            {
+                                tmpObj = GetObject(obj, reader, reader.Name);
+                                if (reader.Name == tmpName && reader.NodeType == XmlNodeType.EndElement)
+                                    break;
+                                else
+                                    reader.Read();
+                            }
+                            if (reader.NodeType == XmlNodeType.EndElement)
+                            {
+                                obj.GetType().GetProperty(reader.Name).SetValue(obj, tmpObj, null);
+                            }
+                        }
+                        list.Add(obj);
+                    }
                 }
                 else
                 {
@@ -262,9 +275,9 @@ namespace hwj.CommonLibrary.Object
             }
             Array ary = Array.CreateInstance(info.PropertyType.GetElementType(), list.Count);
             int index = 0;
-            foreach (object obj in list)
+            foreach (object o in list)
             {
-                ary.SetValue(obj, index);
+                ary.SetValue(o, index);
                 index++;
             }
             return ary;
