@@ -10,10 +10,22 @@ namespace hwj.CommonLibrary.Object
         public static bool Send(string SmtpServer, string EmailFrom, string EmailFromPassword,
             string EmailTo, string cc, string Subject, string Body, bool isBodyHtml)
         {
+            return Send(SmtpServer, EmailFrom, EmailFromPassword, EmailTo, cc, Subject, Body, isBodyHtml, null);
+        }
+        public static bool Send(string SmtpServer, string EmailFrom, string EmailFromPassword,
+            string EmailTo, string cc, string Subject, string Body, bool isBodyHtml, List<Attachment> attachments)
+        {
             MailMessage message = new MailMessage(EmailFrom, EmailTo, Subject, Body);
             message.BodyEncoding = System.Text.Encoding.UTF8;
             if (!string.IsNullOrEmpty(cc))
                 message.CC.Add(cc);
+            if (attachments != null && attachments.Count > 0)
+            {
+                foreach (Attachment a in attachments)
+                {
+                    message.Attachments.Add(a);
+                }
+            }
             message.IsBodyHtml = isBodyHtml;
             return Send(SmtpServer, EmailFrom, EmailFromPassword, message, isBodyHtml);
         }
