@@ -10,6 +10,10 @@ namespace hwj.CommonLibrary.Object
         {
             base.Initialization(null);
         }
+        public LogHelper(string fileName)
+        {
+            base.Initialization(fileName);
+        }
 
         public void Info(string log, Exception ex, string EmailSubject, bool sendEmail)
         {
