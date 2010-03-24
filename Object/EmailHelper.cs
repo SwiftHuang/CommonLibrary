@@ -66,7 +66,7 @@ namespace hwj.CommonLibrary.Object
                 client.UseDefaultCredentials = true;
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
 
-            message.Priority = MailPriority.High;
+            message.Priority = MailPriority.Normal;
             message.BodyEncoding = System.Text.Encoding.UTF8;
             message.IsBodyHtml = isBodyHtml;
             client.Send(message);
