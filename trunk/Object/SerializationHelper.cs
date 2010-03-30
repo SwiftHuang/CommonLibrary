@@ -145,20 +145,14 @@ namespace hwj.CommonLibrary.Object
         {
             T t = new T();
             XmlSerializer xs = new XmlSerializer(t.GetType());
-            xs.UnknownAttribute += new XmlAttributeEventHandler(xs_UnknownAttribute);
             xs.UnknownElement += new XmlElementEventHandler(xs_UnknownElement);
-            xs.UnreferencedObject += new UnreferencedObjectEventHandler(xs_UnreferencedObject);
             StringReader sr = new StringReader(xml);
             object o = xs.Deserialize(sr);
             if (o != null) return (T)o;
             return null;
         }
 
-        static void xs_UnreferencedObject(object sender, UnreferencedObjectEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
+        #region ExcludeXMLNS Function
         static void xs_UnknownElement(object sender, XmlElementEventArgs e)
         {
             PropertyInfo info = e.ObjectBeingDeserialized.GetType().GetProperty(e.Element.Name);
@@ -282,10 +276,7 @@ namespace hwj.CommonLibrary.Object
             }
             return ary;
         }
-        static void xs_UnknownAttribute(object sender, XmlAttributeEventArgs e)
-        {
-
-        }
+        #endregion
 
         public static string SerializeDataTableXml(DataTable dt)
         {
