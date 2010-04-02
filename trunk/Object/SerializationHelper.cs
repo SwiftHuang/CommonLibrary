@@ -141,11 +141,12 @@ namespace hwj.CommonLibrary.Object
             if (o != null) return (T)o;
             return null;
         }
-        public static T FromXmlExcludeXMLNS<T>(string xml) where T : class, new()
+        public static T FromXml<T>(string xml, bool excludeXmlns) where T : class, new()
         {
             T t = new T();
             XmlSerializer xs = new XmlSerializer(t.GetType());
-            xs.UnknownElement += new XmlElementEventHandler(xs_UnknownElement);
+            if (excludeXmlns)
+                xs.UnknownElement += new XmlElementEventHandler(xs_UnknownElement);
             StringReader sr = new StringReader(xml);
             object o = xs.Deserialize(sr);
             if (o != null) return (T)o;
@@ -162,7 +163,12 @@ namespace hwj.CommonLibrary.Object
 
             if (e.Element.InnerText == e.Element.InnerXml)
             {
-                info.SetValue(e.ObjectBeingDeserialized, Convert.ChangeType(e.Element.InnerText, info.PropertyType), null);
+                if (info.PropertyType.Equals(typeof(string)) || (!info.PropertyType.IsInterface && !info.PropertyType.IsClass))
+                {
+                    info.SetValue(e.ObjectBeingDeserialized, Convert.ChangeType(e.Element.InnerText, info.PropertyType), null); 
+                }
+                else
+                    return;
             }
             else
             {
