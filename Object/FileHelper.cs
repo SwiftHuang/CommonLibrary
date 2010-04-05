@@ -163,5 +163,28 @@ namespace hwj.CommonLibrary.Object
             Stream stream = new MemoryStream(bytes);
             return stream;
         }
+
+        public static void CreateFile(string fileName)
+        {
+            CreateFile(fileName, null);
+        }
+        public static void CreateFile(string fileName, string text)
+        {
+            if (!File.Exists(fileName))
+            {
+                string directory = Path.GetDirectoryName(fileName);
+                if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                    Directory.CreateDirectory(directory);
+                else
+                    using (File.Create(fileName)) { }
+            }
+            if (!string.IsNullOrEmpty(text))
+            {
+                using (StreamWriter sw = new StreamWriter(fileName, false, System.Text.Encoding.UTF8))
+                {
+                    sw.Write(text);
+                }
+            }
+        }
     }
 }
