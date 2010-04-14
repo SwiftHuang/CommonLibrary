@@ -11,6 +11,7 @@ namespace hwj.CommonLibrary.WebSite
         {
             base.Initialization(fileName);
         }
+
         private string GetWebInfo(string log, HttpRequest request)
         {
             WebLogInfo w = new WebLogInfo(request);
@@ -20,16 +21,28 @@ namespace hwj.CommonLibrary.WebSite
             sb.Append(log);
             return sb.ToString();
         }
+        public void Info(string log, Exception ex, string EmailSubject, bool sendEmail)
+        {
+            Info(log, ex, EmailSubject, HttpContext.Current.Request, sendEmail);
+        }
         public void Info(string log, Exception ex, string EmailSubject, HttpRequest request, bool sendEmail)
         {
             base.InfoAction(GetWebInfo(log, request), ex, EmailSubject, sendEmail);
         }
 
+        public void Error(string log, Exception ex, string EmailSubject)
+        {
+            Error(log, ex, EmailSubject, HttpContext.Current.Request);
+        }
         public void Error(string log, Exception ex, string EmailSubject, HttpRequest request)
         {
             base.ErrorAction(GetWebInfo(log, request), ex, EmailSubject);
         }
 
+        public void Warn(string log, Exception ex, string EmailSubject)
+        {
+            Warn(log, ex, EmailSubject, HttpContext.Current.Request);
+        }
         public void Warn(string log, Exception ex, string EmailSubject, HttpRequest request)
         {
             base.WarnAction(GetWebInfo(log, request), ex, EmailSubject);
