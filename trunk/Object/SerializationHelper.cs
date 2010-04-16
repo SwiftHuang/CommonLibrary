@@ -165,7 +165,7 @@ namespace hwj.CommonLibrary.Object
             {
                 if (info.PropertyType.Equals(typeof(string)) || (!info.PropertyType.IsInterface && !info.PropertyType.IsClass))
                 {
-                    info.SetValue(e.ObjectBeingDeserialized, Convert.ChangeType(e.Element.InnerText, info.PropertyType), null); 
+                    info.SetValue(e.ObjectBeingDeserialized, Convert.ChangeType(e.Element.InnerText, info.PropertyType), null);
                 }
                 else
                     return;
@@ -252,6 +252,11 @@ namespace hwj.CommonLibrary.Object
                         string tmpName = reader.Name;
                         while (reader.Read())
                         {
+                            if (reader.NodeType == XmlNodeType.Text)
+                            {
+                                PropertyInfo info1 = obj.GetType().GetProperty(tmpName);
+                                info1.SetValue(obj, Convert.ChangeType(reader.ReadString(), info1.PropertyType), null);
+                            }
                             if (reader.IsStartElement() && !reader.IsEmptyElement)
                             {
                                 tmpObj = GetObject(obj, reader, reader.Name);
@@ -260,7 +265,7 @@ namespace hwj.CommonLibrary.Object
                                 else
                                     reader.Read();
                             }
-                            if (reader.NodeType == XmlNodeType.EndElement)
+                            if (reader.NodeType == XmlNodeType.EndElement && tmpObj != null && obj != tmpObj)
                             {
                                 obj.GetType().GetProperty(reader.Name).SetValue(obj, tmpObj, null);
                             }
