@@ -190,7 +190,9 @@ namespace hwj.CommonLibrary.Object
                         if (reader.IsStartElement() && !reader.IsEmptyElement)
                         {
                             tmpObj = GetObject(obj, reader, reader.Name);
-                            reader.Read();
+                            //if (reader.NodeType == XmlNodeType.EndElement)
+                            //    obj.GetType().GetProperty(reader.Name).SetValue(obj, tmpObj, null);
+                            //reader.Read();
                         }
                         if (reader.NodeType == XmlNodeType.EndElement)
                         {
@@ -264,8 +266,11 @@ namespace hwj.CommonLibrary.Object
                                 tmpObj = GetObject(obj, reader, reader.Name);
                                 if (reader.Name == tmpName && reader.NodeType == XmlNodeType.EndElement)
                                     break;
-                                else
-                                    reader.Read();
+                                //else
+                                //{
+                                //    tmpName = reader.Name;
+                                //    reader.Read();
+                                //}
                             }
                             if (reader.NodeType == XmlNodeType.EndElement && tmpObj != null && obj != tmpObj)
                             {
