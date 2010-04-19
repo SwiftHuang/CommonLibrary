@@ -211,7 +211,9 @@ namespace hwj.CommonLibrary.Object
                 {
                     Array list = GetArrayObject(info, reader, reader.Name);
                     info.SetValue(obj, Convert.ChangeType(list, info.PropertyType), null);
-                    return obj;
+                    reader.Read();
+                    return GetObject(obj, reader, reader.Name);
+                    //return obj;
                 }
                 else if (info.PropertyType.IsClass && info.PropertyType.FullName != "System.String")
                 {
