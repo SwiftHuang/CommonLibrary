@@ -148,12 +148,33 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns>
         public static List<int> GetBreakSeqNum(List<int> CurrentSeqList, int MinSeqNum, int MaxSeqNum)
         {
+            return GetBreakSeqNum(CurrentSeqList, MinSeqNum, MaxSeqNum, 0);
+        }
+        /// <summary>
+        /// 计算断号
+        /// </summary>
+        /// <param name="CurrentSeqList">序号列表</param>
+        /// <param name="MinSeqNum">最小序号</param>
+        /// <param name="MaxSeqNum">最大序号</param>
+        /// <param name="top">返回个数</param>
+        /// <returns></returns>
+        public static List<int> GetBreakSeqNum(List<int> CurrentSeqList, int MinSeqNum, int MaxSeqNum, int top)
+        {
+            int index = 0;
             List<int> lst = new List<int>();
+            CurrentSeqList.Sort();
             for (int i = MinSeqNum; i <= MaxSeqNum; i++)
             {
-                Predicate<int> FindValues = delegate(int value) { return value == i; };
-                if (!CurrentSeqList.Exists(FindValues))
+                if (CurrentSeqList.BinarySearch(i) < 0)
+                {
                     lst.Add(i);
+                    if (top > 0)
+                    {
+                        index++;
+                        if (index == top)
+                            return lst;
+                    }
+                }
             }
             return lst;
         }
