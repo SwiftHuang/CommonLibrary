@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{700126CB-2266-4639-AC78-1060D5E38C96}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\log4net.dll</HintPath>
+      <HintPath>bin\Debug\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -52,6 +52,7 @@
     <Compile Include="Object\EmailHelper.cs" />
     <Compile Include="Object\FileHelper.cs" />
     <Compile Include="Object\Base\BaseLogHelper.cs" />
+    <Compile Include="Object\FTPHelper.cs" />
     <Compile Include="Object\LogHelper.cs" />
     <Compile Include="Object\NetHelper.cs" />
     <Compile Include="Object\NumberHelper.cs" />
