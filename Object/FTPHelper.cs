@@ -8,10 +8,10 @@ namespace hwj.CommonLibrary.Object
 {
     public class FTPHelper
     {
-        public static void Upload(string ftpUrl, string user, string password, string filename)
+        public static void Upload(string ftp, string user, string password, string filename)
         {
             FileInfo fileInf = new FileInfo(filename);
-            string uri = ftpUrl + "/" + fileInf.Name;
+            string uri = ftp + "/" + fileInf.Name;
             FtpWebRequest reqFTP;
 
             // 根据uri创建FtpWebRequest对象 
