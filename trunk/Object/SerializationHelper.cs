@@ -147,8 +147,12 @@ namespace hwj.CommonLibrary.Object
             XmlSerializer xs = new XmlSerializer(t.GetType());
             if (excludeXmlns)
                 xs.UnknownElement += new XmlElementEventHandler(xs_UnknownElement);
-            StringReader sr = new StringReader(xml);
-            object o = xs.Deserialize(sr);
+            //StringReader sr = new StringReader(xml);
+            TextReader tr = new StringReader(xml);
+            XmlTextReader reader = new XmlTextReader(tr);
+            //reader.Normalization = false;
+
+            object o = xs.Deserialize(reader);
             if (o != null) return (T)o;
             return null;
         }
@@ -161,7 +165,8 @@ namespace hwj.CommonLibrary.Object
             if (info == null)
                 return;
 
-            if (e.Element.InnerText == e.Element.InnerXml)
+            //if (e.Element.InnerText == e.Element.InnerXml)
+            if (e.Element.FirstChild.HasChildNodes == false)
             {
                 if (info.PropertyType.Equals(typeof(string)) || (!info.PropertyType.IsInterface && !info.PropertyType.IsClass))
                 {
@@ -174,6 +179,7 @@ namespace hwj.CommonLibrary.Object
             {
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.ConformanceLevel = ConformanceLevel.Fragment;
+                settings.CheckCharacters = false;
                 XmlReader reader = XmlReader.Create(new StringReader(e.Element.InnerXml), settings);
 
                 if (info.PropertyType.IsArray)
