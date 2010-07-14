@@ -125,12 +125,7 @@ namespace hwj.CommonLibrary.Object
 
         public static T FromXml<T>(string xml) where T : class, new()
         {
-            T t = new T();
-            XmlSerializer xs = new XmlSerializer(t.GetType());
-            StringReader sr = new StringReader(xml);
-            object o = xs.Deserialize(sr);
-            if (o != null) return (T)o;
-            return null;
+            return FromXml<T>(xml, false);
         }
         public static T FromXml<T>(string xml, string defaultNamespaces) where T : class, new()
         {
@@ -150,7 +145,7 @@ namespace hwj.CommonLibrary.Object
             //StringReader sr = new StringReader(xml);
             TextReader tr = new StringReader(xml);
             XmlTextReader reader = new XmlTextReader(tr);
-            //reader.Normalization = false;
+            reader.Normalization = false;
 
             object o = xs.Deserialize(reader);
             if (o != null) return (T)o;
@@ -179,7 +174,7 @@ namespace hwj.CommonLibrary.Object
             {
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.ConformanceLevel = ConformanceLevel.Fragment;
-                settings.CheckCharacters = false;
+                //settings.CheckCharacters = false;
                 XmlReader reader = XmlReader.Create(new StringReader(e.Element.InnerXml), settings);
 
                 if (info.PropertyType.IsArray)
