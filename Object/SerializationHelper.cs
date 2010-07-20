@@ -142,12 +142,15 @@ namespace hwj.CommonLibrary.Object
             XmlSerializer xs = new XmlSerializer(t.GetType());
             if (excludeXmlns)
                 xs.UnknownElement += new XmlElementEventHandler(xs_UnknownElement);
-            //StringReader sr = new StringReader(xml);
-            TextReader tr = new StringReader(xml);
-            XmlTextReader reader = new XmlTextReader(tr);
-            reader.Normalization = false;
 
-            object o = xs.Deserialize(reader);
+            //TextReader tr = new StringReader(xml);
+            //XmlTextReader reader = new XmlTextReader(tr);
+            ////reader.Normalization = false;
+            //object o = xs.Deserialize(reader);
+
+            StringReader sr = new StringReader(xml);
+            object o = xs.Deserialize(sr);
+
             if (o != null) return (T)o;
             return null;
         }
@@ -157,7 +160,7 @@ namespace hwj.CommonLibrary.Object
         {
             PropertyInfo info = e.ObjectBeingDeserialized.GetType().GetProperty(e.Element.Name);
 
-            if (info == null)
+            if (info == null || e.Element.FirstChild == null)
                 return;
 
             //if (e.Element.InnerText == e.Element.InnerXml)
