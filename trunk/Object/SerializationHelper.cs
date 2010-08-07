@@ -210,6 +210,9 @@ namespace hwj.CommonLibrary.Object
         }
         static object GetObject(object obj, XmlReader reader, string name)
         {
+            if (!reader.IsStartElement())
+                return obj;
+
             PropertyInfo info = obj.GetType().GetProperty(reader.Name);
             if (info != null)
             {
@@ -219,7 +222,6 @@ namespace hwj.CommonLibrary.Object
                     info.SetValue(obj, Convert.ChangeType(list, info.PropertyType), null);
                     reader.Read();
                     return GetObject(obj, reader, reader.Name);
-                    //return obj;
                 }
                 else if (info.PropertyType.IsClass && info.PropertyType.FullName != "System.String")
                 {
@@ -230,7 +232,24 @@ namespace hwj.CommonLibrary.Object
                         if (reader.NodeType == XmlNodeType.EndElement && reader.Name == name)
                             return obj;
                         else
-                            return GetObject(tmpObj, reader, reader.Name);
+                        {
+                            object tmpObj2 = GetObject(tmpObj, reader, reader.Name);
+                            if (reader.NodeType == XmlNodeType.EndElement && reader.Name == name)
+                                return tmpObj2;
+                            else
+                            {
+                                if (reader.NodeType == XmlNodeType.EndElement)
+                                {
+                                    tmpObj.GetType().GetProperty(reader.Name).SetValue(tmpObj, tmpObj2, null);
+                                }
+                                while (reader.Read())
+                                {
+                                    object tmpObj5 = GetObject(tmpObj, reader, reader.Name);
+                                    if (reader.NodeType == XmlNodeType.EndElement && reader.Name == name)
+                                        return tmpObj5;
+                                }
+                            }
+                        }
                     }
                 }
                 else
