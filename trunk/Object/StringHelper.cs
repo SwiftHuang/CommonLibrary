@@ -375,9 +375,16 @@ namespace hwj.CommonLibrary.Object
 
         public static string GetMSSQLConnectionString(string server, string database, string user, string password, bool isWindowsVerification)
         {
-            string tmpStr = string.Format("Data Source={0};Initial Catalog={1};Persist Security Info=True;", server, database);
+            string tmpStr = string.Format("Data Source={0};Initial Catalog={1};", server, database);
             if (!isWindowsVerification)
+            {
+                tmpStr += "Persist Security Info=True;";
                 tmpStr += string.Format("User ID={0};Password={1}", user, password);
+            }
+            else
+            {
+                tmpStr += "Integrated Security=True;";
+            }
             return tmpStr;
         }
     }
