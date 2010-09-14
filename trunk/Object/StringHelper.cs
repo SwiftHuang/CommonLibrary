@@ -373,6 +373,15 @@ namespace hwj.CommonLibrary.Object
             }
         }
 
+        /// <summary>
+        /// 请使用hwj.CommonLibrary.Function.ConnectionString.GetMSSQLConnectionString()方法代替
+        /// </summary>
+        /// <param name="server"></param>
+        /// <param name="database"></param>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <param name="isWindowsVerification"></param>
+        /// <returns></returns>
         public static string GetMSSQLConnectionString(string server, string database, string user, string password, bool isWindowsVerification)
         {
             string tmpStr = string.Format("Data Source={0};Initial Catalog={1};", server, database);
