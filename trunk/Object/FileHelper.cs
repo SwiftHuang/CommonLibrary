@@ -5,6 +5,7 @@ using System.Data.OleDb;
 using System.Text;
 using System.IO;
 using Microsoft.Win32;
+using System.IO.Compression;
 
 namespace hwj.CommonLibrary.Object
 {
@@ -185,6 +186,18 @@ namespace hwj.CommonLibrary.Object
                     sw.Write(text);
                 }
             }
+        }
+
+        public static MemoryStream Stream2GzipStream(Stream stream)
+        {
+            Byte[] buffer = hwj.CommonLibrary.Object.FileHelper.StreamToBytes(stream);
+            MemoryStream ms = new MemoryStream();
+            GZipStream zipStream = new GZipStream(ms, CompressionMode.Compress, true);
+            zipStream.Write(buffer, 0, buffer.Length);
+            zipStream.Close();
+            ms.Position = 0;
+
+            return ms;
         }
     }
 }
