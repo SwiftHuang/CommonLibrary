@@ -1,46 +1,139 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Mail;
-using System.IO;
+using hwj.CommonLibrary.Object.Email;
 
 namespace hwj.CommonLibrary.Object
 {
     public class EmailHelper
     {
+        /// <summary>
+        /// 发送电子邮件
+        /// </summary>
+        /// <param name="smtpServer">SMTP服务器</param>
+        /// <param name="emailFrom">电子邮件的发件人地址</param>
+        /// <param name="emailFromPassword">发件人密码（如果该密码为空，则取消验证发件人身份）</param>
+        /// <param name="emailTo">收件人的地址</param>
+        /// <param name="cc">抄送 (CC) 收件人的地址</param>
+        /// <param name="subject">电子邮件的主题行</param>
+        /// <param name="body">邮件正文</param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <returns></returns>
         public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, string emailTo, string cc, string subject, string body, bool isBodyHtml)
         {
             return Send(smtpServer, emailFrom, emailFromPassword, emailTo, cc, subject, body, isBodyHtml, null);
         }
+        /// <summary>
+        /// 发送电子邮件
+        /// </summary>
+        /// <param name="smtpServer">SMTP服务器</param>
+        /// <param name="emailFrom">电子邮件的发件人地址</param>
+        /// <param name="emailFromPassword">发件人密码（如果该密码为空，则取消验证发件人身份）</param>
+        /// <param name="emailTo">收件人的地址</param>
+        /// <param name="cc">抄送 (CC) 收件人的地址</param>
+        /// <param name="subject">电子邮件的主题行</param>
+        /// <param name="body">邮件正文</param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="attachments">此电子邮件的数据的附件集合</param>
+        /// <returns></returns>
         public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, string emailTo, string cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments)
         {
             return Send(smtpServer, emailFrom, emailFromPassword, new string[] { emailTo }, new string[] { cc }, subject, body, isBodyHtml, attachments);
         }
+
+        /// <summary>
+        /// 发送含附件的电子邮件
+        /// </summary>
+        /// <param name="smtpServer">SMTP服务器</param>
+        /// <param name="emailFrom">电子邮件的发件人地址</param>
+        /// <param name="emailFromPassword">发件人密码（如果该密码为空，则取消验证发件人身份）</param>
+        /// <param name="emailTo">收件人的地址集合</param>
+        /// <param name="cc">抄送 (CC) 收件人的地址集合</param>
+        /// <param name="subject">电子邮件的主题行</param>
+        /// <param name="body">邮件正文</param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="attachments">此电子邮件的数据的附件集合</param>
+        /// <returns></returns>
         public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments)
         {
-            SmtpInfos smtpInfos = new SmtpInfos(smtpServer, emailFrom, emailFromPassword);
+            SMTPInfos smtpInfos = new SMTPInfos(smtpServer, emailFrom, emailFromPassword);
             return Send(emailTo, cc, subject, body, isBodyHtml, attachments, ref smtpInfos);
         }
+        /// <summary>
+        /// 发送含附件的电子邮件（可压缩附件）
+        /// </summary>
+        /// <param name="smtpServer">SMTP服务器</param>
+        /// <param name="emailFrom">电子邮件的发件人地址</param>
+        /// <param name="emailFromPassword">发件人密码（如果该密码为空，则取消验证发件人身份）</param>
+        /// <param name="emailTo">收件人的地址集合</param>
+        /// <param name="cc">抄送 (CC) 收件人的地址集合</param>
+        /// <param name="subject">电子邮件的主题行</param>
+        /// <param name="body">邮件正文</param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="streams">此电子邮件的数据的附件文件流的集合</param>
+        /// <returns></returns>
         public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<StreamFile> streams)
         {
-            SmtpInfos smtpInfos = new SmtpInfos(smtpServer, emailFrom, emailFromPassword);
+            SMTPInfos smtpInfos = new SMTPInfos(smtpServer, emailFrom, emailFromPassword);
             return Send(emailTo, cc, subject, body, isBodyHtml, streams, ref smtpInfos);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="smtpServer"></param>
+        /// <param name="emailFrom"></param>
+        /// <param name="emailFromPassword"></param>
+        /// <param name="message"></param>
+        /// <param name="isBodyHtml"></param>
+        /// <returns></returns>
         public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, MailMessage message, bool isBodyHtml)
         {
-            SmtpInfos smtpInfos = new SmtpInfos(smtpServer, emailFrom, emailFromPassword);
+            SMTPInfos smtpInfos = new SMTPInfos(smtpServer, emailFrom, emailFromPassword);
             return Send(message, isBodyHtml, ref smtpInfos);
         }
 
-
-        public static bool Send(string emailTo, string cc, string subject, string body, bool isBodyHtml, ref SmtpInfos smtpInfos)
+        /// <summary>
+        /// 发送电子邮件
+        /// </summary>
+        /// <param name="emailTo">收件人的地址</param>
+        /// <param name="cc">抄送 (CC) 收件人的地址</param>
+        /// <param name="subject">电子邮件的主题行</param>
+        /// <param name="body">邮件正文</param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="smtpInfos">SMTP服务器集合</param>
+        /// <returns></returns>
+        public static bool Send(string emailTo, string cc, string subject, string body, bool isBodyHtml, ref SMTPInfos smtpInfos)
         {
             return Send(emailTo, cc, subject, body, isBodyHtml, null, ref smtpInfos);
         }
-        public static bool Send(string emailTo, string cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments, ref SmtpInfos smtpInfos)
+        /// <summary>
+        /// 发送含附件的电子邮件
+        /// </summary>
+        /// <param name="emailTo">收件人的地址</param>
+        /// <param name="cc">抄送 (CC) 收件人的地址</param>
+        /// <param name="subject">电子邮件的主题行</param>
+        /// <param name="body">邮件正文</param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="attachments">此电子邮件的数据的附件集合</param>
+        /// <param name="smtpInfos">SMTP服务器集合</param>
+        /// <returns></returns>
+        public static bool Send(string emailTo, string cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments, ref SMTPInfos smtpInfos)
         {
             return Send(new string[] { emailTo }, new string[] { cc }, subject, body, isBodyHtml, attachments, ref  smtpInfos);
         }
-        public static bool Send(string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<StreamFile> streams, ref SmtpInfos smtpInfos)
+
+        /// <summary>
+        /// 发送含附件的电子邮件（可压缩附件）
+        /// </summary>
+        /// <param name="emailTo">收件人的地址集合</param>
+        /// <param name="cc">抄送 (CC) 收件人的地址集合</param>
+        /// <param name="subject">电子邮件的主题行</param>
+        /// <param name="body">邮件正文</param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="streams">此电子邮件的数据的附件文件流的集合</param>
+        /// <param name="smtpInfos">SMTP服务器集合</param>
+        /// <returns></returns>
+        public static bool Send(string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<StreamFile> streams, ref SMTPInfos smtpInfos)
         {
             List<Attachment> attachments = new List<Attachment>();
 
@@ -56,7 +149,18 @@ namespace hwj.CommonLibrary.Object
             }
             return Send(emailTo, cc, subject, body, isBodyHtml, attachments, ref  smtpInfos);
         }
-        public static bool Send(string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments, ref SmtpInfos smtpInfos)
+        /// <summary>
+        /// 发送含附件的电子邮件
+        /// </summary>
+        /// <param name="emailTo">>收件人的地址集合</param>
+        /// <param name="cc">抄送 (CC) 收件人的地址集合</param>
+        /// <param name="subject">电子邮件的主题行</param>
+        /// <param name="body">邮件正文</param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="attachments">此电子邮件的数据的附件集合</param>
+        /// <param name="smtpInfos">SMTP服务器集合</param>
+        /// <returns></returns>
+        public static bool Send(string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments, ref SMTPInfos smtpInfos)
         {
             MailMessage message = new MailMessage();
             //message.From = new MailAddress(emailFrom);
@@ -90,18 +194,25 @@ namespace hwj.CommonLibrary.Object
             message.IsBodyHtml = isBodyHtml;
             return Send(message, isBodyHtml, ref smtpInfos);
         }
-        public static bool Send(MailMessage message, bool isBodyHtml, ref SmtpInfos smtpInfos)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="smtpInfos">SMTP服务器集合</param>
+        /// <returns></returns>
+        public static bool Send(MailMessage message, bool isBodyHtml, ref SMTPInfos smtpInfos)
         {
-            SmtpInfos streamlineList = new SmtpInfos();
-            foreach (SmtpInfo smtpInfo in smtpInfos)
+            SMTPInfos streamlineList = new SMTPInfos();
+            foreach (SMTPInfo smtpInfo in smtpInfos)
             {
                 if (smtpInfo != null && smtpInfo.Active && !string.IsNullOrEmpty(smtpInfo.SmtpServer) && !string.IsNullOrEmpty(smtpInfo.EmailFrom) && smtpInfo.LastFailDate.Date < DateTime.Now.Date)
                 {
                     streamlineList.Add(smtpInfo);
                 }
             }
-            streamlineList.Sort(new SmtpInfoComparer());
-            foreach (SmtpInfo smtpInfo in streamlineList)
+            streamlineList.Sort(new Email.SMTPInfoComparer());
+            foreach (SMTPInfo smtpInfo in streamlineList)
             {
                 try
                 {
@@ -146,85 +257,6 @@ namespace hwj.CommonLibrary.Object
             return myIsEmail;
         }
 
-        public class SmtpInfoComparer : IComparer<SmtpInfo>
-        {
-            public int Compare(SmtpInfo x, SmtpInfo y)
-            {
-                if (x == null && y == null)
-                    return 0;
-                return x.LastFailDate.CompareTo(y.LastFailDate);
-            }
-        }
     }
-    public class SmtpInfo
-    {
-        public SmtpInfo() { }
-        public SmtpInfo(string smtpServer, string emailFrom)
-        {
-            new SmtpInfo(smtpServer, emailFrom, string.Empty);
-        }
-
-        public SmtpInfo(string smtpServer, string emailFrom, string emailFromPassword)
-        {
-            this.Active = true;
-            this.SmtpServer = smtpServer;
-            this.EmailFrom = emailFrom;
-            this.EmailFromPassword = emailFromPassword;
-            this.LastFailDate = DateTime.MinValue;
-        }
-
-        public bool Active { get; set; }
-        public string SmtpServer { get; set; }
-        public string EmailFrom { get; set; }
-        public string EmailFromPassword { get; set; }
-        public DateTime LastFailDate { get; set; }
-        public Exception Exception { get; set; }
-    }
-
-    public class SmtpInfos : List<SmtpInfo>
-    {
-        public SmtpInfos() { }
-        public SmtpInfos(string smtpServer, string emailFrom, string emailFromPassword)
-        {
-            SmtpInfo smtpInfo = new SmtpInfo(smtpServer, emailFrom, emailFromPassword);
-            this.Add(smtpInfo);
-        }
-    }
-    
-    /// <summary>
-    ///
-    /// </summary>
-    public class StreamFile
-    {
-        public StreamFile() { }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StreamFile"/> class,default translate into GzipStream .
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <param name="inStream">The in stream.</param>
-        public StreamFile(string fileName, Stream inStream)
-        {
-            new StreamFile(fileName, inStream, true);
-        }
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StreamFile"/> class.
-        /// </summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <param name="inStream">The in stream.</param>
-        /// <param name="useGzip">if set to <c>true</c> [use gzip].</param>
-        public StreamFile(string fileName, Stream inStream, bool useGzip)
-        {
-            this.FileName = fileName;
-            this.InStream = inStream;
-            this.UseGzip = useGzip;
-        }
-
-        /// <summary>
-        /// Get or Set the value to control either use Gzip to compress the stream or not
-        /// 
-        /// </summary>
-        public bool UseGzip { get; set; }
-        public Stream InStream { get; set; }
-        public string FileName { get; set; }
-    }
+   
 }

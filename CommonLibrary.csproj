@@ -48,9 +48,12 @@
   <ItemGroup>
     <Compile Include="Function\ConnectionString.cs" />
     <Compile Include="Function\DecimalToChinese.cs" />
+    <Compile Include="Function\DecimalToEnglish.cs" />
     <Compile Include="Object\ConfigHelper.cs" />
     <Compile Include="Object\DateHelper.cs" />
     <Compile Include="Object\EmailHelper.cs" />
+    <Compile Include="Object\Email\SMTPInfo.cs" />
+    <Compile Include="Object\Email\StreamFile.cs" />
     <Compile Include="Object\FileHelper.cs" />
     <Compile Include="Object\Base\BaseLogHelper.cs" />
     <Compile Include="Object\FTPHelper.cs" />
