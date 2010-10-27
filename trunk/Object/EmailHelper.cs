@@ -137,16 +137,26 @@ namespace hwj.CommonLibrary.Object
         {
             List<Attachment> attachments = new List<Attachment>();
 
+            string HTML = @"<br><br>To uncompress the file you may need some software else<a href=http://www.winrar.com/>winrar</a>/<a href=http://www.7-zip.org/>7-zip</a>";
+            string STR = @"\r\n\r\nTo uncompress the file you may need some software else winrar:http://www.winrar.com/ or 7-zip http://www.7-zip.org/";
+
+            bool usedGzip = false;
+
             if (streams != null && streams.Count > 0)
             {
                 foreach (StreamFile s in streams)
                 {
                     if (s.UseGzip)
+                    {
                         attachments.Add(new Attachment(hwj.CommonLibrary.Object.FileHelper.Stream2GzipStream(s.InStream), s.FileName + ".gz"));
+                        usedGzip = true;
+                    }
                     else
                         attachments.Add(new Attachment(s.InStream, s.FileName));
                 }
             }
+            if (usedGzip)
+                body += isBodyHtml ? HTML : STR;
             return Send(emailTo, cc, subject, body, isBodyHtml, attachments, ref  smtpInfos);
         }
         /// <summary>
@@ -258,5 +268,5 @@ namespace hwj.CommonLibrary.Object
         }
 
     }
-   
+
 }
