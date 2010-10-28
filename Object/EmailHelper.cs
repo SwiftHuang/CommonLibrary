@@ -137,8 +137,8 @@ namespace hwj.CommonLibrary.Object
         {
             List<Attachment> attachments = new List<Attachment>();
 
-            string HTML = @"<br><br>To uncompress the file you may need some software else<a href=http://www.winrar.com/>winrar</a>/<a href=http://www.7-zip.org/>7-zip</a>";
-            string STR = @"\r\n\r\nTo uncompress the file you may need some software else winrar:http://www.winrar.com/ or 7-zip http://www.7-zip.org/";
+            string HTML = @"<br><br>To uncompress the file you may need one of follow softwares <br>winrar:<a href=http://www.winrar.com>http://www.winrar.com</a><br>7-zip:<a href=http://www.7-zip.org/>http://www.7-zip.org</a>";
+            string STR = "\r\n\r\nTo uncompress the file you may need one of follow softwares \r\nwinrar:http://www.winrar.com \r\n7-zip: http://www.7-zip.org/";
 
             bool usedGzip = false;
 
@@ -213,6 +213,9 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns>
         public static bool Send(MailMessage message, bool isBodyHtml, ref SMTPInfos smtpInfos)
         {
+            if (smtpInfos == null)
+                throw new Exception("SMTPinfos is null");
+
             SMTPInfos streamlineList = new SMTPInfos();
             foreach (SMTPInfo smtpInfo in smtpInfos)
             {
