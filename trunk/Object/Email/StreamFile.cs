@@ -14,8 +14,9 @@ namespace hwj.CommonLibrary.Object.Email
         /// <param name="fileName">Name of the file.</param>
         /// <param name="inStream">The in stream.</param>
         public StreamFile(string fileName, Stream inStream)
+            : this(fileName, inStream, true)
         {
-            new StreamFile(fileName, inStream, true);
+
         }
 
         /// <summary>

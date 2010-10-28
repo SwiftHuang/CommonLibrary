@@ -4,47 +4,68 @@ using System.Text;
 
 namespace hwj.CommonLibrary.Object.Email
 {
-    public class SMTPInfo
+    public class SmtpInfo
     {
-        public SMTPInfo() { }
-        public SMTPInfo(string smtpServer, string emailFrom)
+        #region Property
+        public bool Active { get; set; }
+        public string SmtpServer { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public DateTime FailedOn { get; internal set; }
+        public DateTime SuccessOn { get; internal set; }
+        public bool IsError { get; internal set; }
+        public Exception Exception { get; internal set; }
+        #endregion
+
+        public SmtpInfo() { }
+        public SmtpInfo(string smtpServer, string emailFrom)
+            : this(smtpServer, emailFrom, null)
         {
-            new SMTPInfo(smtpServer, emailFrom, string.Empty);
+
         }
-        public SMTPInfo(string smtpServer, string emailFrom, string emailFromPassword)
+        public SmtpInfo(string smtpServer, string emailFrom, string emailFromPassword)
         {
             this.Active = true;
             this.SmtpServer = smtpServer;
-            this.EmailFrom = emailFrom;
-            this.EmailFromPassword = emailFromPassword;
-            this.LastFailDate = DateTime.MinValue;
+            this.UserName = emailFrom;
+            this.Password = emailFromPassword;
+            this.FailedOn = DateTime.MinValue;
         }
 
-        public bool Active { get; set; }
-        public string SmtpServer { get; set; }
-        public string EmailFrom { get; set; }
-        public string EmailFromPassword { get; set; }
-        public DateTime LastFailDate { get; set; }
-        public Exception Exception { get; set; }
     }
 
-    public class SMTPInfos : List<SMTPInfo>
+    public class SmtpInfoList : List<SmtpInfo>
     {
-        public SMTPInfos() { }
-        public SMTPInfos(string smtpServer, string emailFrom, string emailFromPassword)
+        #region Property
+        /// <summary>
+        /// 获取最后一次成功发送的SMTP配置。
+        /// </summary>
+        public SmtpInfo LastSuccess { get; internal set; }
+        /// <summary>
+        /// 获取最后一次发送失败的SMTP配置。
+        /// </summary>
+        public SmtpInfo LastFailed { get; internal set; }
+        /// <summary>
+        /// 获取或设置SMTP配置发送失败后，间隔几多分钟后重新使用。
+        /// </summary>
+        public int Interval { get; set; }
+        #endregion
+
+        public SmtpInfoList() { }
+        public SmtpInfoList(string smtpServer, string emailFrom, string emailFromPassword)
         {
-            SMTPInfo smtpInfo = new SMTPInfo(smtpServer, emailFrom, emailFromPassword);
+            SmtpInfo smtpInfo = new SmtpInfo(smtpServer, emailFrom, emailFromPassword);
             this.Add(smtpInfo);
         }
     }
 
-    public class SMTPInfoComparer : IComparer<SMTPInfo>
+    internal class SmtpInfoComparer : IComparer<SmtpInfo>
     {
-        public int Compare(SMTPInfo x, SMTPInfo y)
+        public int Compare(SmtpInfo x, SmtpInfo y)
         {
             if (x == null && y == null)
                 return 0;
-            return x.LastFailDate.CompareTo(y.LastFailDate);
+            return x.FailedOn.CompareTo(y.FailedOn);
         }
     }
 }
