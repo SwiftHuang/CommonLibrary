@@ -151,6 +151,16 @@
             多个抄送人请用逗号分隔
             </summary>
         </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.MultSmtpEnabled">
+            <summary>
+            获取或设置是否使用多个SMTP服务器的模式
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.SmtpList">
+            <summary>
+            获取或设置SMTP服务器列表
+            </summary>
+        </member>
         <member name="T:hwj.CommonLibrary.WebSite.WebCache">
             <summary>
             设置Cache操作类

@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Mail;
 using System.Text;
 using hwj.CommonLibrary.Object;
+using hwj.CommonLibrary.Object.Email;
 using log4net;
 
 namespace hwj.CommonLibrary.Object.Base
@@ -18,7 +19,7 @@ namespace hwj.CommonLibrary.Object.Base
 
         public bool EmailOpened { get; set; }
 
-        public string EmailFrom { get; set; }
+
         /// <summary>
         /// 多个收件人请用逗号分隔
         /// </summary>
@@ -29,8 +30,18 @@ namespace hwj.CommonLibrary.Object.Base
         public string EmailCC { get; set; }
         internal string EmailBodyFormat { get; private set; }
 
+        public string EmailFrom { get; set; }
         public string EmailPassword { get; set; }
         public string EmailSMTPServer { get; set; }
+
+        /// <summary>
+        /// 获取或设置是否使用多个SMTP服务器的模式
+        /// </summary>
+        public bool MultSmtpEnabled { get; set; }
+        /// <summary>
+        /// 获取或设置SMTP服务器列表
+        /// </summary>
+        public Email.SmtpInfoList SmtpList { get; set; }
 
         public string Subject { get; set; }
         public string Body { get; set; }
@@ -146,10 +157,6 @@ namespace hwj.CommonLibrary.Object.Base
         #endregion
 
         #region Email Function
-        //public void Email(string subject, string log, Exception ex)
-        //{
-        //    Email(subject, log, ex);
-        //}
         public void Email(string subject, string log, Exception ex, string emailTo, string emailCC)
         {
             if (!string.IsNullOrEmpty(subject))
@@ -160,29 +167,34 @@ namespace hwj.CommonLibrary.Object.Base
                     Email(subject, string.Format(EmailBodyFormat, log, FormatException(ex)), emailTo, emailCC);
             }
         }
-        //public void Email(string subject, string body)
-        //{
-        //    Email(subject, body, EmailTo, EmailCC);
-        //}
         public void Email(string subject, string body, string emailTo, string emailCC)
         {
             Subject = subject;
             Body = body;
             if (EmailOpened)
             {
-                try
+                if (MultSmtpEnabled)
                 {
-                    EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false);
+                    SmtpInfoList smtpList = new SmtpInfoList();
+                    EmailHelper.Send(emailTo, emailCC, subject, body, false, ref smtpList);
+                    SmtpList = smtpList;
                 }
-                catch
+                else
                 {
                     try
                     {
                         EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false);
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        LogError.Error(ex.Message);
+                        try
+                        {
+                            EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogError.Error(ex.Message);
+                        }
                     }
                 }
             }
