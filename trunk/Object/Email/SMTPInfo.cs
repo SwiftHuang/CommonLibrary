@@ -57,6 +57,19 @@ namespace hwj.CommonLibrary.Object.Email
             SmtpInfo smtpInfo = new SmtpInfo(smtpServer, emailFrom, emailFromPassword);
             this.Add(smtpInfo);
         }
+
+        public SmtpInfoList GetActiveList()
+        {
+            SmtpInfoList streamlineList = new SmtpInfoList();
+            foreach (SmtpInfo smtpInfo in this)
+            {
+                if (smtpInfo != null && smtpInfo.Active && !string.IsNullOrEmpty(smtpInfo.SmtpServer) && !string.IsNullOrEmpty(smtpInfo.UserName) && smtpInfo.FailedOn.AddMinutes(Interval) < DateTime.Now)
+                {
+                    streamlineList.Add(smtpInfo);
+                }
+            }
+            return streamlineList;
+        }
     }
 
     internal class SmtpInfoComparer : IComparer<SmtpInfo>
@@ -64,6 +77,8 @@ namespace hwj.CommonLibrary.Object.Email
         public int Compare(SmtpInfo x, SmtpInfo y)
         {
             if (x == null && y == null)
+                return 0;
+            if (x.FailedOn == DateTime.MinValue && y.FailedOn == DateTime.MinValue)
                 return 0;
             return x.FailedOn.CompareTo(y.FailedOn);
         }

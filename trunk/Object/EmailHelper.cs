@@ -203,15 +203,8 @@ namespace hwj.CommonLibrary.Object
                 }
             }
 
-            SmtpInfoList streamlineList = new SmtpInfoList();
-            foreach (SmtpInfo smtpInfo in smtpInfos)
-            {
-                if (smtpInfo != null && smtpInfo.Active && !string.IsNullOrEmpty(smtpInfo.SmtpServer) && !string.IsNullOrEmpty(smtpInfo.UserName) && smtpInfo.FailedOn.Date < DateTime.Now.Date)
-                {
-                    streamlineList.Add(smtpInfo);
-                }
-            }
-            streamlineList.Sort(new Email.SmtpInfoComparer());
+            SmtpInfoList streamlineList = smtpInfos.GetActiveList();
+            //streamlineList.Sort(new Email.SmtpInfoComparer());
 
             foreach (SmtpInfo smtpInfo in streamlineList)
             {
