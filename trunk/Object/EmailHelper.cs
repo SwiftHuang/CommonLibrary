@@ -54,7 +54,7 @@ namespace hwj.CommonLibrary.Object
         /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
         /// <param name="streams">此电子邮件的数据的附件文件流的集合</param>
         /// <returns></returns>
-        public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<StreamFile> streams)
+        public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<FileStream> streams)
         {
             List<Attachment> attachments = GetAttachments(streams);
             return Send(smtpServer, emailFrom, emailFromPassword, emailTo, cc, subject, body, isBodyHtml, attachments);
@@ -118,33 +118,11 @@ namespace hwj.CommonLibrary.Object
         /// <param name="streams">此电子邮件的数据的附件文件流的集合</param>
         /// <param name="smtpInfos">SMTP服务器集合</param>
         /// <returns></returns>
-        public static bool Send(string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<StreamFile> streams, ref SmtpInfoList smtpInfos)
+        public static bool Send(string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<FileStream> streams, ref SmtpInfoList smtpInfos)
         {
             List<Attachment> attachments = GetAttachments(streams);
             MailMessage message = GetMailMessage(null, emailTo, cc, subject, body, isBodyHtml, attachments);
             return Send(message, ref smtpInfos);
-
-            //string HTML = @"<br><br>To uncompress the file you may need one of follow softwares <br>winrar:<a href=http://www.winrar.com>http://www.winrar.com</a><br>7-zip:<a href=http://www.7-zip.org/>http://www.7-zip.org</a>";
-            //string STR = "\r\n\r\nTo uncompress the file you may need one of follow softwares \r\nwinrar:http://www.winrar.com \r\n7-zip: http://www.7-zip.org/";
-
-            //bool usedGzip = false;
-
-            //if (streams != null && streams.Count > 0)
-            //{
-            //    foreach (StreamFile s in streams)
-            //    {
-            //        if (s.UseGzip)
-            //        {
-            //            attachments.Add(new Attachment(hwj.CommonLibrary.Object.FileHelper.Stream2GzipStream(s.InStream), s.FileName + ".gz"));
-            //            usedGzip = true;
-            //        }
-            //        else
-            //            attachments.Add(new Attachment(s.InStream, s.FileName));
-            //    }
-            //}
-            //if (usedGzip)
-            //    body += isBodyHtml ? HTML : STR;
-            //return Send(emailTo, cc, subject, body, isBodyHtml, attachments, ref  smtpInfos);
         }
         /// <summary>
         /// 发送含附件的电子邮件
@@ -203,8 +181,7 @@ namespace hwj.CommonLibrary.Object
                 }
             }
 
-            SmtpInfoList streamlineList = smtpInfos.GetActiveList();
-            //streamlineList.Sort(new Email.SmtpInfoComparer());
+            SmtpInfoList streamlineList = smtpInfos.GetValidList();
 
             foreach (SmtpInfo smtpInfo in streamlineList)
             {
@@ -218,7 +195,8 @@ namespace hwj.CommonLibrary.Object
                 {
                     if (smtpInfo.Equals(streamlineList[streamlineList.Count - 1]))
                     {
-                        throw smtpInfos.LastFailed.Exception;
+                        //throw smtpInfos.LastFailed.Exception;
+                        return false;
                     }
                     else
                     {
@@ -318,26 +296,28 @@ namespace hwj.CommonLibrary.Object
 
             return message;
         }
-        private static List<Attachment> GetAttachments(List<StreamFile> streams)
+        private static List<Attachment> GetAttachments(List<FileStream> streams)
         {
             List<Attachment> attachments = new List<Attachment>();
 
-            string HTML = @"<br><br>To uncompress the file you may need one of follow softwares <br>winrar:<a href=http://www.winrar.com>http://www.winrar.com</a><br>7-zip:<a href=http://www.7-zip.org/>http://www.7-zip.org</a>";
-            string STR = "\r\n\r\nTo uncompress the file you may need one of follow softwares \r\nwinrar:http://www.winrar.com \r\n7-zip: http://www.7-zip.org/";
-
-            bool usedGzip = false;
+            //string HTML = @"<br><br>To uncompress the file you may need one of follow softwares <br>winrar:<a href=http://www.winrar.com>http://www.winrar.com</a><br>7-zip:<a href=http://www.7-zip.org/>http://www.7-zip.org</a>";
+            //string STR = "\r\n\r\nTo uncompress the file you may need one of follow softwares \r\nwinrar:http://www.winrar.com \r\n7-zip: http://www.7-zip.org/";
+            //bool usedGzip = false;
 
             if (streams != null && streams.Count > 0)
             {
-                foreach (StreamFile s in streams)
+                foreach (FileStream s in streams)
                 {
-                    if (s.UseGzip)
+                    if (s != null)
                     {
-                        attachments.Add(new Attachment(hwj.CommonLibrary.Object.FileHelper.Stream2GzipStream(s.InStream), s.FileName + ".gz"));
-                        usedGzip = true;
+                        if (s.UseGzip)
+                        {
+                            attachments.Add(new Attachment(hwj.CommonLibrary.Object.FileHelper.Stream2GzipStream(s.Stream), s.FileName + ".gz"));
+                            //usedGzip = true;
+                        }
+                        else
+                            attachments.Add(new Attachment(s.Stream, s.FileName));
                     }
-                    else
-                        attachments.Add(new Attachment(s.InStream, s.FileName));
                 }
             }
             return attachments;

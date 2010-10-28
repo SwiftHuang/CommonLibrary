@@ -58,12 +58,12 @@ namespace hwj.CommonLibrary.Object.Email
             this.Add(smtpInfo);
         }
 
-        public SmtpInfoList GetActiveList()
+        public SmtpInfoList GetValidList()
         {
             SmtpInfoList streamlineList = new SmtpInfoList();
             foreach (SmtpInfo smtpInfo in this)
             {
-                if (smtpInfo != null && smtpInfo.Active && !string.IsNullOrEmpty(smtpInfo.SmtpServer) && !string.IsNullOrEmpty(smtpInfo.UserName) && smtpInfo.FailedOn.AddMinutes(Interval) < DateTime.Now)
+                if (smtpInfo != null && smtpInfo.Active && !string.IsNullOrEmpty(smtpInfo.SmtpServer) && !string.IsNullOrEmpty(smtpInfo.UserName) && DateTime.Now.Subtract(smtpInfo.FailedOn).Minutes >= Interval)
                 {
                     streamlineList.Add(smtpInfo);
                 }
@@ -72,15 +72,15 @@ namespace hwj.CommonLibrary.Object.Email
         }
     }
 
-    internal class SmtpInfoComparer : IComparer<SmtpInfo>
-    {
-        public int Compare(SmtpInfo x, SmtpInfo y)
-        {
-            if (x == null && y == null)
-                return 0;
-            if (x.FailedOn == DateTime.MinValue && y.FailedOn == DateTime.MinValue)
-                return 0;
-            return x.FailedOn.CompareTo(y.FailedOn);
-        }
-    }
+    //internal class SmtpInfoComparer : IComparer<SmtpInfo>
+    //{
+    //    public int Compare(SmtpInfo x, SmtpInfo y)
+    //    {
+    //        if (x == null && y == null)
+    //            return 0;
+    //        if (x.FailedOn == DateTime.MinValue && y.FailedOn == DateTime.MinValue)
+    //            return 0;
+    //        return x.FailedOn.CompareTo(y.FailedOn);
+    //    }
+    //}
 }
