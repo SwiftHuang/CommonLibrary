@@ -5,39 +5,39 @@ using System.IO;
 
 namespace hwj.CommonLibrary.Object.Email
 {
-    public class StreamFile
+    public class FileStream
     {
-        public StreamFile() { }
+        public FileStream() { }
         /// <summary>
-        /// Initializes a new instance of the <see cref="StreamFile"/> class,default translate into GzipStream .
+        /// Initializes a new instance of the <see cref="FileStream"/> class,default translate into GzipStream .
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        /// <param name="inStream">The in stream.</param>
-        public StreamFile(string fileName, Stream inStream)
-            : this(fileName, inStream, true)
+        /// <param name="stream">The in stream.</param>
+        public FileStream(string fileName, Stream stream)
+            : this(fileName, stream, true)
         {
 
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StreamFile"/> class.
+        /// Initializes a new instance of the <see cref="FileStream"/> class.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        /// <param name="inStream">The in stream.</param>
+        /// <param name="stream">The in stream.</param>
         /// <param name="useGzip">if set to <c>true</c> [use gzip].</param>
-        public StreamFile(string fileName, Stream inStream, bool useGzip)
+        public FileStream(string fileName, Stream stream, bool useGzip)
         {
             this.FileName = fileName;
-            this.InStream = inStream;
+            this.Stream = stream;
             this.UseGzip = useGzip;
         }
 
         /// <summary>
         /// Get or Set the value to control either use Gzip to compress the stream or not
-        /// 
         /// </summary>
         public bool UseGzip { get; set; }
-        public Stream InStream { get; set; }
         public string FileName { get; set; }
+        public Stream Stream { get; set; }
+
     }
 }

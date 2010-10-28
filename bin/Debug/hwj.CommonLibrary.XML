@@ -4,27 +4,6 @@
         <name>hwj.CommonLibrary</name>
     </assembly>
     <members>
-        <member name="M:hwj.CommonLibrary.Object.Email.StreamFile.#ctor(System.String,System.IO.Stream)">
-            <summary>
-            Initializes a new instance of the <see cref="T:hwj.CommonLibrary.Object.Email.StreamFile"/> class,default translate into GzipStream .
-            </summary>
-            <param name="fileName">Name of the file.</param>
-            <param name="inStream">The in stream.</param>
-        </member>
-        <member name="M:hwj.CommonLibrary.Object.Email.StreamFile.#ctor(System.String,System.IO.Stream,System.Boolean)">
-            <summary>
-            Initializes a new instance of the <see cref="T:hwj.CommonLibrary.Object.Email.StreamFile"/> class.
-            </summary>
-            <param name="fileName">Name of the file.</param>
-            <param name="inStream">The in stream.</param>
-            <param name="useGzip">if set to <c>true</c> [use gzip].</param>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Email.StreamFile.UseGzip">
-            <summary>
-            Get or Set the value to control either use Gzip to compress the stream or not
-            
-            </summary>
-        </member>
         <member name="M:hwj.CommonLibrary.Object.NetHelper.GetHostName">
             <summary>
             获取本机名称
@@ -347,7 +326,7 @@
             <param name="attachments">此电子邮件的数据的附件集合</param>
             <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.Object.EmailHelper.Send(System.String,System.String,System.String,System.String[],System.String[],System.String,System.String,System.Boolean,System.Collections.Generic.List{hwj.CommonLibrary.Object.Email.StreamFile})">
+        <member name="M:hwj.CommonLibrary.Object.EmailHelper.Send(System.String,System.String,System.String,System.String[],System.String[],System.String,System.String,System.Boolean,System.Collections.Generic.List{hwj.CommonLibrary.Object.Email.FileStream})">
             <summary>
             发送含附件的电子邮件（可压缩附件）
             </summary>
@@ -400,7 +379,7 @@
             <param name="smtpInfos">SMTP服务器集合</param>
             <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.Object.EmailHelper.Send(System.String[],System.String[],System.String,System.String,System.Boolean,System.Collections.Generic.List{hwj.CommonLibrary.Object.Email.StreamFile},hwj.CommonLibrary.Object.Email.SmtpInfoList@)">
+        <member name="M:hwj.CommonLibrary.Object.EmailHelper.Send(System.String[],System.String[],System.String,System.String,System.Boolean,System.Collections.Generic.List{hwj.CommonLibrary.Object.Email.FileStream},hwj.CommonLibrary.Object.Email.SmtpInfoList@)">
             <summary>
             发送含附件的电子邮件（可压缩附件）
             </summary>
@@ -588,6 +567,26 @@
             <param name="MaxSeqNum">最大序号</param>
             <param name="top">返回个数</param>
             <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.Email.FileStream.#ctor(System.String,System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:hwj.CommonLibrary.Object.Email.FileStream"/> class,default translate into GzipStream .
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="stream">The in stream.</param>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.Email.FileStream.#ctor(System.String,System.IO.Stream,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:hwj.CommonLibrary.Object.Email.FileStream"/> class.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="stream">The in stream.</param>
+            <param name="useGzip">if set to <c>true</c> [use gzip].</param>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Email.FileStream.UseGzip">
+            <summary>
+            Get or Set the value to control either use Gzip to compress the stream or not
+            </summary>
         </member>
     </members>
 </doc>
