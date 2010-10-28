@@ -7,6 +7,7 @@ namespace hwj.CommonLibrary.Object
 {
     public class EmailHelper
     {
+        #region 单一SMTP服务器
         /// <summary>
         /// 发送电子邮件
         /// </summary>
@@ -40,25 +41,6 @@ namespace hwj.CommonLibrary.Object
         {
             return Send(smtpServer, emailFrom, emailFromPassword, new string[] { emailTo }, new string[] { cc }, subject, body, isBodyHtml, attachments);
         }
-
-        /// <summary>
-        /// 发送含附件的电子邮件
-        /// </summary>
-        /// <param name="smtpServer">SMTP服务器</param>
-        /// <param name="emailFrom">电子邮件的发件人地址</param>
-        /// <param name="emailFromPassword">发件人密码（如果该密码为空，则取消验证发件人身份）</param>
-        /// <param name="emailTo">收件人的地址集合</param>
-        /// <param name="cc">抄送 (CC) 收件人的地址集合</param>
-        /// <param name="subject">电子邮件的主题行</param>
-        /// <param name="body">邮件正文</param>
-        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
-        /// <param name="attachments">此电子邮件的数据的附件集合</param>
-        /// <returns></returns>
-        public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments)
-        {
-            SMTPInfos smtpInfos = new SMTPInfos(smtpServer, emailFrom, emailFromPassword);
-            return Send(emailTo, cc, subject, body, isBodyHtml, attachments, ref smtpInfos);
-        }
         /// <summary>
         /// 发送含附件的电子邮件（可压缩附件）
         /// </summary>
@@ -74,8 +56,26 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns>
         public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<StreamFile> streams)
         {
-            SMTPInfos smtpInfos = new SMTPInfos(smtpServer, emailFrom, emailFromPassword);
-            return Send(emailTo, cc, subject, body, isBodyHtml, streams, ref smtpInfos);
+            List<Attachment> attachments = GetAttachments(streams);
+            return Send(smtpServer, emailFrom, emailFromPassword, emailTo, cc, subject, body, isBodyHtml, attachments);
+        }
+        /// <summary>
+        /// 发送含附件的电子邮件
+        /// </summary>
+        /// <param name="smtpServer">SMTP服务器</param>
+        /// <param name="emailFrom">电子邮件的发件人地址</param>
+        /// <param name="emailFromPassword">发件人密码（如果该密码为空，则取消验证发件人身份）</param>
+        /// <param name="emailTo">收件人的地址集合</param>
+        /// <param name="cc">抄送 (CC) 收件人的地址集合</param>
+        /// <param name="subject">电子邮件的主题行</param>
+        /// <param name="body">邮件正文</param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="attachments">此电子邮件的数据的附件集合</param>
+        /// <returns></returns>
+        public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments)
+        {
+            MailMessage message = GetMailMessage(emailFrom, emailTo, cc, subject, body, isBodyHtml, attachments);
+            return Send(smtpServer, emailFrom, emailFromPassword, message);
         }
         /// <summary>
         /// 
@@ -86,12 +86,13 @@ namespace hwj.CommonLibrary.Object
         /// <param name="message"></param>
         /// <param name="isBodyHtml"></param>
         /// <returns></returns>
-        public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, MailMessage message, bool isBodyHtml)
+        public static bool Send(string smtpServer, string emailFrom, string emailFromPassword, MailMessage message)
         {
-            SMTPInfos smtpInfos = new SMTPInfos(smtpServer, emailFrom, emailFromPassword);
-            return Send(message, isBodyHtml, ref smtpInfos);
+            return SendAction(smtpServer, emailFrom, emailFromPassword, message);
         }
+        #endregion
 
+        #region 多个SMTP服务器
         /// <summary>
         /// 发送电子邮件
         /// </summary>
@@ -102,9 +103,48 @@ namespace hwj.CommonLibrary.Object
         /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
         /// <param name="smtpInfos">SMTP服务器集合</param>
         /// <returns></returns>
-        public static bool Send(string emailTo, string cc, string subject, string body, bool isBodyHtml, ref SMTPInfos smtpInfos)
+        public static bool Send(string emailTo, string cc, string subject, string body, bool isBodyHtml, ref SmtpInfoList smtpInfos)
         {
             return Send(emailTo, cc, subject, body, isBodyHtml, null, ref smtpInfos);
+        }
+        /// <summary>
+        /// 发送含附件的电子邮件（可压缩附件）
+        /// </summary>
+        /// <param name="emailTo">收件人的地址集合</param>
+        /// <param name="cc">抄送 (CC) 收件人的地址集合</param>
+        /// <param name="subject">电子邮件的主题行</param>
+        /// <param name="body">邮件正文</param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="streams">此电子邮件的数据的附件文件流的集合</param>
+        /// <param name="smtpInfos">SMTP服务器集合</param>
+        /// <returns></returns>
+        public static bool Send(string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<StreamFile> streams, ref SmtpInfoList smtpInfos)
+        {
+            List<Attachment> attachments = GetAttachments(streams);
+            MailMessage message = GetMailMessage(null, emailTo, cc, subject, body, isBodyHtml, attachments);
+            return Send(message, ref smtpInfos);
+
+            //string HTML = @"<br><br>To uncompress the file you may need one of follow softwares <br>winrar:<a href=http://www.winrar.com>http://www.winrar.com</a><br>7-zip:<a href=http://www.7-zip.org/>http://www.7-zip.org</a>";
+            //string STR = "\r\n\r\nTo uncompress the file you may need one of follow softwares \r\nwinrar:http://www.winrar.com \r\n7-zip: http://www.7-zip.org/";
+
+            //bool usedGzip = false;
+
+            //if (streams != null && streams.Count > 0)
+            //{
+            //    foreach (StreamFile s in streams)
+            //    {
+            //        if (s.UseGzip)
+            //        {
+            //            attachments.Add(new Attachment(hwj.CommonLibrary.Object.FileHelper.Stream2GzipStream(s.InStream), s.FileName + ".gz"));
+            //            usedGzip = true;
+            //        }
+            //        else
+            //            attachments.Add(new Attachment(s.InStream, s.FileName));
+            //    }
+            //}
+            //if (usedGzip)
+            //    body += isBodyHtml ? HTML : STR;
+            //return Send(emailTo, cc, subject, body, isBodyHtml, attachments, ref  smtpInfos);
         }
         /// <summary>
         /// 发送含附件的电子邮件
@@ -117,47 +157,9 @@ namespace hwj.CommonLibrary.Object
         /// <param name="attachments">此电子邮件的数据的附件集合</param>
         /// <param name="smtpInfos">SMTP服务器集合</param>
         /// <returns></returns>
-        public static bool Send(string emailTo, string cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments, ref SMTPInfos smtpInfos)
+        public static bool Send(string emailTo, string cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments, ref SmtpInfoList smtpInfos)
         {
-            return Send(new string[] { emailTo }, new string[] { cc }, subject, body, isBodyHtml, attachments, ref  smtpInfos);
-        }
-
-        /// <summary>
-        /// 发送含附件的电子邮件（可压缩附件）
-        /// </summary>
-        /// <param name="emailTo">收件人的地址集合</param>
-        /// <param name="cc">抄送 (CC) 收件人的地址集合</param>
-        /// <param name="subject">电子邮件的主题行</param>
-        /// <param name="body">邮件正文</param>
-        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
-        /// <param name="streams">此电子邮件的数据的附件文件流的集合</param>
-        /// <param name="smtpInfos">SMTP服务器集合</param>
-        /// <returns></returns>
-        public static bool Send(string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<StreamFile> streams, ref SMTPInfos smtpInfos)
-        {
-            List<Attachment> attachments = new List<Attachment>();
-
-            string HTML = @"<br><br>To uncompress the file you may need one of follow softwares <br>winrar:<a href=http://www.winrar.com>http://www.winrar.com</a><br>7-zip:<a href=http://www.7-zip.org/>http://www.7-zip.org</a>";
-            string STR = "\r\n\r\nTo uncompress the file you may need one of follow softwares \r\nwinrar:http://www.winrar.com \r\n7-zip: http://www.7-zip.org/";
-
-            bool usedGzip = false;
-
-            if (streams != null && streams.Count > 0)
-            {
-                foreach (StreamFile s in streams)
-                {
-                    if (s.UseGzip)
-                    {
-                        attachments.Add(new Attachment(hwj.CommonLibrary.Object.FileHelper.Stream2GzipStream(s.InStream), s.FileName + ".gz"));
-                        usedGzip = true;
-                    }
-                    else
-                        attachments.Add(new Attachment(s.InStream, s.FileName));
-                }
-            }
-            if (usedGzip)
-                body += isBodyHtml ? HTML : STR;
-            return Send(emailTo, cc, subject, body, isBodyHtml, attachments, ref  smtpInfos);
+            return Send(new string[] { emailTo }, new string[] { cc }, subject, body, isBodyHtml, attachments, ref smtpInfos);
         }
         /// <summary>
         /// 发送含附件的电子邮件
@@ -170,10 +172,123 @@ namespace hwj.CommonLibrary.Object
         /// <param name="attachments">此电子邮件的数据的附件集合</param>
         /// <param name="smtpInfos">SMTP服务器集合</param>
         /// <returns></returns>
-        public static bool Send(string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments, ref SMTPInfos smtpInfos)
+        public static bool Send(string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments, ref SmtpInfoList smtpInfos)
+        {
+            MailMessage message = GetMailMessage(null, emailTo, cc, subject, body, isBodyHtml, attachments);
+            return Send(message, ref smtpInfos);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
+        /// <param name="smtpInfos">SMTP服务器集合</param>
+        /// <returns></returns>
+        public static bool Send(MailMessage message, ref SmtpInfoList smtpInfos)
+        {
+            if (smtpInfos == null)
+                throw new Exception("Invalid Data: SmtpInfos is null");
+
+            if (smtpInfos.LastSuccess != null)
+            {
+                SmtpInfo smtp = SendAction(message, smtpInfos.LastSuccess);
+                if (!smtp.IsError)
+                {
+                    return true;
+                }
+                else
+                {
+                    smtpInfos.LastFailed = smtp;
+                    smtpInfos.LastSuccess = null;
+                }
+            }
+
+            SmtpInfoList streamlineList = new SmtpInfoList();
+            foreach (SmtpInfo smtpInfo in smtpInfos)
+            {
+                if (smtpInfo != null && smtpInfo.Active && !string.IsNullOrEmpty(smtpInfo.SmtpServer) && !string.IsNullOrEmpty(smtpInfo.UserName) && smtpInfo.FailedOn.Date < DateTime.Now.Date)
+                {
+                    streamlineList.Add(smtpInfo);
+                }
+            }
+            streamlineList.Sort(new Email.SmtpInfoComparer());
+
+            foreach (SmtpInfo smtpInfo in streamlineList)
+            {
+                SendAction(message, smtpInfo);
+                if (!smtpInfo.IsError)
+                {
+                    smtpInfos.LastSuccess = smtpInfo;
+                    return true;
+                }
+                else
+                {
+                    if (smtpInfo.Equals(streamlineList[streamlineList.Count - 1]))
+                    {
+                        throw smtpInfos.LastFailed.Exception;
+                    }
+                    else
+                    {
+                        smtpInfos.LastFailed = smtpInfo;
+                    }
+                }
+            }
+            return false;
+        }
+        #endregion
+
+        public static bool isValidEmail(string xEmailAddress)
+        {
+            bool myIsEmail = false;
+            string myRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+            System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex(myRegex);
+            if (reg.IsMatch(xEmailAddress))
+            {
+                myIsEmail = true;
+            }
+            return myIsEmail;
+        }
+
+        #region Private Function
+        private static SmtpInfo SendAction(MailMessage message, SmtpInfo smtpInfo)
+        {
+            try
+            {
+                SendAction(smtpInfo.SmtpServer, smtpInfo.UserName, smtpInfo.Password, message);
+                smtpInfo.IsError = false;
+                smtpInfo.SuccessOn = DateTime.Now;
+                smtpInfo.Exception = null;
+                return smtpInfo;
+            }
+            catch (Exception ex)
+            {
+                smtpInfo.IsError = true;
+                smtpInfo.FailedOn = DateTime.Now;
+                smtpInfo.Exception = ex;
+                return smtpInfo;
+            }
+        }
+        private static bool SendAction(string smtpServer, string emailFrom, string emailFromPassword, MailMessage message)
+        {
+            SmtpClient client = new SmtpClient(smtpServer);
+            if (!string.IsNullOrEmpty(emailFromPassword))
+            {
+                client.UseDefaultCredentials = false;
+                client.Credentials = new System.Net.NetworkCredential(emailFrom, emailFromPassword);
+            }
+            else
+                client.UseDefaultCredentials = true;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+            message.From = new MailAddress(emailFrom);
+
+            client.Send(message);
+            return true;
+        }
+
+        private static MailMessage GetMailMessage(string emailFrom, string[] emailTo, string[] cc, string subject, string body, bool isBodyHtml, List<Attachment> attachments)
         {
             MailMessage message = new MailMessage();
-            //message.From = new MailAddress(emailFrom);
             message.Subject = subject;
             message.Body = body;
 
@@ -201,75 +316,40 @@ namespace hwj.CommonLibrary.Object
                     message.Attachments.Add(a);
                 }
             }
-            message.IsBodyHtml = isBodyHtml;
-            return Send(message, isBodyHtml, ref smtpInfos);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
-        /// <param name="smtpInfos">SMTP服务器集合</param>
-        /// <returns></returns>
-        public static bool Send(MailMessage message, bool isBodyHtml, ref SMTPInfos smtpInfos)
-        {
-            if (smtpInfos == null)
-                throw new Exception("SMTPinfos is null");
 
-            SMTPInfos streamlineList = new SMTPInfos();
-            foreach (SMTPInfo smtpInfo in smtpInfos)
+            if (!string.IsNullOrEmpty(emailFrom))
+                message.From = new MailAddress(emailFrom);
+            message.Priority = MailPriority.Normal;
+            message.BodyEncoding = System.Text.Encoding.UTF8;
+            message.IsBodyHtml = isBodyHtml;
+
+            return message;
+        }
+        private static List<Attachment> GetAttachments(List<StreamFile> streams)
+        {
+            List<Attachment> attachments = new List<Attachment>();
+
+            string HTML = @"<br><br>To uncompress the file you may need one of follow softwares <br>winrar:<a href=http://www.winrar.com>http://www.winrar.com</a><br>7-zip:<a href=http://www.7-zip.org/>http://www.7-zip.org</a>";
+            string STR = "\r\n\r\nTo uncompress the file you may need one of follow softwares \r\nwinrar:http://www.winrar.com \r\n7-zip: http://www.7-zip.org/";
+
+            bool usedGzip = false;
+
+            if (streams != null && streams.Count > 0)
             {
-                if (smtpInfo != null && smtpInfo.Active && !string.IsNullOrEmpty(smtpInfo.SmtpServer) && !string.IsNullOrEmpty(smtpInfo.EmailFrom) && smtpInfo.LastFailDate.Date < DateTime.Now.Date)
+                foreach (StreamFile s in streams)
                 {
-                    streamlineList.Add(smtpInfo);
-                }
-            }
-            streamlineList.Sort(new Email.SMTPInfoComparer());
-            foreach (SMTPInfo smtpInfo in streamlineList)
-            {
-                try
-                {
-                    SmtpClient client = new SmtpClient(smtpInfo.SmtpServer);
-                    if (!string.IsNullOrEmpty(smtpInfo.EmailFromPassword))
+                    if (s.UseGzip)
                     {
-                        client.UseDefaultCredentials = false;
-                        client.Credentials = new System.Net.NetworkCredential(smtpInfo.EmailFrom, smtpInfo.EmailFromPassword);
+                        attachments.Add(new Attachment(hwj.CommonLibrary.Object.FileHelper.Stream2GzipStream(s.InStream), s.FileName + ".gz"));
+                        usedGzip = true;
                     }
                     else
-                        client.UseDefaultCredentials = true;
-                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
-
-                    message.From = new MailAddress(smtpInfo.EmailFrom);
-                    message.Priority = MailPriority.Normal;
-                    message.BodyEncoding = System.Text.Encoding.UTF8;
-                    message.IsBodyHtml = isBodyHtml;
-                    client.Send(message);
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    smtpInfo.LastFailDate = DateTime.Now;
-                    smtpInfo.Exception = ex;
-
-                    if (smtpInfo.Equals(streamlineList[streamlineList.Count - 1]))
-                        throw;
+                        attachments.Add(new Attachment(s.InStream, s.FileName));
                 }
             }
-            return false;
+            return attachments;
         }
-
-        public static bool isValidEmail(string xEmailAddress)
-        {
-            bool myIsEmail = false;
-            string myRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-            System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex(myRegex);
-            if (reg.IsMatch(xEmailAddress))
-            {
-                myIsEmail = true;
-            }
-            return myIsEmail;
-        }
-
+        #endregion
     }
 
 }
