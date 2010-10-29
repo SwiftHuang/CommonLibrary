@@ -94,6 +94,10 @@ namespace hwj.CommonLibrary.Object.Base
         }
         public void InfoAction(string log, Exception ex, string EmailSubject, bool sendEmail, string emailTo, string emailCC)
         {
+            InfoAction(log, ex, EmailSubject, sendEmail, emailTo, emailCC, null);
+        }
+        public void InfoAction(string log, Exception ex, string EmailSubject, bool sendEmail, string emailTo, string emailCC, List<Attachment> attachments)
+        {
             if (LogInfo.IsInfoEnabled)
             {
                 if (ex == null)
@@ -102,7 +106,7 @@ namespace hwj.CommonLibrary.Object.Base
                     LogInfo.Info(log, ex);
 
                 if (sendEmail)
-                    Email(EmailSubject + " <Info>", log, ex, EmailTo, EmailCC);
+                    Email(EmailSubject + " <Info>", log, ex, EmailTo, EmailCC, attachments);
             }
         }
         #endregion
@@ -118,10 +122,14 @@ namespace hwj.CommonLibrary.Object.Base
         }
         public void ErrorAction(string log, Exception ex, string EmailSubject, string emailTo, string emailCC)
         {
+            ErrorAction(log, ex, EmailSubject, emailTo, emailCC, null);
+        }
+        public void ErrorAction(string log, Exception ex, string EmailSubject, string emailTo, string emailCC, List<Attachment> attachments)
+        {
             if (LogError.IsErrorEnabled)
             {
                 LogError.Error(log, ex);
-                Email(EmailSubject + " <Error>", log, ex, emailTo, emailCC);
+                Email(EmailSubject + " <Error>", log, ex, emailTo, emailCC, attachments);
             }
         }
         #endregion
@@ -145,13 +153,17 @@ namespace hwj.CommonLibrary.Object.Base
         }
         public void WarnAction(string log, Exception ex, string EmailSubject, string emailTo, string emailCC)
         {
+            WarnAction(log, ex, EmailSubject, emailTo, emailCC, null);
+        }
+        public void WarnAction(string log, Exception ex, string EmailSubject, string emailTo, string emailCC, List<Attachment> attachments)
+        {
             if (LogWarn.IsWarnEnabled)
             {
                 if (ex == null)
                     LogWarn.Warn(log);
                 else
                     LogWarn.Warn(log, ex);
-                Email(EmailSubject + " <Warn>", log, ex, emailTo, emailCC);
+                Email(EmailSubject + " <Warn>", log, ex, emailTo, emailCC, attachments);
             }
         }
         #endregion
@@ -159,15 +171,23 @@ namespace hwj.CommonLibrary.Object.Base
         #region Email Function
         public void Email(string subject, string log, Exception ex, string emailTo, string emailCC)
         {
+            Email(subject, log, ex, emailTo, emailCC, null);
+        }
+        public void Email(string subject, string log, Exception ex, string emailTo, string emailCC, List<Attachment> attachments)
+        {
             if (!string.IsNullOrEmpty(subject))
             {
                 if (ex == null)
-                    Email(subject, log, emailTo, emailCC);
+                    Email(subject, log, emailTo, emailCC, attachments);
                 else
-                    Email(subject, string.Format(EmailBodyFormat, log, FormatException(ex)), emailTo, emailCC);
+                    Email(subject, string.Format(EmailBodyFormat, log, FormatException(ex)), emailTo, emailCC, attachments);
             }
         }
         public void Email(string subject, string body, string emailTo, string emailCC)
+        {
+            Email(subject, body, emailTo, emailCC, null);
+        }
+        public void Email(string subject, string body, string emailTo, string emailCC, List<Attachment> attachments)
         {
             Subject = subject;
             Body = body;
@@ -176,20 +196,20 @@ namespace hwj.CommonLibrary.Object.Base
                 if (MultSmtpEnabled)
                 {
                     SmtpInfoList smtpList = SmtpList;
-                    EmailHelper.Send(emailTo, emailCC, subject, body, false, ref smtpList);
+                    EmailHelper.Send(emailTo, emailCC, subject, body, false, attachments, ref smtpList);
                     SmtpList = smtpList;
                 }
                 else
                 {
                     try
                     {
-                        EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false);
+                        EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false, attachments);
                     }
                     catch
                     {
                         try
                         {
-                            EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false);
+                            EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false, attachments);
                         }
                         catch (Exception ex)
                         {
