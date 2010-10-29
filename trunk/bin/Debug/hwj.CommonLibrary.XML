@@ -4,6 +4,26 @@
         <name>hwj.CommonLibrary</name>
     </assembly>
     <members>
+        <member name="M:hwj.CommonLibrary.Object.Email.FileStream.#ctor(System.String,System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:hwj.CommonLibrary.Object.Email.FileStream"/> class,default translate into GzipStream .
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="stream">The in stream.</param>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.Email.FileStream.#ctor(System.String,System.IO.Stream,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:hwj.CommonLibrary.Object.Email.FileStream"/> class.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+            <param name="stream">The in stream.</param>
+            <param name="useGzip">if set to <c>true</c> [use gzip].</param>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Email.FileStream.UseGzip">
+            <summary>
+            Get or Set the value to control either use Gzip to compress the stream or not
+            </summary>
+        </member>
         <member name="M:hwj.CommonLibrary.Object.NetHelper.GetHostName">
             <summary>
             获取本机名称
@@ -577,26 +597,6 @@
             <param name="MaxSeqNum">最大序号</param>
             <param name="top">返回个数</param>
             <returns></returns>
-        </member>
-        <member name="M:hwj.CommonLibrary.Object.Email.FileStream.#ctor(System.String,System.IO.Stream)">
-            <summary>
-            Initializes a new instance of the <see cref="T:hwj.CommonLibrary.Object.Email.FileStream"/> class,default translate into GzipStream .
-            </summary>
-            <param name="fileName">Name of the file.</param>
-            <param name="stream">The in stream.</param>
-        </member>
-        <member name="M:hwj.CommonLibrary.Object.Email.FileStream.#ctor(System.String,System.IO.Stream,System.Boolean)">
-            <summary>
-            Initializes a new instance of the <see cref="T:hwj.CommonLibrary.Object.Email.FileStream"/> class.
-            </summary>
-            <param name="fileName">Name of the file.</param>
-            <param name="stream">The in stream.</param>
-            <param name="useGzip">if set to <c>true</c> [use gzip].</param>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Email.FileStream.UseGzip">
-            <summary>
-            Get or Set the value to control either use Gzip to compress the stream or not
-            </summary>
         </member>
     </members>
 </doc>

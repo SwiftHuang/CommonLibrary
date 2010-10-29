@@ -175,7 +175,7 @@ namespace hwj.CommonLibrary.Object.Base
             {
                 if (MultSmtpEnabled)
                 {
-                    SmtpInfoList smtpList = new SmtpInfoList();
+                    SmtpInfoList smtpList = SmtpList;
                     EmailHelper.Send(emailTo, emailCC, subject, body, false, ref smtpList);
                     SmtpList = smtpList;
                 }
