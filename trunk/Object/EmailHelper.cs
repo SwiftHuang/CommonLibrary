@@ -312,7 +312,7 @@ namespace hwj.CommonLibrary.Object
                     {
                         if (s.UseGzip)
                         {
-                            attachments.Add(new Attachment(hwj.CommonLibrary.Object.FileHelper.Stream2GzipStream(s.Stream), s.FileName + ".gz"));
+                            attachments.Add(new Attachment(hwj.CommonLibrary.Object.FileHelper.StreamToMemoryStream(s.Stream), s.FileName + ".gz"));
                             //usedGzip = true;
                         }
                         else
