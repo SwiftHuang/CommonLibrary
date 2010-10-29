@@ -191,6 +191,15 @@ namespace hwj.CommonLibrary.Object
         public static MemoryStream Stream2GzipStream(Stream stream)
         {
             Byte[] buffer = hwj.CommonLibrary.Object.FileHelper.StreamToBytes(stream);
+            return Bytes2GzipStream(buffer);
+        }
+        public static MemoryStream Stream2GzipStream(string data)
+        {
+            Byte[] buffer = Encoding.UTF8.GetBytes(data);
+            return Bytes2GzipStream(buffer);
+        }
+        public static MemoryStream Bytes2GzipStream(Byte[] buffer)
+        {
             MemoryStream ms = new MemoryStream();
             GZipStream zipStream = new GZipStream(ms, CompressionMode.Compress, true);
             zipStream.Write(buffer, 0, buffer.Length);
