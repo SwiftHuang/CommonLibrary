@@ -188,17 +188,17 @@ namespace hwj.CommonLibrary.Object
             }
         }
 
-        public static MemoryStream Stream2GzipStream(Stream stream)
+        public static MemoryStream StreamToMemoryStream(Stream stream)
         {
             Byte[] buffer = hwj.CommonLibrary.Object.FileHelper.StreamToBytes(stream);
-            return Bytes2GzipStream(buffer);
+            return BytesToMemoryStream(buffer);
         }
-        public static MemoryStream Stream2GzipStream(string data)
+        public static MemoryStream StringToMemoryStream(string data)
         {
             Byte[] buffer = Encoding.UTF8.GetBytes(data);
-            return Bytes2GzipStream(buffer);
+            return BytesToMemoryStream(buffer);
         }
-        public static MemoryStream Bytes2GzipStream(Byte[] buffer)
+        public static MemoryStream BytesToMemoryStream(Byte[] buffer)
         {
             MemoryStream ms = new MemoryStream();
             GZipStream zipStream = new GZipStream(ms, CompressionMode.Compress, true);
