@@ -27,6 +27,7 @@ namespace hwj.CommonLibrary.Object
             StringBuilder ret = new StringBuilder();
             foreach (byte b in ms.ToArray())
             {
+
                 ret.AppendFormat("{0:X2}", b);
             }
             return ret.ToString();
