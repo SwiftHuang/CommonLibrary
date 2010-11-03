@@ -170,13 +170,12 @@ namespace hwj.CommonLibrary.Object
             if (smtpInfos.LastSuccess != null)
             {
                 SmtpInfo smtp = SendAction(message, smtpInfos.LastSuccess);
-                if (!smtp.IsError)
+                if (smtp.Exception==null)
                 {
                     return true;
                 }
                 else
                 {
-                    smtpInfos.LastFailed = smtp;
                     smtpInfos.LastSuccess = null;
                 }
             }
@@ -186,7 +185,7 @@ namespace hwj.CommonLibrary.Object
             foreach (SmtpInfo smtpInfo in streamlineList)
             {
                 SendAction(message, smtpInfo);
-                if (!smtpInfo.IsError)
+                if (smtpInfo.Exception==null)
                 {
                     smtpInfos.LastSuccess = smtpInfo;
                     return true;
@@ -197,10 +196,6 @@ namespace hwj.CommonLibrary.Object
                     {
                         //throw smtpInfos.LastFailed.Exception;
                         return false;
-                    }
-                    else
-                    {
-                        smtpInfos.LastFailed = smtpInfo;
                     }
                 }
             }
@@ -226,14 +221,11 @@ namespace hwj.CommonLibrary.Object
             try
             {
                 SendAction(smtpInfo.SmtpServer, smtpInfo.UserName, smtpInfo.Password, message);
-                smtpInfo.IsError = false;
-                smtpInfo.SuccessOn = DateTime.Now;
                 smtpInfo.Exception = null;
                 return smtpInfo;
             }
             catch (Exception ex)
             {
-                smtpInfo.IsError = true;
                 smtpInfo.FailedOn = DateTime.Now;
                 smtpInfo.Exception = ex;
                 return smtpInfo;
@@ -324,12 +316,17 @@ namespace hwj.CommonLibrary.Object
         //}
         public static Attachment GetAttachment(string text, string FileName, bool useGzip)
         {
-            System.IO.Stream stream = null;
-            Byte[] buffer;
             if (!string.IsNullOrEmpty(text))
             {
-                buffer = System.Text.Encoding.UTF8.GetBytes(text);
-                return GetAttachment(FileHelper.BytesToStream(buffer), FileName, useGzip);
+                if (useGzip)
+                {
+                    return new Attachment(hwj.CommonLibrary.Object.FileHelper.StringToMemoryStream(text), FileName + ".gz");
+                }
+                else
+                {
+                    Byte[] buffer = System.Text.Encoding.UTF8.GetBytes(text);
+                    return new Attachment(hwj.CommonLibrary.Object.FileHelper.BytesToStream(buffer), FileName);
+                }
             }
             else
                 return null;
