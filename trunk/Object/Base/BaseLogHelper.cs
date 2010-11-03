@@ -29,11 +29,6 @@ namespace hwj.CommonLibrary.Object.Base
         /// </summary>
         public string EmailCC { get; set; }
         internal string EmailBodyFormat { get; private set; }
-
-        public string EmailFrom { get; set; }
-        public string EmailPassword { get; set; }
-        public string EmailSMTPServer { get; set; }
-
         /// <summary>
         /// 获取或设置是否使用多个SMTP服务器的模式
         /// </summary>
@@ -41,7 +36,7 @@ namespace hwj.CommonLibrary.Object.Base
         /// <summary>
         /// 获取或设置SMTP服务器列表
         /// </summary>
-        public Email.SmtpInfoList SmtpList { get; set; }
+        private Email.SmtpInfoList SmtpList = new SmtpInfoList();
 
         public string Subject { get; set; }
         public string Body { get; set; }
@@ -69,11 +64,30 @@ namespace hwj.CommonLibrary.Object.Base
 
             EmailOpened = false;
             EmailTo = "vinsonhwj@gmail.com";
-            EmailFrom = "hpmis@sohu.com";
-            EmailSMTPServer = "smtp.sohu.com";
-            EmailPassword = "123456";
+            //EmailFrom = "hpmis@sohu.com";
+            //EmailSMTPServer = "smtp.sohu.com";
+            //EmailPassword = "123456";
             EmailBodyFormat = "{0}\r\n{1}";
         }
+
+        #region Smtp Function
+        public void SetSmtp(string smtpServer, string emailFrom, string emailFromPassword)
+        {
+            SmtpList = new SmtpInfoList(smtpServer, emailFrom, emailFromPassword);
+        }
+        public void SetSmtp(SmtpInfoList smtpList)
+        {
+            SmtpList = smtpList;
+        }
+        public void InsertSmtp(int index, SmtpInfo smtpList)
+        {
+            SmtpList.Insert(index, smtpList);
+        }
+        public SmtpInfoList GetSmtp()
+        {
+            return SmtpList;
+        }
+        #endregion
 
         #region Info Function
         public void Info(string log, bool sendEmail)
@@ -193,29 +207,36 @@ namespace hwj.CommonLibrary.Object.Base
             Body = body;
             if (EmailOpened)
             {
-                if (MultSmtpEnabled)
+                if (SmtpList.Count > 0)
                 {
-                    SmtpInfoList smtpList = SmtpList;
-                    EmailHelper.Send(emailTo, emailCC, subject, body, false, attachments, ref smtpList);
-                    SmtpList = smtpList;
-                }
-                else
-                {
-                    try
+                    if (MultSmtpEnabled)
                     {
-                        EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false, attachments);
+                        SmtpInfoList smtpList = SmtpList;
+                        EmailHelper.Send(emailTo, emailCC, subject, body, false, attachments, ref smtpList);
+                        SmtpList = smtpList;
                     }
-                    catch
+                    else
                     {
                         try
                         {
-                            EmailHelper.Send(EmailSMTPServer, EmailFrom, EmailPassword, emailTo, emailCC, subject, body, false, attachments);
+                            EmailHelper.Send(SmtpList[0].SmtpServer, SmtpList[0].UserName, SmtpList[0].Password, emailTo, emailCC, subject, body, false, attachments);
                         }
-                        catch (Exception ex)
+                        catch
                         {
-                            LogError.Error(ex.Message);
+                            try
+                            {
+                                EmailHelper.Send(SmtpList[0].SmtpServer, SmtpList[0].UserName, SmtpList[0].Password, emailTo, emailCC, subject, body, false, attachments);
+                            }
+                            catch (Exception ex)
+                            {
+                                LogError.Error(ex.Message);
+                            }
                         }
                     }
+                }
+                else
+                {
+                    throw new Exception("Invaild SmtpList");
                 }
             }
         }
