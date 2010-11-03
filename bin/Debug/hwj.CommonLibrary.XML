@@ -4,26 +4,6 @@
         <name>hwj.CommonLibrary</name>
     </assembly>
     <members>
-        <member name="M:hwj.CommonLibrary.Object.Email.FileStream.#ctor(System.String,System.IO.Stream)">
-            <summary>
-            Initializes a new instance of the <see cref="T:hwj.CommonLibrary.Object.Email.FileStream"/> class,default translate into GzipStream .
-            </summary>
-            <param name="fileName">Name of the file.</param>
-            <param name="stream">The in stream.</param>
-        </member>
-        <member name="M:hwj.CommonLibrary.Object.Email.FileStream.#ctor(System.String,System.IO.Stream,System.Boolean)">
-            <summary>
-            Initializes a new instance of the <see cref="T:hwj.CommonLibrary.Object.Email.FileStream"/> class.
-            </summary>
-            <param name="fileName">Name of the file.</param>
-            <param name="stream">The in stream.</param>
-            <param name="useGzip">if set to <c>true</c> [use gzip].</param>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Email.FileStream.UseGzip">
-            <summary>
-            Get or Set the value to control either use Gzip to compress the stream or not
-            </summary>
-        </member>
         <member name="M:hwj.CommonLibrary.Object.NetHelper.GetHostName">
             <summary>
             获取本机名称
@@ -45,11 +25,6 @@
         <member name="P:hwj.CommonLibrary.Object.Email.SmtpInfoList.LastSuccess">
             <summary>
             获取最后一次成功发送的SMTP配置。
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Email.SmtpInfoList.LastFailed">
-            <summary>
-            获取最后一次发送失败的SMTP配置。
             </summary>
         </member>
         <member name="P:hwj.CommonLibrary.Object.Email.SmtpInfoList.Interval">
@@ -356,21 +331,6 @@
             <param name="attachments">此电子邮件的数据的附件集合</param>
             <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.Object.EmailHelper.Send(System.String,System.String,System.String,System.String[],System.String[],System.String,System.String,System.Boolean,System.Collections.Generic.List{hwj.CommonLibrary.Object.Email.FileStream})">
-            <summary>
-            发送含附件的电子邮件（可压缩附件）
-            </summary>
-            <param name="smtpServer">SMTP服务器</param>
-            <param name="emailFrom">电子邮件的发件人地址</param>
-            <param name="emailFromPassword">发件人密码（如果该密码为空，则取消验证发件人身份）</param>
-            <param name="emailTo">收件人的地址集合</param>
-            <param name="cc">抄送 (CC) 收件人的地址集合</param>
-            <param name="subject">电子邮件的主题行</param>
-            <param name="body">邮件正文</param>
-            <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
-            <param name="streams">此电子邮件的数据的附件文件流的集合</param>
-            <returns></returns>
-        </member>
         <member name="M:hwj.CommonLibrary.Object.EmailHelper.Send(System.String,System.String,System.String,System.String[],System.String[],System.String,System.String,System.Boolean,System.Collections.Generic.List{System.Net.Mail.Attachment})">
             <summary>
             发送含附件的电子邮件
@@ -406,19 +366,6 @@
             <param name="subject">电子邮件的主题行</param>
             <param name="body">邮件正文</param>
             <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
-            <param name="smtpInfos">SMTP服务器集合</param>
-            <returns></returns>
-        </member>
-        <member name="M:hwj.CommonLibrary.Object.EmailHelper.Send(System.String[],System.String[],System.String,System.String,System.Boolean,System.Collections.Generic.List{hwj.CommonLibrary.Object.Email.FileStream},hwj.CommonLibrary.Object.Email.SmtpInfoList@)">
-            <summary>
-            发送含附件的电子邮件（可压缩附件）
-            </summary>
-            <param name="emailTo">收件人的地址集合</param>
-            <param name="cc">抄送 (CC) 收件人的地址集合</param>
-            <param name="subject">电子邮件的主题行</param>
-            <param name="body">邮件正文</param>
-            <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
-            <param name="streams">此电子邮件的数据的附件文件流的集合</param>
             <param name="smtpInfos">SMTP服务器集合</param>
             <returns></returns>
         </member>

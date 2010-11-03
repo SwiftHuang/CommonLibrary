@@ -53,7 +53,6 @@
     <Compile Include="Object\DateHelper.cs" />
     <Compile Include="Object\EmailHelper.cs" />
     <Compile Include="Object\Email\SmtpInfo.cs" />
-    <Compile Include="Object\Email\FileStream.cs" />
     <Compile Include="Object\FileHelper.cs" />
     <Compile Include="Object\Base\BaseLogHelper.cs" />
     <Compile Include="Object\FTPHelper.cs" />
