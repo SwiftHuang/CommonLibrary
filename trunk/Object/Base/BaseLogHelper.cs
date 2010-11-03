@@ -36,7 +36,7 @@ namespace hwj.CommonLibrary.Object.Base
         /// <summary>
         /// 获取或设置SMTP服务器列表
         /// </summary>
-        private Email.SmtpInfoList SmtpList = new SmtpInfoList();
+        public Email.SmtpInfoList SmtpList { get; set; }
 
         public string Subject { get; set; }
         public string Body { get; set; }
@@ -71,21 +71,9 @@ namespace hwj.CommonLibrary.Object.Base
         }
 
         #region Smtp Function
-        public void SetSmtp(string smtpServer, string emailFrom, string emailFromPassword)
+        public void SetSingleSmtp(string smtpServer, string emailFrom, string emailFromPassword)
         {
             SmtpList = new SmtpInfoList(smtpServer, emailFrom, emailFromPassword);
-        }
-        public void SetSmtp(SmtpInfoList smtpList)
-        {
-            SmtpList = smtpList;
-        }
-        public void InsertSmtp(int index, SmtpInfo smtpList)
-        {
-            SmtpList.Insert(index, smtpList);
-        }
-        public SmtpInfoList GetSmtp()
-        {
-            return SmtpList;
         }
         #endregion
 
