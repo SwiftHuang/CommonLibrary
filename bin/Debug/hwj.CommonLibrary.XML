@@ -526,6 +526,13 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:hwj.CommonLibrary.Object.NumberHelper.GetEnglish(System.Decimal)">
+            <summary>
+            将阿拉伯数字转为英文
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
         <member name="M:hwj.CommonLibrary.Object.NumberHelper.GetBreakSeqNum(System.Collections.Generic.List{System.Int32},System.Int32,System.Int32)">
             <summary>
             计算断号
