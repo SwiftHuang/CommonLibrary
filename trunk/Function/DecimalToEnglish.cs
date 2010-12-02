@@ -4,7 +4,7 @@ using System.Text;
 
 namespace hwj.CommonLibrary.Function
 {
-    public class DecimalToEnglish
+    internal class DecimalToEnglish
     {
         public static bool HasAnd = false;
         public static string HKMoneytoEng(decimal Num)

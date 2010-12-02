@@ -138,7 +138,15 @@ namespace hwj.CommonLibrary.Object
         {
             return dtc.ConvertToChinese(Math.Round(value, 2), false);
         }
-
+        /// <summary>
+        /// 将阿拉伯数字转为英文
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetEnglish(decimal value)
+        {
+            return hwj.CommonLibrary.Function.DecimalToEnglish.HKMoneytoEng(value);
+        }
         /// <summary>
         /// 计算断号
         /// </summary>
