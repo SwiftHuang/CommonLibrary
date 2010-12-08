@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Net.Mail;
 using System.Text;
@@ -17,14 +18,10 @@ namespace hwj.CommonLibrary.Object.Base
         private ILog LogError { get; set; }
         private ILog LogWarn { get; set; }
 
-        [System.ComponentModel.DefaultValue(true)]
-        private bool showInvalidSmtpError = true;
-
-        public bool ShowInvalidSmtpError
-        {
-            get { return showInvalidSmtpError; }
-            set { showInvalidSmtpError = value; }
-        }
+        /// <summary>
+        /// 是否抛出SmtpList异常
+        /// </summary>
+        public bool ShowInvalidSmtpError { get; set; }
 
         public bool EmailOpened { get; set; }
 
@@ -52,14 +49,16 @@ namespace hwj.CommonLibrary.Object.Base
 
         public LogHelper()
         {
+            ShowInvalidSmtpError = true;
             //log4net.Config.DOMConfigurator.Configure(new FileInfo("LogHelper.Config"));
             //Init();
         }
-        public LogHelper(string fileName)
-        {
-            //log4net.Config.DOMConfigurator.Configure(new FileInfo(fileName));
-            //Init();
-        }
+        //public LogHelper(string fileName)
+        //{
+        //    ShowInvalidSmtpError = true;
+        //    //log4net.Config.DOMConfigurator.Configure(new FileInfo(fileName));
+        //    //Init();
+        //}
         public void Initialization(string fileName)
         {
             if (!string.IsNullOrEmpty(fileName))
@@ -232,6 +231,12 @@ namespace hwj.CommonLibrary.Object.Base
                 }
                 else
                 {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("<<Invaild SmtpList>> Email Body Content:");
+                    sb.AppendLine();
+                    sb.Append(body);
+                    LogWarn.Warn(sb.ToString());
+
                     if (ShowInvalidSmtpError)
                         throw new Exception("Invaild SmtpList");
                 }
