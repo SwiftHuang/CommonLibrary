@@ -17,8 +17,16 @@ namespace hwj.CommonLibrary.Object.Base
         private ILog LogError { get; set; }
         private ILog LogWarn { get; set; }
 
-        public bool EmailOpened { get; set; }
+        [System.ComponentModel.DefaultValue(true)]
+        private bool showInvalidSmtpError = true;
 
+        public bool ShowInvalidSmtpError
+        {
+            get { return showInvalidSmtpError; }
+            set { showInvalidSmtpError = value; }
+        }
+
+        public bool EmailOpened { get; set; }
 
         /// <summary>
         /// 多个收件人请用逗号分隔
@@ -195,7 +203,7 @@ namespace hwj.CommonLibrary.Object.Base
             Body = body;
             if (EmailOpened)
             {
-                if (SmtpList.Count > 0)
+                if (SmtpList != null && SmtpList.Count > 0)
                 {
                     if (MultSmtpEnabled)
                     {
@@ -224,7 +232,8 @@ namespace hwj.CommonLibrary.Object.Base
                 }
                 else
                 {
-                    throw new Exception("Invaild SmtpList");
+                    if (ShowInvalidSmtpError)
+                        throw new Exception("Invaild SmtpList");
                 }
             }
         }
