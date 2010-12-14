@@ -64,7 +64,7 @@ namespace hwj.CommonLibrary.Object
         /// 获取当前系统、版本、版本号
         /// </summary>
         /// <returns></returns>
-        public static string GetOSInformation()
+        public static string GetOSVersion()
         {
             try
             {
