@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Net.Mail;
+using Microsoft.Win32;
 
 namespace hwj.CommonLibrary.Object
 {
@@ -60,5 +61,28 @@ namespace hwj.CommonLibrary.Object
             base.ErrorAction(log, ex, EmailSubject, emailTo, emailCC, attachments);
         }
         #endregion
+
+        /// <summary>
+        /// 获取当前系统、版本、版本号
+        /// </summary>
+        /// <returns></returns>
+        public static string GetOSInformation()
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                RegistryKey rk = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion");
+                string informaction = rk.GetValue("ProductName") != null ? rk.GetValue("ProductName").ToString() : string.Empty;
+                string version = rk.GetValue("CSDVersion") != null ? rk.GetValue("CSDVersion").ToString() : string.Empty;
+                string versionCode = rk.GetValue("CurrentBuildNumber") != null ? rk.GetValue("CurrentBuildNumber").ToString() : string.Empty;
+
+                sb.AppendFormat("{0} / {1} / {2}", informaction, version, versionCode);
+                return sb.ToString();
+            }
+            catch 
+            {
+                return "Failed to get system information";
+            }
+        }
     }
 }
