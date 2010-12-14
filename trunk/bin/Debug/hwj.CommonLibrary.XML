@@ -161,6 +161,12 @@
             获取或设置SMTP服务器列表
             </summary>
         </member>
+        <member name="M:hwj.CommonLibrary.Object.LogHelper.GetOSVersion">
+            <summary>
+            获取当前系统、版本、版本号
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:hwj.CommonLibrary.WebSite.WebCache">
             <summary>
             设置Cache操作类
