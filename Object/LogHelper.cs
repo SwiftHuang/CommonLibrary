@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Net.Mail;
-using Microsoft.Win32;
-
 namespace hwj.CommonLibrary.Object
 {
     public class LogHelper : Base.LogHelper
@@ -71,15 +69,13 @@ namespace hwj.CommonLibrary.Object
             try
             {
                 StringBuilder sb = new StringBuilder();
-                RegistryKey rk = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion");
-                string informaction = rk.GetValue("ProductName") != null ? rk.GetValue("ProductName").ToString() : string.Empty;
-                string version = rk.GetValue("CSDVersion") != null ? rk.GetValue("CSDVersion").ToString() : string.Empty;
-                string versionCode = rk.GetValue("CurrentBuildNumber") != null ? rk.GetValue("CurrentBuildNumber").ToString() : string.Empty;
+                string informaction = Environment.OSVersion.VersionString.ToString();
+                string version = Environment.Version.ToString();
 
-                sb.AppendFormat("{0} / {1} / {2}", informaction, version, versionCode);
+                sb.AppendFormat("{0}({1})", informaction, version);
                 return sb.ToString();
             }
-            catch 
+            catch
             {
                 return "Failed to get system information";
             }
