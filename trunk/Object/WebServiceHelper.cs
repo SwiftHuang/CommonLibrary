@@ -38,24 +38,31 @@ namespace hwj.CommonLibrary.Object
                 object obj = Activator.CreateInstance(t);
                 MethodInfo mi = t.GetMethod(methodname);
 
-                if (args == null)
-                    return mi.Invoke(obj, null);
+                if (mi != null)
+                {
+                    if (args == null)
+                        return mi.Invoke(obj, null);
+                    else
+                    {
+                        ParameterInfo[] paramsInfo = mi.GetParameters();
+                        object[] tmpArgs = new object[args.Length];
+
+                        for (int i = 0; i < args.Length; i++)
+                        {
+                            Type tType = paramsInfo[i].ParameterType;
+                            //如果它是值类型,或者String   
+                            if (tType.Equals(typeof(string)) || (!tType.IsInterface && !tType.IsClass))
+                            {
+                                //改变参数类型   
+                                tmpArgs[i] = Convert.ChangeType(args[i], tType);
+                            }
+                        }
+                        return mi.Invoke(obj, tmpArgs);
+                    }
+                }
                 else
                 {
-                    ParameterInfo[] paramsInfo = mi.GetParameters();
-                    object[] tmpArgs = new object[args.Length];
-
-                    for (int i = 0; i < args.Length; i++)
-                    {
-                        Type tType = paramsInfo[i].ParameterType;
-                        //如果它是值类型,或者String   
-                        if (tType.Equals(typeof(string)) || (!tType.IsInterface && !tType.IsClass))
-                        {
-                            //改变参数类型   
-                            tmpArgs[i] = Convert.ChangeType(args[i], tType);
-                        }
-                    }
-                    return mi.Invoke(obj, tmpArgs);
+                    throw new Exception(string.Format("Invalid Method Name:{0}", methodname));
                 }
             }
             catch (Exception ex)
@@ -144,10 +151,17 @@ namespace hwj.CommonLibrary.Object
                     object obj = Activator.CreateInstance(t);
                     MethodInfo mi = t.GetMethod(methodname);
 
-                    if (args == null)
-                        return mi.Invoke(obj, null);
+                    if (mi != null)
+                    {
+                        if (args == null)
+                            return mi.Invoke(obj, null);
+                        else
+                            return mi.Invoke(obj, args);
+                    }
                     else
-                        return mi.Invoke(obj, args);
+                    {
+                        throw new Exception(string.Format("Invalid Method Name:{0}", methodname));
+                    }
                 }
                 else
                     return null;
