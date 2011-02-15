@@ -26,6 +26,10 @@ namespace hwj.CommonLibrary.Object
         }
         public static object InvokeWebServiceByDLL(string fileName, string url, string classname, string methodname, object[] args)
         {
+            return InvokeWebServiceByDLL(fileName, url, classname, methodname, 100000, args);
+        }
+        public static object InvokeWebServiceByDLL(string fileName, string url, string classname, string methodname, int timeout, object[] args)
+        {
             try
             {
                 if ((classname == null) || (classname == ""))
@@ -37,6 +41,10 @@ namespace hwj.CommonLibrary.Object
 
                 object obj = Activator.CreateInstance(t);
                 MethodInfo mi = t.GetMethod(methodname);
+
+                PropertyInfo propInfo = obj.GetType().GetProperty("Timeout");
+                propInfo.SetValue(obj, timeout, null);
+
 
                 if (mi != null)
                 {
@@ -107,6 +115,7 @@ namespace hwj.CommonLibrary.Object
 
                 //生成客户端代理类代码
                 CodeCompileUnit ccu = new CodeCompileUnit();
+
                 ccu.Namespaces.Add(cn);
                 sdi.Import(cn, ccu);
                 CSharpCodeProvider csc = new CSharpCodeProvider();
