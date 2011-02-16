@@ -4,6 +4,11 @@
         <name>hwj.CommonLibrary</name>
     </assembly>
     <members>
+        <member name="M:hwj.CommonLibrary.Object.MemoryHelper.ReleaseMemory">
+            <summary>
+            释放物理内存
+            </summary>
+        </member>
         <member name="M:hwj.CommonLibrary.Object.NetHelper.GetHostName">
             <summary>
             获取本机名称
