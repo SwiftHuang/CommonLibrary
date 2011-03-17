@@ -30,8 +30,8 @@ namespace hwj.CommonLibrary.Object
         }
         public static object InvokeWebServiceByDLL(string fileName, string url, string classname, string methodname, int timeout, object[] args)
         {
-            try
-            {
+            //try
+            //{
             if ((classname == null) || (classname == ""))
             {
                 classname = GetWsClassName(url);
@@ -40,9 +40,8 @@ namespace hwj.CommonLibrary.Object
             Type t = assembly.GetType(@namespace + "." + classname, true, true);
 
             object obj = Activator.CreateInstance(t);
-            MethodInfo mi = t.GetMethod(methodname,BindingFlags.Public|BindingFlags.Static);
+            MethodInfo mi = t.GetMethod(methodname);
 
-            MethodInfo mi2 = t.GetMethod(methodname);
             if (timeout != -1)
             {
                 PropertyInfo propInfo = obj.GetType().GetProperty("Timeout");
@@ -52,7 +51,6 @@ namespace hwj.CommonLibrary.Object
 
             if (mi != null)
             {
-                return null;
                 if (args == null)
                     return mi.Invoke(obj, null);
                 else
@@ -75,17 +73,36 @@ namespace hwj.CommonLibrary.Object
             }
             else
             {
-                FileInfo fi = new FileInfo(fileName);
-                throw new Exception(string.Format("Invalid Method Name:{0}\r\n{1}-{2}", methodname, fi.FullName, fi.LastWriteTime));
+                throw new Exception(string.Format("Invalid Method Name:{0}", methodname));
             }
-            }
-            catch (Exception ex)
-            {
-                if (ex.InnerException != null)
-                    throw new Exception(ex.InnerException.Message, new Exception(ex.InnerException.StackTrace));
-                else
-                    throw ex;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    if (ex.InnerException != null && ex.InnerException is System.Net.WebException)
+            //    {
+            //        System.Net.WebException webEx = ex.InnerException as System.Net.WebException;
+            //        if (webEx.Status == WebExceptionStatus.ConnectFailure)
+            //            throw new Exception("Target WebService connection failure", ex);
+            //        else if (ex.InnerException.InnerException != null && ex.InnerException.InnerException is System.IO.IOException)
+            //            if (ex.InnerException.InnerException.InnerException != null && ex.InnerException.InnerException.InnerException is System.Net.Sockets.SocketException)
+            //            {
+            //                System.Net.Sockets.SocketException socketEx = ex.InnerException.InnerException.InnerException as System.Net.Sockets.SocketException;
+            //                if (socketEx.ErrorCode == 10054)
+            //                    ///存在的连接被远程主机强制关闭。
+            //                    ///通常原因为：远程主机上对等方应用程序突然停止运行，或远程主机重新启动，或远程主机在远程方套接字上使用了“强制”关闭
+            //                    ///（参见setsockopt(SO_LINGER)）。另外，在一个或多个操作正在进行时，如果连接因“keep-alive”活动检测到一个失败而中断，
+            //                    ///也可能导致此错误。此时，正在进行的操作以错误码WSAENETRESET失败返回，后续操作将失败返回错误码WSAECONNRESET。
+            //                    /// 
+            //                    ///简单来说就是“超时”！
+            //                    ///
+            //                    throw new Exception("Target WebService connection was closed", ex);
+            //            }
+            //    }
+            //    if (ex.InnerException != null)
+            //        throw new Exception(ex.InnerException.Message, new Exception(ex.InnerException.StackTrace));
+            //    else
+            //        throw ex;
+            //}
         }
         public static bool CreateWebServiceDLL(string url, string classname, string fileName)
         {
@@ -189,7 +206,6 @@ namespace hwj.CommonLibrary.Object
                     throw ex;
             }
         }
-
         private static string GetWsClassName(string wsUrl)
         {
             string[] parts = wsUrl.Split('/');
@@ -197,6 +213,7 @@ namespace hwj.CommonLibrary.Object
 
             return pps[0];
         }
+
         #endregion
     }
 }
