@@ -118,12 +118,20 @@ namespace hwj.CommonLibrary.Object.Base
                     Email(EmailSubject + " <Info>", log, ex, EmailTo, EmailCC, attachments);
             }
         }
+
         #endregion
 
         #region Error Function
         public void Error(string log, Exception ex)
         {
             ErrorAction(log, ex, null, EmailTo, EmailCC);
+        }
+        public void Error(string log, Exception ex, bool sendEmail)
+        {
+            if (sendEmail)
+                ErrorAction(log, ex, null, EmailTo, EmailCC);
+            else
+                ErrorAction(log, ex, false, null, null, null, null);
         }
         public void ErrorAction(string log, Exception ex, string EmailSubject)
         {
@@ -135,10 +143,15 @@ namespace hwj.CommonLibrary.Object.Base
         }
         public void ErrorAction(string log, Exception ex, string EmailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
+            ErrorAction(log, ex, true, EmailSubject, emailTo, emailCC, attachments);
+        }
+        private void ErrorAction(string log, Exception ex, bool sendEmail, string EmailSubject, string emailTo, string emailCC, List<Attachment> attachments)
+        {
             if (LogError.IsErrorEnabled)
             {
                 LogError.Error(log, ex);
-                Email(EmailSubject + " <Error>", log, ex, emailTo, emailCC, attachments);
+                if (sendEmail)
+                    Email(EmailSubject + " <Error>", log, ex, emailTo, emailCC, attachments);
             }
         }
         #endregion
@@ -148,13 +161,27 @@ namespace hwj.CommonLibrary.Object.Base
         {
             WarnAction(log, null, null);
         }
-        public void Warn(string log, string EmailSubject)
+        public void Warn(string log, bool sendEmail)
         {
-            WarnAction(log, null, EmailSubject);
+            Warn(log, null, sendEmail);
         }
         public void Warn(string log, Exception ex)
         {
             WarnAction(log, ex, null);
+        }
+        public void Warn(string log, Exception ex, bool sendEmail)
+        {
+            if (sendEmail)
+                WarnAction(log, ex, null);
+            else
+                WarnAction(log, ex, false, null, null, null, null);
+        }
+
+
+
+        public void Warn(string log, string emailSubject)
+        {
+            WarnAction(log, null, emailSubject);
         }
         public void WarnAction(string log, Exception ex, string EmailSubject)
         {
@@ -166,15 +193,21 @@ namespace hwj.CommonLibrary.Object.Base
         }
         public void WarnAction(string log, Exception ex, string EmailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
+            WarnAction(log, ex, true, EmailSubject, emailTo, emailCC, attachments);
+        }
+        private void WarnAction(string log, Exception ex, bool sendEmail, string EmailSubject, string emailTo, string emailCC, List<Attachment> attachments)
+        {
             if (LogWarn.IsWarnEnabled)
             {
                 if (ex == null)
                     LogWarn.Warn(log);
                 else
                     LogWarn.Warn(log, ex);
-                Email(EmailSubject + " <Warn>", log, ex, emailTo, emailCC, attachments);
+                if (sendEmail)
+                    Email(EmailSubject + " <Warn>", log, ex, emailTo, emailCC, attachments);
             }
         }
+
         #endregion
 
         #region Email Function
