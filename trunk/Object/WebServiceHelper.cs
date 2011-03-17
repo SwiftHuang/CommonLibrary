@@ -32,49 +32,52 @@ namespace hwj.CommonLibrary.Object
         {
             //try
             //{
-                if ((classname == null) || (classname == ""))
-                {
-                    classname = GetWsClassName(url);
-                }
-                Assembly assembly = Assembly.LoadFrom(fileName);
-                Type t = assembly.GetType(@namespace + "." + classname, true, true);
+            if ((classname == null) || (classname == ""))
+            {
+                classname = GetWsClassName(url);
+            }
+            Assembly assembly = Assembly.LoadFrom(fileName);
+            Type t = assembly.GetType(@namespace + "." + classname, true, true);
 
-                object obj = Activator.CreateInstance(t);
-                MethodInfo mi = t.GetMethod(methodname);
+            object obj = Activator.CreateInstance(t);
+            MethodInfo mi = t.GetMethod(methodname,BindingFlags.Public|BindingFlags.Static);
 
-                if (timeout != -1)
-                {
-                    PropertyInfo propInfo = obj.GetType().GetProperty("Timeout");
-                    propInfo.SetValue(obj, timeout, null);
-                }
+            MethodInfo mi2 = t.GetMethod(methodname);
+            if (timeout != -1)
+            {
+                PropertyInfo propInfo = obj.GetType().GetProperty("Timeout");
+                propInfo.SetValue(obj, timeout, null);
+            }
 
 
-                if (mi != null)
-                {
-                    if (args == null)
-                        return mi.Invoke(obj, null);
-                    else
-                    {
-                        ParameterInfo[] paramsInfo = mi.GetParameters();
-                        object[] tmpArgs = new object[args.Length];
-
-                        for (int i = 0; i < args.Length; i++)
-                        {
-                            Type tType = paramsInfo[i].ParameterType;
-                            //如果它是值类型,或者String   
-                            if (tType.Equals(typeof(string)) || (!tType.IsInterface && !tType.IsClass))
-                            {
-                                //改变参数类型   
-                                tmpArgs[i] = Convert.ChangeType(args[i], tType);
-                            }
-                        }
-                        return mi.Invoke(obj, tmpArgs);
-                    }
-                }
+            if (mi != null)
+            {
+                return null;
+                if (args == null)
+                    return mi.Invoke(obj, null);
                 else
                 {
-                    throw new Exception(string.Format("Invalid Method Name:{0}", methodname));
+                    ParameterInfo[] paramsInfo = mi.GetParameters();
+                    object[] tmpArgs = new object[args.Length];
+
+                    for (int i = 0; i < args.Length; i++)
+                    {
+                        Type tType = paramsInfo[i].ParameterType;
+                        //如果它是值类型,或者String   
+                        if (tType.Equals(typeof(string)) || (!tType.IsInterface && !tType.IsClass))
+                        {
+                            //改变参数类型   
+                            tmpArgs[i] = Convert.ChangeType(args[i], tType);
+                        }
+                    }
+                    return mi.Invoke(obj, tmpArgs);
                 }
+            }
+            else
+            {
+                FileInfo fi = new FileInfo(fileName);
+                throw new Exception(string.Format("Invalid Method Name:{0}\r\n{1}-{2}", methodname, fi.FullName, fi.LastWriteTime));
+            }
             //}
             //catch (Exception ex)
             //{
