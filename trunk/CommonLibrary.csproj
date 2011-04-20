@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{700126CB-2266-4639-AC78-1060D5E38C96}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -40,9 +40,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +65,7 @@
     <Compile Include="Object\SecurityHelper.cs" />
     <Compile Include="Object\SerializationHelper.cs" />
     <Compile Include="Object\WebServiceHelper.cs" />
+    <Compile Include="Object\WebServiceResult.cs" />
     <Compile Include="WebSite\ErrorInfo.cs" />
     <Compile Include="Object\StringHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
