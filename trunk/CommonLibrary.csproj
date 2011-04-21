@@ -19,7 +19,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>D:\Project\WMAccount\trunk\DLL\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -55,6 +55,7 @@
     <Compile Include="Object\DateHelper.cs" />
     <Compile Include="Object\EmailHelper.cs" />
     <Compile Include="Object\Email\SmtpInfo.cs" />
+    <Compile Include="Object\ErrorMsg.cs" />
     <Compile Include="Object\FileHelper.cs" />
     <Compile Include="Object\Base\BaseLogHelper.cs" />
     <Compile Include="Object\FTPHelper.cs" />
@@ -65,7 +66,6 @@
     <Compile Include="Object\SecurityHelper.cs" />
     <Compile Include="Object\SerializationHelper.cs" />
     <Compile Include="Object\WebServiceHelper.cs" />
-    <Compile Include="Object\WebServiceResult.cs" />
     <Compile Include="WebSite\ErrorInfo.cs" />
     <Compile Include="Object\StringHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
