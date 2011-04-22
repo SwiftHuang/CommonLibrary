@@ -568,39 +568,54 @@
             <param name="top">返回个数</param>
             <returns></returns>
         </member>
-        <member name="P:hwj.CommonLibrary.Object.ErrorMsg.Version">
-            <summary>
-            版本号
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.ErrorMsg.Ext1">
-            <summary>
-            扩展参数1
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.ErrorMsg.Ext2">
-            <summary>
-            扩展参数2
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.ErrorMsg.Ext3">
-            <summary>
-            扩展参数3
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.ErrorMsg.IsError">
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.IsError">
             <summary>
             是否错误
             </summary>
         </member>
-        <member name="P:hwj.CommonLibrary.Object.ErrorMsg.FirstError">
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.FirstError">
             <summary>
             获取首个Error对象
             </summary>
         </member>
-        <member name="P:hwj.CommonLibrary.Object.ErrorMsg.ErrorList">
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.ErrorList">
             <summary>
             错误列表
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.Error.Code">
+            <summary>
+            错误编号
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.Error.Message">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.Error.Exception">
+            <summary>
+            错误对象
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Version">
+            <summary>
+            版本号
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Ext1">
+            <summary>
+            扩展参数1
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Ext2">
+            <summary>
+            扩展参数2
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Ext3">
+            <summary>
+            扩展参数3
             </summary>
         </member>
     </members>
