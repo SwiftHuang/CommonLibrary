@@ -27,6 +27,56 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.IsError">
+            <summary>
+            是否错误
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.FirstError">
+            <summary>
+            获取首个Error对象
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.ErrorList">
+            <summary>
+            错误列表
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.Error.Code">
+            <summary>
+            错误编号
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.Error.Message">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.ReturnObject.Error.Exception">
+            <summary>
+            错误对象
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Version">
+            <summary>
+            版本号
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Ext1">
+            <summary>
+            扩展参数1
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Ext2">
+            <summary>
+            扩展参数2
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Ext3">
+            <summary>
+            扩展参数3
+            </summary>
+        </member>
         <member name="P:hwj.CommonLibrary.Object.Email.SmtpInfoList.LastSuccess">
             <summary>
             获取最后一次成功发送的SMTP配置。
@@ -171,6 +221,93 @@
             获取当前系统、版本、版本号
             </summary>
             <returns></returns>
+        </member>
+        <member name="F:hwj.CommonLibrary.DataStructure.AdjacencyList`1.items">
+            <summary>
+            图的顶点集合
+            </summary>
+        </member>
+        <member name="M:hwj.CommonLibrary.DataStructure.AdjacencyList`1.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:hwj.CommonLibrary.DataStructure.AdjacencyList`1.#ctor(System.Int32)">
+            <summary>
+            指定容量的构造方法
+            </summary>
+            <param name="capacity"></param>
+        </member>
+        <member name="M:hwj.CommonLibrary.DataStructure.AdjacencyList`1.AddVertex(`0)">
+            <summary>
+            添加一个顶点
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:hwj.CommonLibrary.DataStructure.AdjacencyList`1.AddEdge(`0,`0)">
+            <summary>
+            添加无向边
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
+        </member>
+        <member name="M:hwj.CommonLibrary.DataStructure.AdjacencyList`1.Contains(`0)">
+            <summary>
+            查找图中是否包含某项
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.DataStructure.AdjacencyList`1.Find(`0)">
+            <summary>
+            查找指定项并返回
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.DataStructure.AdjacencyList`1.AddDirectedEdge(hwj.CommonLibrary.DataStructure.AdjacencyList{`0}.Vertex{`0},hwj.CommonLibrary.DataStructure.AdjacencyList{`0}.Vertex{`0})">
+            <summary>
+            添加有向边
+            </summary>
+            <param name="fromVer"></param>
+            <param name="toVer"></param>
+        </member>
+        <member name="P:hwj.CommonLibrary.DataStructure.AdjacencyList`1.Node.adjvex">
+            <summary>
+            邻接点域
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.DataStructure.AdjacencyList`1.Node.next">
+            <summary>
+            下一个邻接点指针域
+            </summary>
+        </member>
+        <member name="T:hwj.CommonLibrary.DataStructure.AdjacencyList`1.Vertex`1">
+            <summary>
+            嵌套类，表示存放于数组中的表头结点
+            </summary>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="F:hwj.CommonLibrary.DataStructure.AdjacencyList`1.Vertex`1.data">
+            <summary>
+            数据
+            </summary>
+        </member>
+        <member name="F:hwj.CommonLibrary.DataStructure.AdjacencyList`1.Vertex`1.firstEdge">
+            <summary>
+            邻接点链表头指针
+            </summary>
+        </member>
+        <member name="F:hwj.CommonLibrary.DataStructure.AdjacencyList`1.Vertex`1.visited">
+            <summary>
+            访问标志,遍历时使用
+            </summary>
+        </member>
+        <member name="M:hwj.CommonLibrary.DataStructure.AdjacencyList`1.Vertex`1.#ctor(`1)">
+            <summary>
+            构造方法
+            </summary>
+            <param name="value"></param>
         </member>
         <member name="T:hwj.CommonLibrary.WebSite.WebCache">
             <summary>
@@ -567,56 +704,6 @@
             <param name="MaxSeqNum">最大序号</param>
             <param name="top">返回个数</param>
             <returns></returns>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.ReturnObject.IsError">
-            <summary>
-            是否错误
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.ReturnObject.FirstError">
-            <summary>
-            获取首个Error对象
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.ReturnObject.ErrorList">
-            <summary>
-            错误列表
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.ReturnObject.Error.Code">
-            <summary>
-            错误编号
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.ReturnObject.Error.Message">
-            <summary>
-            错误信息
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.ReturnObject.Error.Exception">
-            <summary>
-            错误对象
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Version">
-            <summary>
-            版本号
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Ext1">
-            <summary>
-            扩展参数1
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Ext2">
-            <summary>
-            扩展参数2
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.WSReturnObject.Ext3">
-            <summary>
-            扩展参数3
-            </summary>
         </member>
     </members>
 </doc>
