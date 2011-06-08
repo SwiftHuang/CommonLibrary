@@ -62,6 +62,11 @@ namespace hwj.CommonLibrary.Object.Email
             }
             return streamlineList;
         }
+
+        public void Add(string smtpServer, string emailFrom, string emailFromPassword)
+        {
+            this.Add(new SmtpInfo(smtpServer, emailFrom, emailFromPassword));
+        }
     }
 
     //internal class SmtpInfoComparer : IComparer<SmtpInfo>
