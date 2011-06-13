@@ -57,6 +57,26 @@ namespace hwj.CommonLibrary.Object
 
         }
 
+        public static bool ExistFile(string ftp, string user, string password, string fileName)
+        {
+            string uri = ftp + "/" + fileName;
+            FtpWebRequest reqFTP = InitFtpWebRequest(uri, user, password, WebRequestMethods.Ftp.GetFileSize);
+            try
+            {
+                FtpWebResponse ftpresponse = (FtpWebResponse)reqFTP.GetResponse();
+                return true;
+            }
+            catch (WebException ex)
+            {
+                FtpWebResponse wr = (FtpWebResponse)ex.Response;
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         #region Private Function
         private static FtpWebRequest InitFtpWebRequest(string uri, string user, string password, string method)
         {
