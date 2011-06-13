@@ -170,7 +170,7 @@ namespace hwj.CommonLibrary.Object
             if (smtpInfos.LastSuccess != null)
             {
                 SmtpInfo smtp = SendAction(message, smtpInfos.LastSuccess);
-                if (smtp.Exception==null)
+                if (smtp.Exception == null)
                 {
                     return true;
                 }
@@ -185,7 +185,7 @@ namespace hwj.CommonLibrary.Object
             foreach (SmtpInfo smtpInfo in streamlineList)
             {
                 SendAction(message, smtpInfo);
-                if (smtpInfo.Exception==null)
+                if (smtpInfo.Exception == null)
                 {
                     smtpInfos.LastSuccess = smtpInfo;
                     return true;
