@@ -56,7 +56,14 @@ namespace hwj.CommonLibrary.Object
             response.Close();
 
         }
-
+        /// <summary>
+        /// 检查文件是否存在
+        /// </summary>
+        /// <param name="ftp"></param>
+        /// <param name="user"></param>
+        /// <param name="password"></param>
+        /// <param name="fileName">文件名(不含路径)</param>
+        /// <returns></returns>
         public static bool ExistFile(string ftp, string user, string password, string fileName)
         {
             string uri = ftp + "/" + fileName;
