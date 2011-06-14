@@ -215,6 +215,24 @@ namespace hwj.CommonLibrary.Object
             return myIsEmail;
         }
 
+        public static bool isValidEmails(string xEmailAddress, string split)
+        {
+            if (!string.IsNullOrEmpty(split) && split != "\0")
+            {
+                string[] emailList = xEmailAddress.Split(new string[] { split }, StringSplitOptions.None);
+                bool myIsEmail = false;
+                foreach (string email in emailList)
+                {
+                    myIsEmail = isValidEmail(email);
+                    if (!myIsEmail)
+                        break;
+                }
+                return myIsEmail;
+            }
+            else
+                return isValidEmail(xEmailAddress);
+        }
+
         #region Private Function
         private static SmtpInfo SendAction(MailMessage message, SmtpInfo smtpInfo)
         {
