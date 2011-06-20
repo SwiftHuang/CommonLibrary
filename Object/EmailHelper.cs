@@ -217,7 +217,7 @@ namespace hwj.CommonLibrary.Object
 
         public static bool isValidEmails(string xEmailAddress, string split)
         {
-            if (!string.IsNullOrEmpty(split) && split != "\0")
+            if (!string.IsNullOrEmpty(split))
             {
                 string[] emailList = xEmailAddress.Split(new string[] { split }, StringSplitOptions.None);
                 bool myIsEmail = false;
