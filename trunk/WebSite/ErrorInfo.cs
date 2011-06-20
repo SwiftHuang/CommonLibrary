@@ -11,19 +11,28 @@ namespace hwj.CommonLibrary.WebSite
             Login,
             Unauthorized,
             DefaultException,
-            Exception
+            Exception,
+            Information,
+            Warning,
         }
 
         #region Property
         public ErrorTypes ErrorType { get; set; }
+        public string Message { get; set; }
         public Exception Exceptions { get; set; }
         public string RedirectUrl { get; set; }
         public HttpRequest ErrorRequest { get; set; }
-
+        public bool SendEmail { get; set; }
         #endregion
+
         public ErrorInfo()
         {
-
+            ErrorType = ErrorTypes.None;
+            Message = string.Empty;
+            Exceptions = null;
+            RedirectUrl = string.Empty;
+            ErrorRequest = null;
+            SendEmail = true;
         }
     }
 
