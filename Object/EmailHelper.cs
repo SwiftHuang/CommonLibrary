@@ -215,8 +215,9 @@ namespace hwj.CommonLibrary.Object
             return myIsEmail;
         }
 
-        public static bool isValidEmails(string xEmailAddress, string split)
+        public static bool isValidEmails(string xEmailAddress, string split, out List<string> errList)
         {
+            errList = new List<string>();
             if (!string.IsNullOrEmpty(split))
             {
                 string[] emailList = xEmailAddress.Split(new string[] { split }, StringSplitOptions.None);
@@ -225,7 +226,7 @@ namespace hwj.CommonLibrary.Object
                 {
                     myIsEmail = isValidEmail(email);
                     if (!myIsEmail)
-                        break;
+                        errList.Add(email);
                 }
                 return myIsEmail;
             }
