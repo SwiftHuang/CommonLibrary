@@ -218,6 +218,10 @@ namespace hwj.CommonLibrary.Object
         public static bool isValidEmails(string xEmailAddress, string split, out List<string> errList)
         {
             errList = new List<string>();
+
+            if (string.IsNullOrEmpty(xEmailAddress))
+                return false;
+
             if (!string.IsNullOrEmpty(split))
             {
                 string[] emailList = xEmailAddress.Split(new string[] { split }, StringSplitOptions.None);
