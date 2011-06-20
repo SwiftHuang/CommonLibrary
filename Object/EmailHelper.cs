@@ -221,14 +221,15 @@ namespace hwj.CommonLibrary.Object
             if (!string.IsNullOrEmpty(split))
             {
                 string[] emailList = xEmailAddress.Split(new string[] { split }, StringSplitOptions.None);
-                bool myIsEmail = false;
+
                 foreach (string email in emailList)
                 {
-                    myIsEmail = isValidEmail(email);
-                    if (!myIsEmail)
+                    if (!isValidEmail(email))
+                    {
                         errList.Add(email);
+                    }
                 }
-                return myIsEmail;
+                return errList.Count == 0;
             }
             else
                 return isValidEmail(xEmailAddress);
