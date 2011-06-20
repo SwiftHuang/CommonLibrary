@@ -136,15 +136,54 @@ namespace hwj.CommonLibrary.WebSite.Base
                     err.ErrorType = ErrorInfo.ErrorTypes.Exception;
                 }
 
-                if (HttpContext.Current != null && HttpContext.Current.Request != null)
-                    err.ErrorRequest = HttpContext.Current.Request;
-                err.RedirectUrl = RedirectLoginUrl;
-                err.Exceptions = objErr;
-                err.SetSession();
-                Server.ClearError();
-
-                Response.Redirect(RedirectErrorUrl);
+                ShowErrorPage(err.ErrorType, objErr.Message, objErr, true);
             }
+        }
+        protected void ShowErrorPage(ErrorInfo.ErrorTypes type, string text, Exception ex, bool sendEmail)
+        {
+            ErrorInfo err = new ErrorInfo();
+
+            if (HttpContext.Current != null && HttpContext.Current.Request != null)
+            {
+                err.ErrorRequest = HttpContext.Current.Request;
+            }
+
+            err.SendEmail = sendEmail;
+            err.ErrorType = type;
+            err.Exceptions = ex;
+            err.Message = text;
+            err.RedirectUrl = RedirectLoginUrl;
+            err.SetSession();
+            Server.ClearError();
+
+            Response.Redirect(RedirectErrorUrl);
+        }
+        #endregion
+
+        #region Show Function
+        public void ShowInfo(string text)
+        {
+            ShowInfo(text, null, false);
+        }
+        public void ShowInfo(string text, Exception ex, bool sendEmail)
+        {
+            ShowErrorPage(ErrorInfo.ErrorTypes.Information, text, ex, sendEmail);
+        }
+        public void ShowWarn(string text, Exception ex)
+        {
+            ShowWarn(text, ex, true);
+        }
+        public void ShowWarn(string text, Exception ex, bool sendEmail)
+        {
+            ShowErrorPage(ErrorInfo.ErrorTypes.Warning, text, ex, sendEmail);
+        }
+        public void ShowError(string text, Exception ex)
+        {
+            ShowError(text, ex, true);
+        }
+        public void ShowError(string text, Exception ex, bool sendEmail)
+        {
+            ShowErrorPage(ErrorInfo.ErrorTypes.Exception, text, ex, sendEmail);
         }
         #endregion
 
