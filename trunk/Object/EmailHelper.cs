@@ -203,41 +203,46 @@ namespace hwj.CommonLibrary.Object
         }
         #endregion
 
-        public static bool isValidEmail(string xEmailAddress)
+        #region Check Email
+        public static bool isValidEmail(string email)
         {
+            if (string.IsNullOrEmpty(email))
+                return false;
+
             bool myIsEmail = false;
             string myRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
             System.Text.RegularExpressions.Regex reg = new System.Text.RegularExpressions.Regex(myRegex);
-            if (reg.IsMatch(xEmailAddress))
+            if (reg.IsMatch(email))
             {
                 myIsEmail = true;
             }
             return myIsEmail;
         }
 
-        public static bool isValidEmails(string xEmailAddress, string split, out List<string> errList)
+        public static bool isValidEmail(string emails, string split, out List<string> invalidList)
         {
-            errList = new List<string>();
+            invalidList = new List<string>();
 
-            if (string.IsNullOrEmpty(xEmailAddress))
+            if (string.IsNullOrEmpty(emails))
                 return false;
 
             if (!string.IsNullOrEmpty(split))
             {
-                string[] emailList = xEmailAddress.Split(new string[] { split }, StringSplitOptions.None);
+                string[] emailList = emails.Split(new string[] { split }, StringSplitOptions.None);
 
                 foreach (string email in emailList)
                 {
                     if (!isValidEmail(email))
                     {
-                        errList.Add(email);
+                        invalidList.Add(email);
                     }
                 }
-                return errList.Count == 0;
+                return invalidList.Count == 0;
             }
             else
-                return isValidEmail(xEmailAddress);
+                return isValidEmail(emails);
         }
+        #endregion
 
         #region Private Function
         private static SmtpInfo SendAction(MailMessage message, SmtpInfo smtpInfo)
