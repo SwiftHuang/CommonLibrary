@@ -237,10 +237,16 @@ namespace hwj.CommonLibrary.Object
                         invalidList.Add(email);
                     }
                 }
-                return invalidList.Count == 0;
             }
             else
-                return isValidEmail(emails);
+            {
+                if (!isValidEmail(emails))
+                {
+                    invalidList.Add(emails);
+                }
+            }
+
+            return invalidList.Count == 0;
         }
         #endregion
 
