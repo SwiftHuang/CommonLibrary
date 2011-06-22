@@ -207,7 +207,7 @@ namespace hwj.CommonLibrary.Object
         public static bool isValidEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
-                return false;
+                return true;
 
             bool myIsEmail = false;
             string myRegex = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
@@ -224,7 +224,7 @@ namespace hwj.CommonLibrary.Object
             invalidList = new List<string>();
 
             if (string.IsNullOrEmpty(emails))
-                return false;
+                return true;
 
             if (!string.IsNullOrEmpty(split))
             {
