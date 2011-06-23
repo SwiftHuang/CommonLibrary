@@ -39,13 +39,13 @@ namespace hwj.CommonLibrary.WebSite
             base.ErrorAction(GetWebInfo(log, request), ex, EmailSubject);
         }
 
-        public void Warn(string log, Exception ex, string EmailSubject)
+        public void Warn(string log, Exception ex, string EmailSubject, bool sendEmail)
         {
-            Warn(log, ex, EmailSubject, HttpContext.Current.Request);
+            Warn(log, ex, EmailSubject, HttpContext.Current.Request, sendEmail);
         }
-        public void Warn(string log, Exception ex, string EmailSubject, HttpRequest request)
+        public void Warn(string log, Exception ex, string EmailSubject, HttpRequest request, bool sendEmail)
         {
-            base.WarnAction(GetWebInfo(log, request), ex, EmailSubject);
+            base.WarnAction(GetWebInfo(log, request), ex, EmailSubject, sendEmail);
         }
     }
 }

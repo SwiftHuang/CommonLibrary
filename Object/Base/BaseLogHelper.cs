@@ -189,6 +189,10 @@ namespace hwj.CommonLibrary.Object.Base
         {
             WarnAction(log, ex, emailSubject, EmailTo, EmailCC);
         }
+        public void WarnAction(string log, Exception ex, string emailSubject, bool sendEmail)
+        {
+            WarnAction(log, ex, sendEmail, emailSubject, EmailTo, EmailCC, null);
+        }
         public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC)
         {
             WarnAction(log, ex, emailSubject, emailTo, emailCC, null);
