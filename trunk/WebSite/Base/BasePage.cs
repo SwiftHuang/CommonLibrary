@@ -147,7 +147,7 @@ namespace hwj.CommonLibrary.WebSite.Base
             {
                 err.ErrorRequest = HttpContext.Current.Request;
             }
-
+            err.webLogInfo = new WebLogInfo(err.ErrorRequest);
             err.SendEmail = sendEmail;
             err.ErrorType = type;
             err.Exceptions = ex;
