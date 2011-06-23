@@ -17,6 +17,7 @@ namespace hwj.CommonLibrary.WebSite
         }
 
         #region Property
+        public WebLogInfo webLogInfo { get; set; }
         public ErrorTypes ErrorType { get; set; }
         public string Message { get; set; }
         public Exception Exceptions { get; set; }
