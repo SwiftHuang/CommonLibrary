@@ -43,37 +43,36 @@ namespace hwj.CommonLibrary.Object.Base
         /// </summary>
         public Email.SmtpInfoList SmtpList { get; set; }
 
-        public string Subject { get; set; }
-        public string Body { get; set; }
+        //public string Subject { get; set; }
+        //public string Body { get; set; }
         #endregion
 
         public LogHelper()
+            : this(null)
+        {
+
+        }
+        public LogHelper(string fileName)
         {
             ShowInvalidSmtpError = true;
-            //log4net.Config.DOMConfigurator.Configure(new FileInfo("LogHelper.Config"));
-            //Init();
+            Initialization(fileName);
         }
-        //public LogHelper(string fileName)
-        //{
-        //    ShowInvalidSmtpError = true;
-        //    //log4net.Config.DOMConfigurator.Configure(new FileInfo(fileName));
-        //    //Init();
-        //}
         public void Initialization(string fileName)
         {
             if (!string.IsNullOrEmpty(fileName))
+            {
                 log4net.Config.DOMConfigurator.Configure(new FileInfo(fileName));
+            }
             else
+            {
                 log4net.Config.DOMConfigurator.Configure(new FileInfo("LogHelper.Config"));
+            }
             LogInfo = log4net.LogManager.GetLogger("loginfo");
             LogError = log4net.LogManager.GetLogger("logerror");
             LogWarn = log4net.LogManager.GetLogger("logwarn");
 
             EmailOpened = false;
             EmailTo = "vinsonhwj@gmail.com";
-            //EmailFrom = "hpmis@sohu.com";
-            //EmailSMTPServer = "smtp.sohu.com";
-            //EmailPassword = "123456";
             EmailBodyFormat = "{0}\r\n{1}";
         }
 
@@ -85,28 +84,38 @@ namespace hwj.CommonLibrary.Object.Base
         #endregion
 
         #region Info Function
-        public void Info(string log, bool sendEmail)
+        //public void InfoAction(string log, bool sendEmail)
+        //{
+        //    InfoAction(log, null, null, sendEmail, EmailTo, EmailCC, null);
+        //}
+        //public void InfoAction(string log, string emailSubject)
+        //{
+        //    InfoAction(log, null, emailSubject, EmailTo, EmailCC);
+        //}
+        public void InfoWithoutEmail(string log)
         {
-            InfoAction(log, null, null, sendEmail);
+            InfoWithoutEmail(log, null);
         }
-        public void Info(string log, string EmailSubject, bool sendEmail)
+        public void InfoWithoutEmail(string log, Exception ex)
         {
-            InfoAction(log, null, EmailSubject, sendEmail);
-        }
-        public void Info(string log, Exception ex, bool sendEmail)
-        {
-            InfoAction(log, ex, null, sendEmail);
+            InfoAction(log, ex, false, null, null, null, null);
         }
 
-        public void InfoAction(string log, Exception ex, string EmailSubject, bool sendEmail)
+        public void InfoWithEmail(string log, Exception ex, string emailSubject)
         {
-            InfoAction(log, ex, EmailSubject, sendEmail, EmailTo, EmailCC);
+            InfoAction(log, ex, emailSubject, EmailTo, EmailCC);
         }
-        public void InfoAction(string log, Exception ex, string EmailSubject, bool sendEmail, string emailTo, string emailCC)
+
+        public void InfoAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC)
         {
-            InfoAction(log, ex, EmailSubject, sendEmail, emailTo, emailCC, null);
+            InfoAction(log, ex, emailSubject, emailTo, emailCC, null);
         }
-        public void InfoAction(string log, Exception ex, string EmailSubject, bool sendEmail, string emailTo, string emailCC, List<Attachment> attachments)
+        public void InfoAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
+        {
+            InfoAction(log, ex, true, emailSubject, emailTo, emailCC, attachments);
+        }
+
+        private void InfoAction(string log, Exception ex, bool sendEmail, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
             if (LogInfo.IsInfoEnabled)
             {
@@ -116,29 +125,27 @@ namespace hwj.CommonLibrary.Object.Base
                     LogInfo.Info(log, ex);
 
                 if (sendEmail)
-                    Email(EmailSubject + " <Info>", log, ex, EmailTo, EmailCC, attachments);
+                    Email(emailSubject + " <Info>", log, ex, emailTo, emailCC, attachments);
             }
         }
 
         #endregion
 
         #region Error Function
-        public void Error(string log, Exception ex)
+        public void ErrorWithoutEmail(string log)
         {
-            ErrorAction(log, ex, null, EmailTo, EmailCC);
+            ErrorWithoutEmail(log, null);
         }
-        public void Error(string log, Exception ex, bool sendEmail)
+        public void ErrorWithoutEmail(string log, Exception ex)
         {
-            if (sendEmail)
-                ErrorAction(log, ex, null, EmailTo, EmailCC);
-            else
-                ErrorAction(log, ex, false, null, null, null, null);
+            ErrorAction(log, ex, false, null, null, null, null);
         }
 
-        public void ErrorAction(string log, Exception ex, string emailSubject)
+        public void ErrorWithEmail(string log, Exception ex, string emailSubject)
         {
             ErrorAction(log, ex, emailSubject, EmailTo, EmailCC);
         }
+
         public void ErrorAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC)
         {
             ErrorAction(log, ex, emailSubject, emailTo, emailCC, null);
@@ -154,45 +161,40 @@ namespace hwj.CommonLibrary.Object.Base
             {
                 LogError.Error(log, ex);
                 if (sendEmail)
+                {
                     Email(emailSubject + " <Error>", log, ex, emailTo, emailCC, attachments);
+                }
             }
         }
         #endregion
 
         #region Warn Function
-        public void Warn(string log)
+        //public void Warn(string log, bool sendEmail)
+        //{
+        //    Warn(log, null, sendEmail);
+        //}
+        //public void Warn(string log, Exception ex)
+        //{
+        //    WarnAction(log, ex, null);
+        //}
+        //public void Warn(string log, string emailSubject)
+        //{
+        //    WarnAction(log, null, emailSubject);
+        //}
+        public void WarnWithoutEmail(string log)
         {
-            WarnAction(log, null, null);
+            WarnWithoutEmail(log, null);
         }
-        public void Warn(string log, bool sendEmail)
+        public void WarnWithoutEmail(string log, Exception ex)
         {
-            Warn(log, null, sendEmail);
+            WarnAction(log, ex, false, null, null, null, null);
         }
 
-        public void Warn(string log, Exception ex)
-        {
-            WarnAction(log, ex, null);
-        }
-        public void Warn(string log, Exception ex, bool sendEmail)
-        {
-            if (sendEmail)
-                WarnAction(log, ex, null);
-            else
-                WarnAction(log, ex, false, null, null, null, null);
-        }
-
-        public void Warn(string log, string emailSubject)
-        {
-            WarnAction(log, null, emailSubject);
-        }
-        public void WarnAction(string log, Exception ex, string emailSubject)
+        public void WarnWithEmail(string log, Exception ex, string emailSubject)
         {
             WarnAction(log, ex, emailSubject, EmailTo, EmailCC);
         }
-        public void WarnAction(string log, Exception ex, string emailSubject, bool sendEmail)
-        {
-            WarnAction(log, ex, sendEmail, emailSubject, EmailTo, EmailCC, null);
-        }
+
         public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC)
         {
             WarnAction(log, ex, emailSubject, emailTo, emailCC, null);
@@ -237,8 +239,8 @@ namespace hwj.CommonLibrary.Object.Base
         }
         public void Email(string subject, string body, string emailTo, string emailCC, List<Attachment> attachments)
         {
-            Subject = subject;
-            Body = body;
+            //Subject = subject;
+            //Body = body;
             if (EmailOpened)
             {
                 if (SmtpList != null && SmtpList.Count > 0)

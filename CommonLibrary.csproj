@@ -56,11 +56,13 @@
     <Compile Include="Object\DateHelper.cs" />
     <Compile Include="Object\EmailHelper.cs" />
     <Compile Include="Object\Email\SmtpInfo.cs" />
+    <Compile Include="Object\LogHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Object\ReturnObject.cs" />
     <Compile Include="Object\FileHelper.cs" />
     <Compile Include="Object\Base\BaseLogHelper.cs" />
     <Compile Include="Object\FTPHelper.cs" />
-    <Compile Include="Object\LogHelper.cs" />
     <Compile Include="Object\MemoryHelper.cs" />
     <Compile Include="Object\NetHelper.cs" />
     <Compile Include="Object\NumberHelper.cs" />

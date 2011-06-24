@@ -396,5 +396,26 @@ namespace hwj.CommonLibrary.Object
             }
             return tmpStr;
         }
+
+        /// <summary>
+        /// 获取当前系统、版本、版本号
+        /// </summary>
+        /// <returns></returns>
+        public static string GetOSVersion()
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                string informaction = Environment.OSVersion.VersionString.ToString();
+                string version = Environment.Version.ToString();
+
+                sb.AppendFormat("{0}({1})", informaction, version);
+                return sb.ToString();
+            }
+            catch
+            {
+                return "Failed to get system information";
+            }
+        }
     }
 }

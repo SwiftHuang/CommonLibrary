@@ -20,21 +20,6 @@ namespace hwj.CommonLibrary.WebSite
             sb.Append(log);
             return sb.ToString();
         }
-
-        public void Info(string log, Exception ex, string EmailSubject, WebLogInfo webLogInfo, bool sendEmail)
-        {
-            base.InfoAction(GetWebInfo(log, webLogInfo), ex, EmailSubject, sendEmail);
-        }
-
-        public void Error(string log, Exception ex, string EmailSubject, WebLogInfo webLogInfo)
-        {
-            base.ErrorAction(GetWebInfo(log, webLogInfo), ex, EmailSubject);
-        }
-        public void Warn(string log, Exception ex, string EmailSubject, WebLogInfo webLogInfo, bool sendEmail)
-        {
-            base.WarnAction(GetWebInfo(log, webLogInfo), ex, EmailSubject, sendEmail);
-        }
-
         private string GetWebInfo(string log, HttpRequest request)
         {
             WebLogInfo w = new WebLogInfo(request);
@@ -45,31 +30,56 @@ namespace hwj.CommonLibrary.WebSite
             return sb.ToString();
         }
 
-        public void Info(string log, Exception ex, string EmailSubject, bool sendEmail)
+        public void InfoWithoutEmail(string log, Exception ex, WebLogInfo webLogInfo)
         {
-            Info(log, ex, EmailSubject, HttpContext.Current.Request, sendEmail);
+            base.InfoWithoutEmail(GetWebInfo(log, webLogInfo), ex);
         }
-        public void Info(string log, Exception ex, string EmailSubject, HttpRequest request, bool sendEmail)
+        public void InfoWithEmail(string log, Exception ex, string emailSubject)
         {
-            base.InfoAction(GetWebInfo(log, request), ex, EmailSubject, sendEmail);
+            InfoWithEmail(log, ex, emailSubject, HttpContext.Current.Request);
+        }
+        public void InfoWithEmail(string log, Exception ex, string emailSubject, WebLogInfo webLogInfo)
+        {
+            base.InfoWithEmail(GetWebInfo(log, webLogInfo), ex, emailSubject);
+        }
+        public void InfoWithEmail(string log, Exception ex, string emailSubject, HttpRequest request)
+        {
+            base.InfoWithEmail(GetWebInfo(log, request), ex, emailSubject);
         }
 
-        public void Error(string log, Exception ex, string EmailSubject)
+        public void WarnWithoutEmail(string log, Exception ex, WebLogInfo webLogInfo)
         {
-            Error(log, ex, EmailSubject, HttpContext.Current.Request);
+            base.WarnWithoutEmail(GetWebInfo(log, webLogInfo), ex);
         }
-        public void Error(string log, Exception ex, string EmailSubject, HttpRequest request)
+        public void WarnWithEmail(string log, Exception ex, string emailSubject)
         {
-            base.ErrorAction(GetWebInfo(log, request), ex, EmailSubject);
+            WarnWithEmail(log, ex, emailSubject, HttpContext.Current.Request);
+        }
+        public void WarnWithEmail(string log, Exception ex, string emailSubject, WebLogInfo webLogInfo)
+        {
+            base.WarnWithEmail(GetWebInfo(log, webLogInfo), ex, emailSubject);
+        }
+        public void WarnWithEmail(string log, Exception ex, string emailSubject, HttpRequest request)
+        {
+            base.WarnWithEmail(GetWebInfo(log, request), ex, emailSubject);
         }
 
-        public void Warn(string log, Exception ex, string EmailSubject, bool sendEmail)
+        public void ErrorWithoutEmail(string log, Exception ex, WebLogInfo webLogInfo)
         {
-            Warn(log, ex, EmailSubject, HttpContext.Current.Request, sendEmail);
+            base.ErrorWithoutEmail(GetWebInfo(log, webLogInfo), ex);
         }
-        public void Warn(string log, Exception ex, string EmailSubject, HttpRequest request, bool sendEmail)
+        public void ErrorWithEmail(string log, Exception ex, string emailSubject)
         {
-            base.WarnAction(GetWebInfo(log, request), ex, EmailSubject, sendEmail);
+            ErrorWithEmail(log, ex, emailSubject, HttpContext.Current.Request);
         }
+        public void ErrorWithEmail(string log, Exception ex, string emailSubject, HttpRequest request)
+        {
+            base.ErrorWithEmail(GetWebInfo(log, request), ex, emailSubject);
+        }
+        public void ErrorWithEmail(string log, Exception ex, string emailSubject, WebLogInfo webLogInfo)
+        {
+            base.ErrorWithEmail(GetWebInfo(log, webLogInfo), ex, emailSubject);
+        }
+
     }
 }
