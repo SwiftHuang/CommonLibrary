@@ -191,37 +191,6 @@
             <param name="sKey"></param> 
             <returns></returns> 
         </member>
-        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.ShowInvalidSmtpError">
-            <summary>
-            是否抛出SmtpList异常
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.EmailTo">
-            <summary>
-            多个收件人请用逗号分隔
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.EmailCC">
-            <summary>
-            多个抄送人请用逗号分隔
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.MultSmtpEnabled">
-            <summary>
-            获取或设置是否使用多个SMTP服务器的模式
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.SmtpList">
-            <summary>
-            获取或设置SMTP服务器列表
-            </summary>
-        </member>
-        <member name="M:hwj.CommonLibrary.Object.LogHelper.GetOSVersion">
-            <summary>
-            获取当前系统、版本、版本号
-            </summary>
-            <returns></returns>
-        </member>
         <member name="F:hwj.CommonLibrary.DataStructure.AdjacencyList`1.items">
             <summary>
             图的顶点集合
@@ -435,6 +404,12 @@
             <param name="isWindowsVerification"></param>
             <returns></returns>
         </member>
+        <member name="M:hwj.CommonLibrary.Object.StringHelper.GetOSVersion">
+            <summary>
+            获取当前系统、版本、版本号
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:hwj.CommonLibrary.Object.FileHelper.StreamToBytes(System.IO.Stream)">
             <summary>
             将 Stream 转成 byte[]
@@ -556,6 +531,31 @@
             <param name="isBodyHtml">邮件正文是否为 Html 格式的值</param>
             <param name="smtpInfos">SMTP服务器集合</param>
             <returns></returns>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.ShowInvalidSmtpError">
+            <summary>
+            是否抛出SmtpList异常
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.EmailTo">
+            <summary>
+            多个收件人请用逗号分隔
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.EmailCC">
+            <summary>
+            多个抄送人请用逗号分隔
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.MultSmtpEnabled">
+            <summary>
+            获取或设置是否使用多个SMTP服务器的模式
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.SmtpList">
+            <summary>
+            获取或设置SMTP服务器列表
+            </summary>
         </member>
         <member name="T:hwj.CommonLibrary.WebSite.Base.BasePage">
             <summary>
