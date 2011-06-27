@@ -52,21 +52,23 @@ namespace hwj.CommonLibrary.Object.Base
         {
 
         }
-        public LogHelper(string fileName)
+        public LogHelper(string configFileName)
         {
             ShowInvalidSmtpError = true;
-            Initialization(fileName);
+            Initialization(configFileName);
         }
-        public void Initialization(string fileName)
+
+        public void Initialization(string configFileName)
         {
-            if (!string.IsNullOrEmpty(fileName))
+            if (!string.IsNullOrEmpty(configFileName))
             {
-                log4net.Config.DOMConfigurator.Configure(new FileInfo(fileName));
+                log4net.Config.DOMConfigurator.Configure(new FileInfo(configFileName));
             }
             else
             {
                 log4net.Config.DOMConfigurator.Configure(new FileInfo("LogHelper.Config"));
             }
+
             LogInfo = log4net.LogManager.GetLogger("loginfo");
             LogError = log4net.LogManager.GetLogger("logerror");
             LogWarn = log4net.LogManager.GetLogger("logwarn");
@@ -76,22 +78,14 @@ namespace hwj.CommonLibrary.Object.Base
             EmailBodyFormat = "{0}\r\n{1}";
         }
 
-        #region Smtp Function
-        public void SetSingleSmtp(string smtpServer, string emailFrom, string emailFromPassword)
-        {
-            SmtpList = new SmtpInfoList(smtpServer, emailFrom, emailFromPassword);
-        }
-        #endregion
-
         #region Info Function
-        //public void InfoAction(string log, bool sendEmail)
-        //{
-        //    InfoAction(log, null, null, sendEmail, EmailTo, EmailCC, null);
-        //}
-        //public void InfoAction(string log, string emailSubject)
-        //{
-        //    InfoAction(log, null, emailSubject, EmailTo, EmailCC);
-        //}
+        public void ChangeInfoOutputFile(string fileName)
+        {
+            if (LogInfo != null)
+            {
+                ChangeOutputFile(LogInfo, fileName);
+            }
+        }
         public void InfoWithoutEmail(string log)
         {
             InfoWithoutEmail(log, null);
@@ -131,7 +125,59 @@ namespace hwj.CommonLibrary.Object.Base
 
         #endregion
 
+        #region Warn Function
+        public void ChangeWarnOutputFile(string fileName)
+        {
+            if (LogWarn != null)
+            {
+                ChangeOutputFile(LogWarn, fileName);
+            }
+        }
+        public void WarnWithoutEmail(string log)
+        {
+            WarnWithoutEmail(log, null);
+        }
+        public void WarnWithoutEmail(string log, Exception ex)
+        {
+            WarnAction(log, ex, false, null, null, null, null);
+        }
+
+        public void WarnWithEmail(string log, Exception ex, string emailSubject)
+        {
+            WarnAction(log, ex, emailSubject, EmailTo, EmailCC);
+        }
+
+        public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC)
+        {
+            WarnAction(log, ex, emailSubject, emailTo, emailCC, null);
+        }
+        public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
+        {
+            WarnAction(log, ex, true, emailSubject, emailTo, emailCC, attachments);
+        }
+
+        private void WarnAction(string log, Exception ex, bool sendEmail, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
+        {
+            if (LogWarn.IsWarnEnabled)
+            {
+                if (ex == null)
+                    LogWarn.Warn(log);
+                else
+                    LogWarn.Warn(log, ex);
+                if (sendEmail)
+                    Email(emailSubject + " <Warn>", log, ex, emailTo, emailCC, attachments);
+            }
+        }
+        #endregion
+
         #region Error Function
+        public void ChangeErrorOutputFile(string fileName)
+        {
+            if (LogError != null)
+            {
+                ChangeOutputFile(LogError, fileName);
+            }
+        }
         public void ErrorWithoutEmail(string log)
         {
             ErrorWithoutEmail(log, null);
@@ -168,53 +214,10 @@ namespace hwj.CommonLibrary.Object.Base
         }
         #endregion
 
-        #region Warn Function
-        //public void Warn(string log, bool sendEmail)
-        //{
-        //    Warn(log, null, sendEmail);
-        //}
-        //public void Warn(string log, Exception ex)
-        //{
-        //    WarnAction(log, ex, null);
-        //}
-        //public void Warn(string log, string emailSubject)
-        //{
-        //    WarnAction(log, null, emailSubject);
-        //}
-        public void WarnWithoutEmail(string log)
+        #region Smtp Function
+        public void SetSingleSmtp(string smtpServer, string emailFrom, string emailFromPassword)
         {
-            WarnWithoutEmail(log, null);
-        }
-        public void WarnWithoutEmail(string log, Exception ex)
-        {
-            WarnAction(log, ex, false, null, null, null, null);
-        }
-
-        public void WarnWithEmail(string log, Exception ex, string emailSubject)
-        {
-            WarnAction(log, ex, emailSubject, EmailTo, EmailCC);
-        }
-
-        public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC)
-        {
-            WarnAction(log, ex, emailSubject, emailTo, emailCC, null);
-        }
-        public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
-        {
-            WarnAction(log, ex, true, emailSubject, emailTo, emailCC, attachments);
-        }
-
-        private void WarnAction(string log, Exception ex, bool sendEmail, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
-        {
-            if (LogWarn.IsWarnEnabled)
-            {
-                if (ex == null)
-                    LogWarn.Warn(log);
-                else
-                    LogWarn.Warn(log, ex);
-                if (sendEmail)
-                    Email(emailSubject + " <Warn>", log, ex, emailTo, emailCC, attachments);
-            }
+            SmtpList = new SmtpInfoList(smtpServer, emailFrom, emailFromPassword);
         }
         #endregion
 
@@ -318,5 +321,22 @@ namespace hwj.CommonLibrary.Object.Base
             return sb.ToString();
         }
         #endregion
+
+        public static void ChangeOutputFile(ILog iLog, string fileName)
+        {
+            if (iLog != null)
+            {
+                log4net.Appender.AppenderCollection ac = ((log4net.Repository.Hierarchy.Logger)iLog.Logger).Appenders;
+                for (int i = 0; i < ac.Count; i++)
+                {
+                    log4net.Appender.RollingFileAppender rfa = ac[i] as log4net.Appender.RollingFileAppender;
+                    if (rfa != null)
+                    {
+                        rfa.File = fileName;
+                        rfa.ActivateOptions();
+                    }
+                }
+            }
+        }
     }
 }
