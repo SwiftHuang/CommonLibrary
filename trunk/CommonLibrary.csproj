@@ -68,6 +68,7 @@
     <Compile Include="Object\NumberHelper.cs" />
     <Compile Include="Object\SecurityHelper.cs" />
     <Compile Include="Object\SerializationHelper.cs" />
+    <Compile Include="Object\TextHelper.cs" />
     <Compile Include="Object\WebServiceHelper.cs" />
     <Compile Include="WebSite\ErrorInfo.cs" />
     <Compile Include="Object\StringHelper.cs" />

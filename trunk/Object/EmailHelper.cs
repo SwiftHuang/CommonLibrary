@@ -355,12 +355,12 @@ namespace hwj.CommonLibrary.Object
             {
                 if (useGzip)
                 {
-                    return new Attachment(hwj.CommonLibrary.Object.FileHelper.StringToMemoryStream(text), FileName + ".gz");
+                    return new Attachment(hwj.CommonLibrary.Object.TextHelper.StringToMemoryStream(text, true), FileName + ".gz");
                 }
                 else
                 {
                     Byte[] buffer = System.Text.Encoding.UTF8.GetBytes(text);
-                    return new Attachment(hwj.CommonLibrary.Object.FileHelper.BytesToStream(buffer), FileName);
+                    return new Attachment(hwj.CommonLibrary.Object.TextHelper.BytesToStream(buffer), FileName);
                 }
             }
             else
@@ -372,7 +372,7 @@ namespace hwj.CommonLibrary.Object
             {
                 if (useGzip)
                 {
-                    return new Attachment(hwj.CommonLibrary.Object.FileHelper.StreamToMemoryStream(stream), FileName + ".gz");
+                    return new Attachment(hwj.CommonLibrary.Object.TextHelper.StreamToMemoryStream(stream, true), FileName + ".gz");
                 }
                 else
                     return new Attachment(stream, FileName);
