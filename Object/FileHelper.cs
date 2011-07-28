@@ -9,6 +9,9 @@ using System.IO.Compression;
 
 namespace hwj.CommonLibrary.Object
 {
+    /// <summary>
+    /// 文件类
+    /// </summary>
     public class FileHelper
     {
         public static bool RegisterFile(string fileName, bool displayMessage)
@@ -36,6 +39,162 @@ namespace hwj.CommonLibrary.Object
             catch { return false; }
         }
 
+        #region 文件操作
+        public static List<string> ReadFileList(string fileName)
+        {
+            using (StreamReader sr = new StreamReader(fileName))
+            {
+                List<string> lines = new List<string>();
+                String line;
+                // Read and display lines from the file until the end of 
+                // the file is reached.
+                while ((line = sr.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+                return lines;
+            }
+        }
+        public static string ReadFile(string fileName)
+        {
+            using (StreamReader sr = new StreamReader(fileName))
+            {
+                return sr.ReadToEnd();
+            }
+        }
+        /// <summary>
+        /// 创建文件
+        /// </summary>
+        /// <param name="fileName"></param>
+        public static void CreateFile(string fileName)
+        {
+            CreateFile(fileName, null);
+        }
+        /// <summary>
+        /// 创建文件
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="text"></param>
+        public static void CreateFile(string fileName, string text)
+        {
+            if (!File.Exists(fileName))
+            {
+                string directory = Path.GetDirectoryName(fileName);
+                if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+                    Directory.CreateDirectory(directory);
+                else
+                    using (File.Create(fileName)) { }
+            }
+            if (!string.IsNullOrEmpty(text))
+            {
+                using (StreamWriter sw = new StreamWriter(fileName, false, System.Text.Encoding.UTF8))
+                {
+                    sw.Write(text);
+                }
+            }
+        }
+        /// <summary>
+        /// 复制文件夹
+        /// </summary>
+        /// <param name="sourceFolder">源文件夹</param>
+        /// <param name="targetFolder">目标文件夹</param>
+        /// <returns></returns>
+        public static bool CopyFolder(string sourceFolder, string targetFolder)
+        {
+            string[] filenames = Directory.GetFileSystemEntries(FormatFolder(sourceFolder));
+            string tmpTargetFolder = FormatFolder(targetFolder);
+
+            foreach (string file in filenames)// 遍历所有的文件和目录
+            {
+                string currFolder = GetCurrentFolder(file);
+
+                if (Directory.Exists(file))// 先当作目录处理如果存在这个目录就递归Copy该目录下面的文件
+                {
+                    currFolder = tmpTargetFolder + "\\" + currFolder;
+
+                    if (!Directory.Exists(currFolder))
+                    {
+                        Directory.CreateDirectory(currFolder);
+                    }
+
+                    CopyFolder(file, currFolder);
+                }
+                else // 否则直接copy文件
+                {
+                    currFolder = tmpTargetFolder + "\\" + currFolder;
+
+                    if (!Directory.Exists(tmpTargetFolder))
+                    {
+                        Directory.CreateDirectory(tmpTargetFolder);
+                    }
+
+                    File.Copy(file, currFolder, true);
+                }
+            }
+            return true;
+
+        }
+        /// <summary>
+        /// 删除文件夹
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <returns></returns>
+        public static bool DeleteFolder(string folder)
+        {
+            DirectoryInfo path = new DirectoryInfo(folder);
+            return DeleteFolder(path);
+        }
+        /// <summary>
+        /// 删除文件夹
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <returns></returns>
+        public static bool DeleteFolder(DirectoryInfo directory)
+        {
+            foreach (System.IO.DirectoryInfo d in directory.GetDirectories())
+            {
+                DeleteFolder(d);
+            }
+            foreach (System.IO.FileInfo f in directory.GetFiles())
+            {
+                f.Delete();
+            }
+            if (directory.GetDirectories() == null || directory.GetDirectories().Length == 0)
+            {
+                directory.Delete();
+            }
+
+            return true;
+        }
+
+        #region Private Function
+        private static string GetCurrentFolder(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return string.Empty;
+
+            string[] arr = path.Split('\\');
+
+            if (arr != null && arr.Length <= 1)
+                return arr[0];
+
+            if (arr != null && string.IsNullOrEmpty(arr[arr.Length - 1]))
+            {
+                return arr[arr.Length - 2];
+            }
+            else
+            {
+                return arr[arr.Length - 1];
+            }
+        }
+        private static string FormatFolder(string path)
+        {
+            return path.EndsWith("\\") ? path.Substring(0, path.Length - 1) : path;
+        }
+        #endregion
+        #endregion
+
+        #region 文件转换
         public static DataSet TxtToDataSet(string fileName, bool changeRegistry)
         {
             try
@@ -81,55 +240,7 @@ namespace hwj.CommonLibrary.Object
                 throw ex;
             }
         }
-        public static List<string> ReadFileList(string fileName)
-        {
-            using (StreamReader sr = new StreamReader(fileName))
-            {
-                List<string> lines = new List<string>();
-                String line;
-                // Read and display lines from the file until the end of 
-                // the file is reached.
-                while ((line = sr.ReadLine()) != null)
-                {
-                    lines.Add(line);
-                }
-                return lines;
-            }
-        }
-        public static string ReadFile(string fileName)
-        {
-            using (StreamReader sr = new StreamReader(fileName))
-            {
-                return sr.ReadToEnd();
-            }
-        }
 
-        /// <summary>
-        /// 将 Stream 转成 byte[]
-        /// </summary>
-        public static byte[] StreamToBytes(Stream stream)
-        {
-            byte[] bytes = new byte[stream.Length];
-            stream.Read(bytes, 0, bytes.Length);
-
-            // 设置当前流的位置为流的开始
-            stream.Seek(0, SeekOrigin.Begin);
-            return bytes;
-        }
-
-        /// <summary>
-        /// 将 byte[] 转成 Stream
-        /// </summary>
-        public static Stream BytesToStream(byte[] bytes)
-        {
-            Stream stream = new MemoryStream(bytes);
-            return stream;
-        }
-
-
-        /* - - - - - - - - - - - - - - - - - - - - - - - - 
-         * Stream 和 文件之间的转换
-         * - - - - - - - - - - - - - - - - - - - - - - - */
         /// <summary>
         /// 将 Stream 写入文件
         /// </summary>
@@ -164,49 +275,6 @@ namespace hwj.CommonLibrary.Object
             Stream stream = new MemoryStream(bytes);
             return stream;
         }
-
-        public static void CreateFile(string fileName)
-        {
-            CreateFile(fileName, null);
-        }
-        public static void CreateFile(string fileName, string text)
-        {
-            if (!File.Exists(fileName))
-            {
-                string directory = Path.GetDirectoryName(fileName);
-                if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-                    Directory.CreateDirectory(directory);
-                else
-                    using (File.Create(fileName)) { }
-            }
-            if (!string.IsNullOrEmpty(text))
-            {
-                using (StreamWriter sw = new StreamWriter(fileName, false, System.Text.Encoding.UTF8))
-                {
-                    sw.Write(text);
-                }
-            }
-        }
-
-        public static MemoryStream StreamToMemoryStream(Stream stream)
-        {
-            Byte[] buffer = hwj.CommonLibrary.Object.FileHelper.StreamToBytes(stream);
-            return BytesToMemoryStream(buffer);
-        }
-        public static MemoryStream StringToMemoryStream(string data)
-        {
-            Byte[] buffer = Encoding.UTF8.GetBytes(data);
-            return BytesToMemoryStream(buffer);
-        }
-        public static MemoryStream BytesToMemoryStream(Byte[] buffer)
-        {
-            MemoryStream ms = new MemoryStream();
-            GZipStream zipStream = new GZipStream(ms, CompressionMode.Compress, true);
-            zipStream.Write(buffer, 0, buffer.Length);
-            zipStream.Close();
-            ms.Position = 0;
-
-            return ms;
-        }
+        #endregion
     }
 }

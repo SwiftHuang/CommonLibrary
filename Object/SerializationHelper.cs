@@ -326,5 +326,100 @@ namespace hwj.CommonLibrary.Object
             xs.Serialize(stream, dt);
             return System.Text.Encoding.UTF8.GetString(stream.ToArray());
         }
+
+        /// <summary>
+        /// 比较两个对象之间的属性值(支持子类,但子类对边没有使用ignorePropertys)
+        /// </summary>
+        /// <param name="obj1">对象1</param>
+        /// <param name="obj2">对象2</param>
+        /// <returns></returns>
+        public static bool CompareObject(object obj1, object obj2)
+        {
+            List<string> error = new List<string>();
+            return CompareObject(obj1, obj2, null, out error);
+        }
+        /// <summary>
+        /// 比较两个对象之间的属性值(支持子类,但子类对边没有使用ignorePropertys)
+        /// </summary>
+        /// <param name="obj1">对象1</param>
+        /// <param name="obj2">对象2</param>
+        /// <param name="mismatchingList">返回属性值不一致的属性名列表</param>
+        /// <returns></returns>
+        public static bool CompareObject(object obj1, object obj2, out List<string> mismatchingList)
+        {
+            return CompareObject(obj1, obj2, null, out mismatchingList);
+        }
+        /// <summary>
+        /// 比较两个对象之间的属性值(支持子类,但子类对边没有使用ignorePropertys)
+        /// </summary>
+        /// <param name="obj1">对象1</param>
+        /// <param name="obj2">对象2</param>
+        /// <param name="ignorePropertys">忽略的属性列表</param>
+        /// <param name="mismatchingList">返回属性值不一致的属性名列表</param>
+        /// <returns></returns>
+        public static bool CompareObject(object obj1, object obj2, List<string> ignorePropertys, out List<string> mismatchingList)
+        {
+            mismatchingList = new List<string>();
+            if (obj1.GetType() != obj2.GetType())
+            {
+                return false;
+            }
+            if (obj1 == null && obj2 == null)
+            {
+                return true;
+            }
+
+            Type type1 = obj1.GetType();
+            Type type2 = obj2.GetType();
+
+            StringBuilder objString = new StringBuilder();
+            foreach (PropertyInfo field1 in type1.GetProperties())
+            {
+                if (ignorePropertys != null && ignorePropertys.Count > 0)
+                {
+                    if (ignorePropertys.Contains(field1.Name))
+                    {
+                        continue;
+                    }
+                }
+                object value1 = field1.GetValue(obj1, null);//取得字段的值
+
+                foreach (PropertyInfo field2 in type2.GetProperties())
+                {
+                    if (field1.Name == field2.Name)
+                    {
+                        object value2 = field2.GetValue(obj2, null);//取得字段的值
+                        if (field1.PropertyType.IsClass && field1.PropertyType.Name != "String")
+                        {
+                            List<string> errSubClass = new List<string>();
+                            if (!CompareObject(value1, value2, null, out errSubClass))
+                            {
+                                foreach (string s in errSubClass)
+                                {
+                                    mismatchingList.Add(string.Format("{0}:{1}", field1.Name, s));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (value1 != null && value2 != null)
+                            {
+                                if (value1.ToString().Trim() != value2.ToString().Trim())
+                                {
+                                    mismatchingList.Add(string.Format("[{0}]", field1.Name));
+                                }
+                            }
+                            else if ((value1 == null && value2 != null) || (value1 != null && value2 == null))
+                            {
+                                mismatchingList.Add(string.Format("[{0}]", field1.Name));
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+
+            return !(mismatchingList.Count > 0);
+        }
     }
 }
