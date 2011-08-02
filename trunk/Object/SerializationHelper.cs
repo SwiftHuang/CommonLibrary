@@ -349,6 +349,7 @@ namespace hwj.CommonLibrary.Object
         {
             return CompareObject(obj1, obj2, null, out mismatchingList);
         }
+
         /// <summary>
         /// 比较两个对象之间的属性值(支持子类,但子类对边没有使用ignorePropertys)
         /// </summary>
@@ -357,7 +358,24 @@ namespace hwj.CommonLibrary.Object
         /// <param name="ignorePropertys">忽略的属性列表</param>
         /// <param name="mismatchingList">返回属性值不一致的属性名列表</param>
         /// <returns></returns>
-        public static bool CompareObject(object obj1, object obj2, List<string> ignorePropertys, out List<string> mismatchingList)
+        public static bool CompareObjectIgnores(object obj1, object obj2, List<string> ignorePropertys, out List<string> mismatchingList)
+        {
+            return CompareObject(obj1, obj2, null, ignorePropertys, out mismatchingList);
+        }
+        /// <summary>
+        /// 比较两个对象之间的属性值(支持子类,但子类对边没有使用CheckPropertys)
+        /// </summary>
+        /// <param name="obj1">对象1</param>
+        /// <param name="obj2">对象2</param>
+        /// <param name="CheckPropertys">对比属性列表</param>
+        /// <param name="mismatchingList">返回属性值不一致的属性名列表</param>
+        /// <returns></returns>
+        public static bool CompareObject(object obj1, object obj2, List<string> CheckPropertys, out List<string> mismatchingList)
+        {
+            return CompareObject(obj1, obj2, CheckPropertys, null, out mismatchingList);
+        }
+
+        private static bool CompareObject(object obj1, object obj2, List<string> CheckPropertys, List<string> ignorePropertys, out List<string> mismatchingList)
         {
             mismatchingList = new List<string>();
             if (obj1.GetType() != obj2.GetType())
@@ -375,6 +393,13 @@ namespace hwj.CommonLibrary.Object
             StringBuilder objString = new StringBuilder();
             foreach (PropertyInfo field1 in type1.GetProperties())
             {
+                if (CheckPropertys != null && CheckPropertys.Count > 0)
+                {
+                    if (!CheckPropertys.Contains(field1.Name))
+                    {
+                        continue;
+                    }
+                }
                 if (ignorePropertys != null && ignorePropertys.Count > 0)
                 {
                     if (ignorePropertys.Contains(field1.Name))
@@ -386,9 +411,12 @@ namespace hwj.CommonLibrary.Object
 
                 foreach (PropertyInfo field2 in type2.GetProperties())
                 {
+                    //if (CompareProperties(field1, value1, field2, value2, ref mismatchingList))
+                    //    break;
                     if (field1.Name == field2.Name)
                     {
                         object value2 = field2.GetValue(obj2, null);//取得字段的值
+
                         if (field1.PropertyType.IsClass && field1.PropertyType.Name != "String")
                         {
                             List<string> errSubClass = new List<string>();
