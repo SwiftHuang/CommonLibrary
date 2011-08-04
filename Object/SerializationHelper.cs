@@ -72,23 +72,23 @@ namespace hwj.CommonLibrary.Object
 
     public class SerializationHelper
     {
-        public static string SerializeToXml<T>(Type objType, T t) where T : class, new()
-        {
-            StringBuilder sb = new StringBuilder();
-            XmlWriter writer = XmlWriter.Create(sb);
-            XmlSerializer serializer = new XmlSerializer(objType);
-            serializer.Serialize(writer, t);
-            writer.Close();
-            return sb.ToString();
+        //public static string SerializeToXml<T>(Type objType, T t) where T : class, new()
+        //{
+        //    StringBuilder sb = new StringBuilder();
+        //    XmlWriter writer = XmlWriter.Create(sb);
+        //    XmlSerializer serializer = new XmlSerializer(objType);
+        //    serializer.Serialize(writer, t);
+        //    writer.Close();
+        //    return sb.ToString();
 
-        }
-        public static T DeserializeObject<T>(Type objType, string objXml) where T : class, new()
-        {
-            System.IO.StringReader strReader = new System.IO.StringReader(objXml);
-            XmlReader xmlReader = XmlReader.Create(strReader);
-            XmlSerializer serializer = new XmlSerializer(objType);
-            return serializer.Deserialize(xmlReader) as T;
-        }
+        //}
+        //public static T DeserializeObject<T>(Type objType, string objXml) where T : class, new()
+        //{
+        //    System.IO.StringReader strReader = new System.IO.StringReader(objXml);
+        //    XmlReader xmlReader = XmlReader.Create(strReader);
+        //    XmlSerializer serializer = new XmlSerializer(objType);
+        //    return serializer.Deserialize(xmlReader) as T;
+        //}
         public static PropertyInfo[] GetPropertyInfos<T>() where T : class, new()
         {
             List<PropertyInfo> propertyinfo_list = new List<PropertyInfo>();
@@ -104,12 +104,6 @@ namespace hwj.CommonLibrary.Object
 
         public static string SerializeToXml(object obj)
         {
-            //XmlSerializer xs = new XmlSerializer(obj.GetType());
-            //StringWriter sw = new StringWriter();
-            //xs.Serialize(sw, obj);
-            //sw.Close();
-            //return sw.ToString();
-
             System.Xml.Serialization.XmlSerializer xs = new XmlSerializer(obj.GetType());
             System.IO.MemoryStream stream = new System.IO.MemoryStream();
             xs.Serialize(stream, obj);
@@ -327,6 +321,7 @@ namespace hwj.CommonLibrary.Object
             return System.Text.Encoding.UTF8.GetString(stream.ToArray());
         }
 
+        #region Compare Object
         /// <summary>
         /// 比较两个对象之间的属性值(支持子类,但子类对边没有使用ignorePropertys)
         /// </summary>
@@ -370,12 +365,12 @@ namespace hwj.CommonLibrary.Object
         /// <param name="CheckPropertys">对比属性列表</param>
         /// <param name="mismatchingList">返回属性值不一致的属性名列表</param>
         /// <returns></returns>
-        public static bool CompareObject(object obj1, object obj2, List<string> CheckPropertys, out List<string> mismatchingList)
+        public static bool CompareObject(object obj1, object obj2, List<string> checkPropertys, out List<string> mismatchingList)
         {
-            return CompareObject(obj1, obj2, CheckPropertys, null, out mismatchingList);
+            return CompareObject(obj1, obj2, checkPropertys, null, out mismatchingList);
         }
 
-        private static bool CompareObject(object obj1, object obj2, List<string> CheckPropertys, List<string> ignorePropertys, out List<string> mismatchingList)
+        private static bool CompareObject(object obj1, object obj2, List<string> checkPropertys, List<string> ignorePropertys, out List<string> mismatchingList)
         {
             mismatchingList = new List<string>();
             if (obj1.GetType() != obj2.GetType())
@@ -393,9 +388,9 @@ namespace hwj.CommonLibrary.Object
             StringBuilder objString = new StringBuilder();
             foreach (PropertyInfo field1 in type1.GetProperties())
             {
-                if (CheckPropertys != null && CheckPropertys.Count > 0)
+                if (checkPropertys != null && checkPropertys.Count > 0)
                 {
-                    if (!CheckPropertys.Contains(field1.Name))
+                    if (!checkPropertys.Contains(field1.Name))
                     {
                         continue;
                     }
@@ -449,5 +444,6 @@ namespace hwj.CommonLibrary.Object
 
             return !(mismatchingList.Count > 0);
         }
+        #endregion
     }
 }
