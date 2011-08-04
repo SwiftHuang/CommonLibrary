@@ -21,7 +21,7 @@
             <param name="mismatchingList">返回属性值不一致的属性名列表</param>
             <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.Object.SerializationHelper.CompareObjectIgnores(System.Object,System.Object,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String}@)">
+        <member name="M:hwj.CommonLibrary.Object.SerializationHelper.CompareObjectIgnorePropertys(System.Object,System.Object,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String}@)">
             <summary>
             比较两个对象之间的属性值(支持子类,但子类对边没有使用ignorePropertys)
             </summary>
