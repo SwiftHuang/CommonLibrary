@@ -21,13 +21,23 @@
             <param name="mismatchingList">返回属性值不一致的属性名列表</param>
             <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.Object.SerializationHelper.CompareObject(System.Object,System.Object,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String}@)">
+        <member name="M:hwj.CommonLibrary.Object.SerializationHelper.CompareObjectIgnores(System.Object,System.Object,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String}@)">
             <summary>
             比较两个对象之间的属性值(支持子类,但子类对边没有使用ignorePropertys)
             </summary>
             <param name="obj1">对象1</param>
             <param name="obj2">对象2</param>
             <param name="ignorePropertys">忽略的属性列表</param>
+            <param name="mismatchingList">返回属性值不一致的属性名列表</param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.SerializationHelper.CompareObject(System.Object,System.Object,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String}@)">
+            <summary>
+            比较两个对象之间的属性值(支持子类,但子类对边没有使用CheckPropertys)
+            </summary>
+            <param name="obj1">对象1</param>
+            <param name="obj2">对象2</param>
+            <param name="CheckPropertys">对比属性列表</param>
             <param name="mismatchingList">返回属性值不一致的属性名列表</param>
             <returns></returns>
         </member>
