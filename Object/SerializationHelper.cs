@@ -353,7 +353,7 @@ namespace hwj.CommonLibrary.Object
         /// <param name="ignorePropertys">忽略的属性列表</param>
         /// <param name="mismatchingList">返回属性值不一致的属性名列表</param>
         /// <returns></returns>
-        public static bool CompareObjectIgnores(object obj1, object obj2, List<string> ignorePropertys, out List<string> mismatchingList)
+        public static bool CompareObjectIgnorePropertys(object obj1, object obj2, List<string> ignorePropertys, out List<string> mismatchingList)
         {
             return CompareObject(obj1, obj2, null, ignorePropertys, out mismatchingList);
         }
@@ -384,6 +384,7 @@ namespace hwj.CommonLibrary.Object
 
             Type type1 = obj1.GetType();
             Type type2 = obj2.GetType();
+            PropertyInfo[] propertyList2 = type2.GetProperties();
 
             StringBuilder objString = new StringBuilder();
             foreach (PropertyInfo field1 in type1.GetProperties())
@@ -404,10 +405,8 @@ namespace hwj.CommonLibrary.Object
                 }
                 object value1 = field1.GetValue(obj1, null);//取得字段的值
 
-                foreach (PropertyInfo field2 in type2.GetProperties())
+                foreach (PropertyInfo field2 in propertyList2)
                 {
-                    //if (CompareProperties(field1, value1, field2, value2, ref mismatchingList))
-                    //    break;
                     if (field1.Name == field2.Name)
                     {
                         object value2 = field2.GetValue(obj2, null);//取得字段的值
