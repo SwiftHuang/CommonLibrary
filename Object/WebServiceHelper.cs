@@ -13,6 +13,44 @@ namespace hwj.CommonLibrary.Object
 {
     public class WebServiceHelper
     {
+        public class InvokeEntity
+        {
+            #region Property
+            public object iObject { get; set; }
+            public MethodInfo iMethodInfo { get; set; }
+            public string MethodName { get; set; }
+            #endregion
+
+            public InvokeEntity() { }
+            public InvokeEntity(string fileName, string url, string classname, string methodname, int timeout)
+            {
+                this.MethodName = methodname;
+
+                if ((classname == null) || (classname == ""))
+                {
+                    classname = GetWsClassName(url);
+                }
+                Assembly assembly = Assembly.LoadFrom(fileName);
+                Type t = assembly.GetType(@namespace + "." + classname, true, true);
+
+                object obj = Activator.CreateInstance(t);
+
+                if (timeout != -1)
+                {
+                    PropertyInfo propInfo = obj.GetType().GetProperty("Timeout");
+                    propInfo.SetValue(obj, timeout, null);
+                }
+
+                this.iObject = obj;
+                this.iMethodInfo = t.GetMethod(methodname);
+            }
+
+            public object Invoke(object[] args)
+            {
+                return InvokeWebServiceByDLL(this, args);
+            }
+        }
+
         #region InvokeWebService
         private const string @namespace = "EnterpriseServerBase.WebService.DynamicWebCalling";
         //动态调用web服务
@@ -28,26 +66,91 @@ namespace hwj.CommonLibrary.Object
         {
             return InvokeWebServiceByDLL(fileName, url, classname, methodname, -1, args);
         }
+        //public static object InvokeWebServiceByDLL(string fileName, string url, string classname, string methodname, int timeout, object[] args)
+        //{
+        //    //try
+        //    //{
+        //    if ((classname == null) || (classname == ""))
+        //    {
+        //        classname = GetWsClassName(url);
+        //    }
+        //    Assembly assembly = Assembly.LoadFrom(fileName);
+        //    Type t = assembly.GetType(@namespace + "." + classname, true, true);
+
+        //    object obj = Activator.CreateInstance(t);
+        //    MethodInfo mi = t.GetMethod(methodname);
+
+        //    if (timeout != -1)
+        //    {
+        //        PropertyInfo propInfo = obj.GetType().GetProperty("Timeout");
+        //        propInfo.SetValue(obj, timeout, null);
+        //    }
+
+
+        //    if (mi != null)
+        //    {
+        //        if (args == null)
+        //            return mi.Invoke(obj, null);
+        //        else
+        //        {
+        //            ParameterInfo[] paramsInfo = mi.GetParameters();
+        //            object[] tmpArgs = new object[args.Length];
+
+        //            for (int i = 0; i < args.Length; i++)
+        //            {
+        //                Type tType = paramsInfo[i].ParameterType;
+        //                //如果它是值类型,或者String   
+        //                if (tType.Equals(typeof(string)) || (!tType.IsInterface && !tType.IsClass))
+        //                {
+        //                    //改变参数类型   
+        //                    tmpArgs[i] = Convert.ChangeType(args[i], tType);
+        //                }
+        //            }
+        //            return mi.Invoke(obj, tmpArgs);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        throw new Exception(string.Format("Invalid Method Name:{0}", methodname));
+        //    }
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    if (ex.InnerException != null && ex.InnerException is System.Net.WebException)
+        //    //    {
+        //    //        System.Net.WebException webEx = ex.InnerException as System.Net.WebException;
+        //    //        if (webEx.Status == WebExceptionStatus.ConnectFailure)
+        //    //            throw new Exception("Target WebService connection failure", ex);
+        //    //        else if (ex.InnerException.InnerException != null && ex.InnerException.InnerException is System.IO.IOException)
+        //    //            if (ex.InnerException.InnerException.InnerException != null && ex.InnerException.InnerException.InnerException is System.Net.Sockets.SocketException)
+        //    //            {
+        //    //                System.Net.Sockets.SocketException socketEx = ex.InnerException.InnerException.InnerException as System.Net.Sockets.SocketException;
+        //    //                if (socketEx.ErrorCode == 10054)
+        //    //                    ///存在的连接被远程主机强制关闭。
+        //    //                    ///通常原因为：远程主机上对等方应用程序突然停止运行，或远程主机重新启动，或远程主机在远程方套接字上使用了“强制”关闭
+        //    //                    ///（参见setsockopt(SO_LINGER)）。另外，在一个或多个操作正在进行时，如果连接因“keep-alive”活动检测到一个失败而中断，
+        //    //                    ///也可能导致此错误。此时，正在进行的操作以错误码WSAENETRESET失败返回，后续操作将失败返回错误码WSAECONNRESET。
+        //    //                    /// 
+        //    //                    ///简单来说就是“超时”！
+        //    //                    ///
+        //    //                    throw new Exception("Target WebService connection was closed", ex);
+        //    //            }
+        //    //    }
+        //    //    if (ex.InnerException != null)
+        //    //        throw new Exception(ex.InnerException.Message, new Exception(ex.InnerException.StackTrace));
+        //    //    else
+        //    //        throw ex;
+        //    //}
+        //}
         public static object InvokeWebServiceByDLL(string fileName, string url, string classname, string methodname, int timeout, object[] args)
         {
-            //try
-            //{
-            if ((classname == null) || (classname == ""))
-            {
-                classname = GetWsClassName(url);
-            }
-            Assembly assembly = Assembly.LoadFrom(fileName);
-            Type t = assembly.GetType(@namespace + "." + classname, true, true);
-
-            object obj = Activator.CreateInstance(t);
-            MethodInfo mi = t.GetMethod(methodname);
-
-            if (timeout != -1)
-            {
-                PropertyInfo propInfo = obj.GetType().GetProperty("Timeout");
-                propInfo.SetValue(obj, timeout, null);
-            }
-
+            InvokeEntity en = new InvokeEntity(fileName, url, classname, methodname, timeout);
+            return InvokeWebServiceByDLL(en, args);
+        }
+        public static object InvokeWebServiceByDLL(InvokeEntity entity, object[] args)
+        {
+            object obj = entity.iObject;
+            MethodInfo mi = entity.iMethodInfo;
 
             if (mi != null)
             {
@@ -73,36 +176,8 @@ namespace hwj.CommonLibrary.Object
             }
             else
             {
-                throw new Exception(string.Format("Invalid Method Name:{0}", methodname));
+                throw new Exception(string.Format("Invalid Method Name:{0}", entity.MethodName));
             }
-            //}
-            //catch (Exception ex)
-            //{
-            //    if (ex.InnerException != null && ex.InnerException is System.Net.WebException)
-            //    {
-            //        System.Net.WebException webEx = ex.InnerException as System.Net.WebException;
-            //        if (webEx.Status == WebExceptionStatus.ConnectFailure)
-            //            throw new Exception("Target WebService connection failure", ex);
-            //        else if (ex.InnerException.InnerException != null && ex.InnerException.InnerException is System.IO.IOException)
-            //            if (ex.InnerException.InnerException.InnerException != null && ex.InnerException.InnerException.InnerException is System.Net.Sockets.SocketException)
-            //            {
-            //                System.Net.Sockets.SocketException socketEx = ex.InnerException.InnerException.InnerException as System.Net.Sockets.SocketException;
-            //                if (socketEx.ErrorCode == 10054)
-            //                    ///存在的连接被远程主机强制关闭。
-            //                    ///通常原因为：远程主机上对等方应用程序突然停止运行，或远程主机重新启动，或远程主机在远程方套接字上使用了“强制”关闭
-            //                    ///（参见setsockopt(SO_LINGER)）。另外，在一个或多个操作正在进行时，如果连接因“keep-alive”活动检测到一个失败而中断，
-            //                    ///也可能导致此错误。此时，正在进行的操作以错误码WSAENETRESET失败返回，后续操作将失败返回错误码WSAECONNRESET。
-            //                    /// 
-            //                    ///简单来说就是“超时”！
-            //                    ///
-            //                    throw new Exception("Target WebService connection was closed", ex);
-            //            }
-            //    }
-            //    if (ex.InnerException != null)
-            //        throw new Exception(ex.InnerException.Message, new Exception(ex.InnerException.StackTrace));
-            //    else
-            //        throw ex;
-            //}
         }
         public static bool CreateWebServiceDLL(string url, string classname, string fileName)
         {
