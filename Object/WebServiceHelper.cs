@@ -13,15 +13,22 @@ namespace hwj.CommonLibrary.Object
 {
     public class WebServiceHelper
     {
+        [Serializable]
         public class InvokeEntity
         {
             #region Property
             public object iObject { get; set; }
             public MethodInfo iMethodInfo { get; set; }
+            public Type Type { get; set; }
             public string MethodName { get; set; }
             #endregion
 
             public InvokeEntity() { }
+            public InvokeEntity(string fileName, string url, string classname, int timeout)
+                : this(fileName, url, classname, null, timeout)
+            {
+            }
+
             public InvokeEntity(string fileName, string url, string classname, string methodname, int timeout)
             {
                 this.MethodName = methodname;
@@ -42,12 +49,17 @@ namespace hwj.CommonLibrary.Object
                 }
 
                 this.iObject = obj;
-                this.iMethodInfo = t.GetMethod(methodname);
+                this.Type = t;
+
+                if (!string.IsNullOrEmpty(methodname))
+                {
+                    this.iMethodInfo = t.GetMethod(methodname);
+                }
             }
 
-            public object Invoke(object[] args)
+            public object Invoke(string methodname, object[] args)
             {
-                return InvokeWebServiceByDLL(this, args);
+                return InvokeWebServiceByDLL(this, methodname, args);
             }
         }
 
@@ -145,12 +157,12 @@ namespace hwj.CommonLibrary.Object
         public static object InvokeWebServiceByDLL(string fileName, string url, string classname, string methodname, int timeout, object[] args)
         {
             InvokeEntity en = new InvokeEntity(fileName, url, classname, methodname, timeout);
-            return InvokeWebServiceByDLL(en, args);
+            return InvokeWebServiceByDLL(en, methodname, args);
         }
-        public static object InvokeWebServiceByDLL(InvokeEntity entity, object[] args)
+        public static object InvokeWebServiceByDLL(InvokeEntity entity, string methodname, object[] args)
         {
             object obj = entity.iObject;
-            MethodInfo mi = entity.iMethodInfo;
+            MethodInfo mi = entity.Type.GetMethod(methodname);
 
             if (mi != null)
             {
