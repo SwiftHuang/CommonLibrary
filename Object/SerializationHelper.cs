@@ -323,7 +323,7 @@ namespace hwj.CommonLibrary.Object
 
         #region Compare Object
         /// <summary>
-        /// 比较两个对象之间的属性值(支持子类,但子类对边没有使用ignorePropertys)
+        /// 比较两个对象之间的属性值(支持子类,但子类对比没有使用ignorePropertys)
         /// </summary>
         /// <param name="obj1">对象1</param>
         /// <param name="obj2">对象2</param>
@@ -334,7 +334,7 @@ namespace hwj.CommonLibrary.Object
             return CompareObject(obj1, obj2, null, out error);
         }
         /// <summary>
-        /// 比较两个对象之间的属性值(支持子类,但子类对边没有使用ignorePropertys)
+        /// 比较两个对象之间的属性值(支持子类,但子类对比没有使用ignorePropertys)
         /// </summary>
         /// <param name="obj1">对象1</param>
         /// <param name="obj2">对象2</param>
@@ -346,7 +346,7 @@ namespace hwj.CommonLibrary.Object
         }
 
         /// <summary>
-        /// 比较两个对象之间的属性值(支持子类,但子类对边没有使用ignorePropertys)
+        /// 比较两个对象之间的属性值(支持子类,但子类对比没有使用ignorePropertys)
         /// </summary>
         /// <param name="obj1">对象1</param>
         /// <param name="obj2">对象2</param>
@@ -358,7 +358,7 @@ namespace hwj.CommonLibrary.Object
             return CompareObject(obj1, obj2, null, ignorePropertys, out mismatchingList);
         }
         /// <summary>
-        /// 比较两个对象之间的属性值(支持子类,但子类对边没有使用CheckPropertys)
+        /// 比较两个对象之间的属性值(支持子类,但子类对比没有使用CheckPropertys)
         /// </summary>
         /// <param name="obj1">对象1</param>
         /// <param name="obj2">对象2</param>
