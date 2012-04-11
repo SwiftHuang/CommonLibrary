@@ -350,26 +350,50 @@ namespace hwj.CommonLibrary.Object
             {
                 sb = new StringBuilder();
             }
+            public void AppendFormat(string format, params object[] args)
+            {
+                AppendFormat(0, format, args);
+            }
+            public void AppendFormat(int spaceNum, string format, params object[] args)
+            {
+                string tmpStr = GetSpaceText(spaceNum);
+                sb.AppendFormat(tmpStr + format, args);
+            }
+            public void AppendLine()
+            {
+                AppendLine(string.Empty);
+            }
             public void AppendLine(string text)
             {
                 AppendLine(0, text);
             }
             public void AppendLine(int spaceNum, string text)
             {
+                string tmpStr = GetSpaceText(spaceNum);
+                sb.AppendLine(tmpStr + text);
+            }
+            public void Append(string text)
+            {
+                Append(0, text);
+            }
+            public void Append(int spaceNum, string text)
+            {
+                string tmpStr = GetSpaceText(spaceNum);
+                sb.Append(tmpStr + text);
+            }
+
+            public string ToString()
+            {
+                return sb.ToString();
+            }
+            private string GetSpaceText(int spaceNum)
+            {
                 string tmpStr = string.Empty;
                 for (int i = 0; i < spaceNum; i++)
                 {
                     tmpStr += "    ";
                 }
-                sb.AppendLine(tmpStr + text);
-            }
-            public void Append(string text)
-            {
-                sb.Append(text);
-            }
-            public string ToString()
-            {
-                return sb.ToString();
+                return tmpStr;
             }
         }
 
