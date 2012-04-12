@@ -114,6 +114,13 @@
             扩展参数3
             </summary>
         </member>
+        <member name="M:hwj.CommonLibrary.Object.Email.SmtpInfoList.#ctor(System.String)">
+            <summary>
+            Format:Smtp Server/User/Password|Smtp Server/User/Password|
+            eg.smtp.163.com/user@163.com/163163|smtp.163.com/user@163.com/163163
+            </summary>
+            <param name="value"></param>
+        </member>
         <member name="P:hwj.CommonLibrary.Object.Email.SmtpInfoList.LastSuccess">
             <summary>
             获取最后一次成功发送的SMTP配置。
