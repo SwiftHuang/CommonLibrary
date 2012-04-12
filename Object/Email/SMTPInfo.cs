@@ -49,6 +49,28 @@ namespace hwj.CommonLibrary.Object.Email
             SmtpInfo smtpInfo = new SmtpInfo(smtpServer, emailFrom, emailFromPassword);
             this.Add(smtpInfo);
         }
+        /// <summary>
+        /// Format:Smtp Server/User/Password|Smtp Server/User/Password|
+        /// eg.smtp.163.com/user@163.com/163163|smtp.163.com/user@163.com/163163
+        /// </summary>
+        /// <param name="value"></param>
+        public SmtpInfoList(string value)
+        {
+            //smtp.sohu.com/wtlit@sohu.com/gzwtlit|smtp.sohu.com/vinsonemail@sohu.com/gzwtlit
+            if (!string.IsNullOrEmpty(value))
+            {
+                string[] tmpStr = value.Split('|');
+                foreach (string s in tmpStr)
+                {
+                    string[] smtpStr = s.Split('/');
+                    if (smtpStr.Length == 3)
+                    {
+                        SmtpInfo smtp = new SmtpInfo(smtpStr[0], smtpStr[1], smtpStr[2]);
+                        this.Add(smtp);
+                    }
+                }
+            }
+        }
 
         public SmtpInfoList GetValidList()
         {
