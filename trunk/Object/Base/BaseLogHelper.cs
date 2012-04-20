@@ -97,12 +97,16 @@ namespace hwj.CommonLibrary.Object.Base
 
         public void InfoWithEmail(string log, Exception ex, string emailSubject)
         {
-            InfoAction(log, ex, emailSubject, EmailTo, EmailCC);
+            InfoAction(log, ex, emailSubject, EmailTo, EmailCC, null, null);
         }
-
-        public void InfoAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC)
+        public void InfoWithEmail(string log, Exception ex, string emailSubject, string attachmentText, string attachmentFileName)
         {
-            InfoAction(log, ex, emailSubject, emailTo, emailCC, null);
+            InfoAction(log, ex, emailSubject, EmailTo, EmailCC, attachmentText, attachmentFileName);
+        }
+        public void InfoAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, string attachmentText, string attachmentFileName)
+        {
+            Attachment atch = GetTextAttachment(emailSubject, attachmentText, attachmentFileName);
+            InfoAction(log, ex, emailSubject, emailTo, emailCC, new List<Attachment>() { atch });
         }
         public void InfoAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
@@ -144,12 +148,18 @@ namespace hwj.CommonLibrary.Object.Base
 
         public void WarnWithEmail(string log, Exception ex, string emailSubject)
         {
-            WarnAction(log, ex, emailSubject, EmailTo, EmailCC);
+            WarnAction(log, ex, emailSubject, EmailTo, EmailCC, null, null);
         }
 
-        public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC)
+        public void WarnWithEmail(string log, Exception ex, string emailSubject, string attachmentText, string attachmentFileName)
         {
-            WarnAction(log, ex, emailSubject, emailTo, emailCC, null);
+            WarnAction(log, ex, emailSubject, EmailTo, EmailCC, attachmentText, attachmentFileName);
+        }
+
+        public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, string attachmentText, string attachmentFileName)
+        {
+            Attachment atch = GetTextAttachment(emailSubject, attachmentText, attachmentFileName);
+            WarnAction(log, ex, emailSubject, emailTo, emailCC, new List<Attachment>() { atch });
         }
         public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
@@ -189,12 +199,18 @@ namespace hwj.CommonLibrary.Object.Base
 
         public void ErrorWithEmail(string log, Exception ex, string emailSubject)
         {
-            ErrorAction(log, ex, emailSubject, EmailTo, EmailCC);
+            ErrorAction(log, ex, emailSubject, EmailTo, EmailCC, null, null);
         }
 
-        public void ErrorAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC)
+        public void ErrorWithEmail(string log, Exception ex, string emailSubject, string attachmentText, string attachmentFileName)
         {
-            ErrorAction(log, ex, emailSubject, emailTo, emailCC, null);
+            ErrorAction(log, ex, emailSubject, EmailTo, EmailCC, attachmentText, attachmentFileName);
+        }
+
+        public void ErrorAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, string attachmentText, string attachmentFileName)
+        {
+            Attachment atch = GetTextAttachment(emailSubject, attachmentText, attachmentFileName);
+            ErrorAction(log, ex, emailSubject, emailTo, emailCC, new List<Attachment>() { atch });
         }
         public void ErrorAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
@@ -337,6 +353,20 @@ namespace hwj.CommonLibrary.Object.Base
                     }
                 }
             }
+        }
+
+        private Attachment GetTextAttachment(string emailSubject, string text, string fileName)
+        {
+            Attachment atch = null;
+            if (!string.IsNullOrEmpty(text))
+            {
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    fileName = string.Format("{0}_{1}.log", emailSubject, DateTime.Now.ToString("yyyyMMddHHmmss"));
+                }
+                atch = EmailHelper.GetAttachment(text, fileName, true);
+            }
+            return atch;
         }
     }
 }

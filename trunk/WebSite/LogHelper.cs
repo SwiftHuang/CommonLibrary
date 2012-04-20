@@ -30,56 +30,95 @@ namespace hwj.CommonLibrary.WebSite
             return sb.ToString();
         }
 
+        #region Info
         public void InfoWithoutEmail(string log, Exception ex, WebLogInfo webLogInfo)
         {
             base.InfoWithoutEmail(GetWebInfo(log, webLogInfo), ex);
         }
+
         public void InfoWithEmail(string log, Exception ex, string emailSubject)
         {
-            InfoWithEmail(log, ex, emailSubject, HttpContext.Current.Request);
+            InfoWithEmail(log, ex, emailSubject, null, null);
         }
+        public void InfoWithEmail(string log, Exception ex, string emailSubject, string attachmentText, string attachmentFileName)
+        {
+            InfoWithEmail(log, ex, emailSubject, HttpContext.Current.Request, attachmentText, attachmentFileName);
+        }
+
+        public void InfoWithEmail(string log, Exception ex, string emailSubject, HttpRequest request)
+        {
+            InfoWithEmail(log, ex, emailSubject, request, null, null);
+        }
+        public void InfoWithEmail(string log, Exception ex, string emailSubject, HttpRequest request, string attachmentText, string attachmentFileName)
+        {
+            base.InfoWithEmail(GetWebInfo(log, request), ex, emailSubject, attachmentText, attachmentFileName);
+        }
+
         public void InfoWithEmail(string log, Exception ex, string emailSubject, WebLogInfo webLogInfo)
         {
             base.InfoWithEmail(GetWebInfo(log, webLogInfo), ex, emailSubject);
         }
-        public void InfoWithEmail(string log, Exception ex, string emailSubject, HttpRequest request)
-        {
-            base.InfoWithEmail(GetWebInfo(log, request), ex, emailSubject);
-        }
+        #endregion
 
+        #region Warn
         public void WarnWithoutEmail(string log, Exception ex, WebLogInfo webLogInfo)
         {
             base.WarnWithoutEmail(GetWebInfo(log, webLogInfo), ex);
         }
+
         public void WarnWithEmail(string log, Exception ex, string emailSubject)
         {
-            WarnWithEmail(log, ex, emailSubject, HttpContext.Current.Request);
+            WarnWithEmail(log, ex, emailSubject, null, null);
         }
+        public void WarnWithEmail(string log, Exception ex, string emailSubject, string attachmentText, string attachmentFileName)
+        {
+            WarnWithEmail(log, ex, emailSubject, HttpContext.Current.Request, attachmentText, attachmentFileName);
+        }
+
+        public void WarnWithEmail(string log, Exception ex, string emailSubject, HttpRequest request)
+        {
+            WarnWithEmail(log, ex, emailSubject, request, null, null);
+        }
+        public void WarnWithEmail(string log, Exception ex, string emailSubject, HttpRequest request, string attachmentText, string attachmentFileName)
+        {
+            base.WarnWithEmail(GetWebInfo(log, request), ex, emailSubject, attachmentText, attachmentFileName);
+        }
+
         public void WarnWithEmail(string log, Exception ex, string emailSubject, WebLogInfo webLogInfo)
         {
             base.WarnWithEmail(GetWebInfo(log, webLogInfo), ex, emailSubject);
         }
-        public void WarnWithEmail(string log, Exception ex, string emailSubject, HttpRequest request)
-        {
-            base.WarnWithEmail(GetWebInfo(log, request), ex, emailSubject);
-        }
 
+        #endregion
+
+        #region Error
         public void ErrorWithoutEmail(string log, Exception ex, WebLogInfo webLogInfo)
         {
             base.ErrorWithoutEmail(GetWebInfo(log, webLogInfo), ex);
         }
+
         public void ErrorWithEmail(string log, Exception ex, string emailSubject)
         {
-            ErrorWithEmail(log, ex, emailSubject, HttpContext.Current.Request);
+            ErrorWithEmail(log, ex, emailSubject, null, null);
         }
+        public void ErrorWithEmail(string log, Exception ex, string emailSubject, string attachmentText, string attachmentFileName)
+        {
+            ErrorWithEmail(log, ex, emailSubject, HttpContext.Current.Request, attachmentText, attachmentFileName);
+        }
+
         public void ErrorWithEmail(string log, Exception ex, string emailSubject, HttpRequest request)
         {
-            base.ErrorWithEmail(GetWebInfo(log, request), ex, emailSubject);
+            ErrorWithEmail(log, ex, emailSubject, request, null, null);
         }
+        public void ErrorWithEmail(string log, Exception ex, string emailSubject, HttpRequest request, string attachmentText, string attachmentFileName)
+        {
+            base.ErrorWithEmail(GetWebInfo(log, request), ex, emailSubject, attachmentText, attachmentFileName);
+        }
+
         public void ErrorWithEmail(string log, Exception ex, string emailSubject, WebLogInfo webLogInfo)
         {
             base.ErrorWithEmail(GetWebInfo(log, webLogInfo), ex, emailSubject);
         }
-
+        #endregion
     }
 }
