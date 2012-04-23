@@ -311,12 +311,17 @@ namespace hwj.CommonLibrary.Object
             {
                 foreach (Attachment a in attachments)
                 {
-                    message.Attachments.Add(a);
+                    if (a != null)
+                    {
+                        message.Attachments.Add(a);
+                    }
                 }
             }
 
             if (!string.IsNullOrEmpty(emailFrom))
+            {
                 message.From = new MailAddress(emailFrom);
+            }
             message.Priority = MailPriority.Normal;
             message.BodyEncoding = System.Text.Encoding.UTF8;
             message.IsBodyHtml = isBodyHtml;
