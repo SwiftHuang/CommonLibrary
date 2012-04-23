@@ -143,7 +143,7 @@ namespace hwj.CommonLibrary.Object.Base
         }
         public void WarnWithoutEmail(string log, Exception ex)
         {
-            WarnAction(log, ex, false, null, null, null, null);
+            WarnAction(log, ex, false, null, null, null, null, null);
         }
 
         public void WarnWithEmail(string log, Exception ex, string emailSubject)
@@ -159,23 +159,30 @@ namespace hwj.CommonLibrary.Object.Base
         public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, string attachmentText, string attachmentFileName)
         {
             Attachment atch = GetTextAttachment(emailSubject, attachmentText, attachmentFileName);
-            WarnAction(log, ex, emailSubject, emailTo, emailCC, new List<Attachment>() { atch });
+            WarnAction(log, ex, true, emailSubject, emailTo, emailCC, attachmentText, new List<Attachment>() { atch });
         }
         public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
-            WarnAction(log, ex, true, emailSubject, emailTo, emailCC, attachments);
+            WarnAction(log, ex, true, emailSubject, emailTo, emailCC, null, attachments);
         }
 
-        private void WarnAction(string log, Exception ex, bool sendEmail, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
+        private void WarnAction(string log, Exception ex, bool sendEmail, string emailSubject, string emailTo, string emailCC, string attachmentText, List<Attachment> attachments)
         {
             if (LogWarn.IsWarnEnabled)
             {
+                string tmpLog = GetTextAttachmentForFileLog(log, attachmentText);
                 if (ex == null)
-                    LogWarn.Warn(log);
+                {
+                    LogWarn.Warn(tmpLog);
+                }
                 else
-                    LogWarn.Warn(log, ex);
+                {
+                    LogWarn.Warn(tmpLog, ex);
+                }
                 if (sendEmail)
+                {
                     Email(emailSubject + " <Warn>", log, ex, emailTo, emailCC, attachments);
+                }
             }
         }
         #endregion
@@ -194,7 +201,7 @@ namespace hwj.CommonLibrary.Object.Base
         }
         public void ErrorWithoutEmail(string log, Exception ex)
         {
-            ErrorAction(log, ex, false, null, null, null, null);
+            ErrorAction(log, ex, false, null, null, null, null, null);
         }
 
         public void ErrorWithEmail(string log, Exception ex, string emailSubject)
@@ -210,18 +217,20 @@ namespace hwj.CommonLibrary.Object.Base
         public void ErrorAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, string attachmentText, string attachmentFileName)
         {
             Attachment atch = GetTextAttachment(emailSubject, attachmentText, attachmentFileName);
-            ErrorAction(log, ex, emailSubject, emailTo, emailCC, new List<Attachment>() { atch });
+            ErrorAction(log, ex, true, emailSubject, emailTo, emailCC, attachmentText, new List<Attachment>() { atch });
         }
         public void ErrorAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
-            ErrorAction(log, ex, true, emailSubject, emailTo, emailCC, attachments);
+            ErrorAction(log, ex, true, emailSubject, emailTo, emailCC, null, attachments);
         }
 
-        private void ErrorAction(string log, Exception ex, bool sendEmail, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
+        private void ErrorAction(string log, Exception ex, bool sendEmail, string emailSubject, string emailTo, string emailCC, string attachmentText, List<Attachment> attachments)
         {
             if (LogError.IsErrorEnabled)
             {
-                LogError.Error(log, ex);
+                string tmpLog = GetTextAttachmentForFileLog(log, attachmentText);
+                LogError.Error(tmpLog, ex);
+
                 if (sendEmail)
                 {
                     Email(emailSubject + " <Error>", log, ex, emailTo, emailCC, attachments);
@@ -367,6 +376,22 @@ namespace hwj.CommonLibrary.Object.Base
                 atch = EmailHelper.GetAttachment(text, fileName, true);
             }
             return atch;
+        }
+        private string GetTextAttachmentForFileLog(string log, string text)
+        {
+            if (!string.IsNullOrEmpty(text))
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine(log);
+                sb.AppendLine("**** Begin Attachment Text ****");
+                sb.AppendLine(text);
+                sb.AppendLine("**** End Attachment Text ****");
+                return sb.ToString();
+            }
+            else
+            {
+                return log;
+            }
         }
     }
 }
