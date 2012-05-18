@@ -56,6 +56,7 @@
     <Compile Include="Object\DateHelper.cs" />
     <Compile Include="Object\EmailHelper.cs" />
     <Compile Include="Object\Email\SmtpInfo.cs" />
+    <Compile Include="Object\EntityHelper.cs" />
     <Compile Include="Object\LogHelper.cs">
       <SubType>Code</SubType>
     </Compile>
