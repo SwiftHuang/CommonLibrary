@@ -373,13 +373,17 @@ namespace hwj.CommonLibrary.Object
         private static bool CompareObject(object obj1, object obj2, List<string> checkPropertys, List<string> ignorePropertys, out List<string> mismatchingList)
         {
             mismatchingList = new List<string>();
-            if (obj1.GetType() != obj2.GetType())
-            {
-                return false;
-            }
             if (obj1 == null && obj2 == null)
             {
                 return true;
+            }
+            if (obj1 == null || obj2 == null)
+            {
+                return false;
+            }
+            if (obj1.GetType() != obj2.GetType())
+            {
+                return false;
             }
 
             Type type1 = obj1.GetType();
