@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.IO.Compression;
+using System.Security.Cryptography;
 
 namespace hwj.CommonLibrary.Object
 {
@@ -106,14 +107,32 @@ namespace hwj.CommonLibrary.Object
             return ms;
         }
 
+        public static string GetMD5Key(string data)
+        {
+            return GetMD5Key(StringToMemoryStream(data));
+        }
+        public static string GetMD5Key(Stream InputStream)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            byte[] OutBytes = md5.ComputeHash(InputStream);
+            InputStream.Close();
+            for (int i = 0; i < OutBytes.Length; i++)
+            {
+                sb.Append(OutBytes[i].ToString("x2"));
+            }
+
+            return sb.ToString();
+        }
         //public static Stream Decompress(Stream stream)
         //{
         //    MemoryStream ms = new MemoryStream();
         //    GZipStream zipStream = new GZipStream(stream, CompressionMode.Decompress);
-        
+
         //    using (StreamReader reader = new StreamReader(zipStream))
         //    {
-                
+
         //        string tmp = reader.ReadToEnd();
         //        ms = StringToMemoryStream(tmp);
         //    }
