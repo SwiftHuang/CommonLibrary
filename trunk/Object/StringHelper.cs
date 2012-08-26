@@ -441,5 +441,22 @@ namespace hwj.CommonLibrary.Object
                 return "Failed to get system information";
             }
         }
+
+        /// <summary>
+        /// 获取String（如果value=null则返回string.Empty)
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string GetString(object value)
+        {
+            if (value != null)
+            {
+                return value.ToString();
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
     }
 }
