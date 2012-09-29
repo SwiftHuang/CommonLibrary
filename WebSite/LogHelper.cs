@@ -5,7 +5,7 @@ using System.Web;
 
 namespace hwj.CommonLibrary.WebSite
 {
-    public class LogHelper : Object.Base.LogHelper
+    public abstract class LogHelper : Object.Base.LogHelper
     {
         public LogHelper(string fileName)
         {
