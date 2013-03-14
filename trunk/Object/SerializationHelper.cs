@@ -408,7 +408,14 @@ namespace hwj.CommonLibrary.Object
                     }
                 }
                 object value1 = field1.GetValue(obj1, null);//取得字段的值
-
+                //if (obj1.GetType().Name == "List`1")
+                //{
+                //    value1 = field1.GetValue(null, new object[] { obj1 });
+                //}
+                //else
+                //{
+                //    value1 = field1.GetValue(obj1, null);
+                //}
                 foreach (PropertyInfo field2 in propertyList2)
                 {
                     if (field1.Name == field2.Name)
