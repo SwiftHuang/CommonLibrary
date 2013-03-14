@@ -50,6 +50,9 @@ namespace hwj.CommonLibrary.Object
             object[] pis = obj.GetType().GetProperties();
             foreach (PropertyInfo pi in pis)
             {
+                if (pi.Name == "Capacity" || pi.Name == "Count")
+                    continue;
+
                 object v = pi.GetValue(obj, null);
 
                 if (v != null)
