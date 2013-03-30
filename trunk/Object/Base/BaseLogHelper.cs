@@ -318,6 +318,7 @@ namespace hwj.CommonLibrary.Object.Base
 
             if (ex.Data != null && ex.Data.Count > 0)
             {
+                sb.AppendLine(string.Empty);
                 sb.AppendLine("----------------Exception.Data List----------------");
                 foreach (DictionaryEntry obj in ex.Data)
                 {

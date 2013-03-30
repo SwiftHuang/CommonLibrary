@@ -57,7 +57,14 @@ namespace hwj.CommonLibrary.Object
         }
         public static string ReadFile(string fileName)
         {
-            using (StreamReader sr = new StreamReader(fileName))
+            using (StreamReader sr = new StreamReader(fileName, System.Text.Encoding.Default))
+            {
+                return sr.ReadToEnd();
+            }
+        }
+        public static string ReadFile(string fileName, Encoding encoding)
+        {
+            using (StreamReader sr = new StreamReader(fileName, encoding))
             {
                 return sr.ReadToEnd();
             }
