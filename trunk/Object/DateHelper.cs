@@ -6,7 +6,7 @@ namespace hwj.CommonLibrary.Object
 {
     public class DateHelper
     {
-        public static DateTime ToDate(string value, string format)
+        public static DateTime ToDate(string value)
         {
             DateTime date = DateTime.MinValue;
             IFormatProvider culture = new System.Globalization.CultureInfo("en-us", true);
