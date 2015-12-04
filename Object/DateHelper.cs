@@ -16,7 +16,6 @@ namespace hwj.CommonLibrary.Object
         }
         public static string FormatDate(DateTime value, string format)
         {
-            DateTime date = DateTime.MinValue;
             IFormatProvider culture = new System.Globalization.CultureInfo("en-us", true);
             return value.ToString(format, culture);
         }

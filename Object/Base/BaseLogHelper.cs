@@ -1,21 +1,24 @@
-﻿using System;
+﻿using hwj.CommonLibrary.Object;
+using hwj.CommonLibrary.Object.Email;
+using log4net;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net.Mail;
 using System.Text;
-using hwj.CommonLibrary.Object;
-using hwj.CommonLibrary.Object.Email;
-using log4net;
 
 namespace hwj.CommonLibrary.Object.Base
 {
     public abstract class LogHelper
     {
         #region Property
+
         private ILog LogInfo { get; set; }
+
         private ILog LogError { get; set; }
+
         private ILog LogWarn { get; set; }
 
         /// <summary>
@@ -29,15 +32,19 @@ namespace hwj.CommonLibrary.Object.Base
         /// 多个收件人请用逗号分隔
         /// </summary>
         public string EmailTo { get; set; }
+
         /// <summary>
         /// 多个抄送人请用逗号分隔
         /// </summary>
         public string EmailCC { get; set; }
+
         internal string EmailBodyFormat { get; private set; }
+
         /// <summary>
         /// 获取或设置是否使用多个SMTP服务器的模式
         /// </summary>
         public bool MultSmtpEnabled { get; set; }
+
         /// <summary>
         /// 获取或设置SMTP服务器列表
         /// </summary>
@@ -45,13 +52,14 @@ namespace hwj.CommonLibrary.Object.Base
 
         //public string Subject { get; set; }
         //public string Body { get; set; }
-        #endregion
+
+        #endregion Property
 
         public LogHelper()
             : this(null)
         {
-
         }
+
         public LogHelper(string configFileName)
         {
             ShowInvalidSmtpError = true;
@@ -79,6 +87,7 @@ namespace hwj.CommonLibrary.Object.Base
         }
 
         #region Info Function
+
         public void ChangeInfoOutputFile(string fileName)
         {
             if (LogInfo != null)
@@ -86,10 +95,12 @@ namespace hwj.CommonLibrary.Object.Base
                 ChangeOutputFile(LogInfo, fileName);
             }
         }
+
         public void InfoWithoutEmail(string log)
         {
             InfoWithoutEmail(log, null);
         }
+
         public void InfoWithoutEmail(string log, Exception ex)
         {
             InfoAction(log, ex, false, null, null, null, null);
@@ -99,15 +110,18 @@ namespace hwj.CommonLibrary.Object.Base
         {
             InfoAction(log, ex, emailSubject, EmailTo, EmailCC, null, null);
         }
+
         public void InfoWithEmail(string log, Exception ex, string emailSubject, string attachmentText, string attachmentFileName)
         {
             InfoAction(log, ex, emailSubject, EmailTo, EmailCC, attachmentText, attachmentFileName);
         }
+
         public void InfoAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, string attachmentText, string attachmentFileName)
         {
             Attachment atch = GetTextAttachment(emailSubject, attachmentText, attachmentFileName);
             InfoAction(log, ex, emailSubject, emailTo, emailCC, new List<Attachment>() { atch });
         }
+
         public void InfoAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
             InfoAction(log, ex, true, emailSubject, emailTo, emailCC, attachments);
@@ -127,9 +141,10 @@ namespace hwj.CommonLibrary.Object.Base
             }
         }
 
-        #endregion
+        #endregion Info Function
 
         #region Warn Function
+
         public void ChangeWarnOutputFile(string fileName)
         {
             if (LogWarn != null)
@@ -137,10 +152,12 @@ namespace hwj.CommonLibrary.Object.Base
                 ChangeOutputFile(LogWarn, fileName);
             }
         }
+
         public void WarnWithoutEmail(string log)
         {
             WarnWithoutEmail(log, null);
         }
+
         public void WarnWithoutEmail(string log, Exception ex)
         {
             WarnAction(log, ex, false, null, null, null, null, null);
@@ -161,6 +178,7 @@ namespace hwj.CommonLibrary.Object.Base
             Attachment atch = GetTextAttachment(emailSubject, attachmentText, attachmentFileName);
             WarnAction(log, ex, true, emailSubject, emailTo, emailCC, attachmentText, new List<Attachment>() { atch });
         }
+
         public void WarnAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
             WarnAction(log, ex, true, emailSubject, emailTo, emailCC, null, attachments);
@@ -170,7 +188,7 @@ namespace hwj.CommonLibrary.Object.Base
         {
             if (LogWarn.IsWarnEnabled)
             {
-                string tmpLog = GetTextAttachmentForFileLog(log, attachmentText);
+                string tmpLog = GetTextAttachmentForFileLog(log, attachmentText, ex);
                 if (ex == null)
                 {
                     LogWarn.Warn(tmpLog);
@@ -185,9 +203,11 @@ namespace hwj.CommonLibrary.Object.Base
                 }
             }
         }
-        #endregion
+
+        #endregion Warn Function
 
         #region Error Function
+
         public void ChangeErrorOutputFile(string fileName)
         {
             if (LogError != null)
@@ -195,10 +215,12 @@ namespace hwj.CommonLibrary.Object.Base
                 ChangeOutputFile(LogError, fileName);
             }
         }
+
         public void ErrorWithoutEmail(string log)
         {
             ErrorWithoutEmail(log, null);
         }
+
         public void ErrorWithoutEmail(string log, Exception ex)
         {
             ErrorAction(log, ex, false, null, null, null, null, null);
@@ -219,6 +241,7 @@ namespace hwj.CommonLibrary.Object.Base
             Attachment atch = GetTextAttachment(emailSubject, attachmentText, attachmentFileName);
             ErrorAction(log, ex, true, emailSubject, emailTo, emailCC, attachmentText, new List<Attachment>() { atch });
         }
+
         public void ErrorAction(string log, Exception ex, string emailSubject, string emailTo, string emailCC, List<Attachment> attachments)
         {
             ErrorAction(log, ex, true, emailSubject, emailTo, emailCC, null, attachments);
@@ -228,7 +251,7 @@ namespace hwj.CommonLibrary.Object.Base
         {
             if (LogError.IsErrorEnabled)
             {
-                string tmpLog = GetTextAttachmentForFileLog(log, attachmentText);
+                string tmpLog = GetTextAttachmentForFileLog(log, attachmentText, ex);
                 LogError.Error(tmpLog, ex);
 
                 if (sendEmail)
@@ -237,20 +260,25 @@ namespace hwj.CommonLibrary.Object.Base
                 }
             }
         }
-        #endregion
+
+        #endregion Error Function
 
         #region Smtp Function
+
         public void SetSingleSmtp(string smtpServer, string emailFrom, string emailFromPassword)
         {
             SmtpList = new SmtpInfoList(smtpServer, emailFrom, emailFromPassword);
         }
-        #endregion
+
+        #endregion Smtp Function
 
         #region Email Function
+
         public void Email(string subject, string log, Exception ex, string emailTo, string emailCC)
         {
             Email(subject, log, ex, emailTo, emailCC, null);
         }
+
         public void Email(string subject, string log, Exception ex, string emailTo, string emailCC, List<Attachment> attachments)
         {
             if (!string.IsNullOrEmpty(subject))
@@ -261,10 +289,12 @@ namespace hwj.CommonLibrary.Object.Base
                     Email(subject, string.Format(EmailBodyFormat, log, FormatException(ex)), emailTo, emailCC, attachments);
             }
         }
+
         public void Email(string subject, string body, string emailTo, string emailCC)
         {
             Email(subject, body, emailTo, emailCC, null);
         }
+
         public void Email(string subject, string body, string emailTo, string emailCC, List<Attachment> attachments)
         {
             //Subject = subject;
@@ -346,7 +376,8 @@ namespace hwj.CommonLibrary.Object.Base
 
             return sb.ToString();
         }
-        #endregion
+
+        #endregion Email Function
 
         public static void ChangeOutputFile(ILog iLog, string fileName)
         {
@@ -378,20 +409,24 @@ namespace hwj.CommonLibrary.Object.Base
             }
             return atch;
         }
-        private string GetTextAttachmentForFileLog(string log, string text)
+
+        private string GetTextAttachmentForFileLog(string log, string text, Exception ex)
         {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(log);
+            sb.AppendLine(FormatException(ex));
+
             if (!string.IsNullOrEmpty(text))
             {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine(log);
                 sb.AppendLine("**** Begin Attachment Text ****");
                 sb.AppendLine(text);
                 sb.AppendLine("**** End Attachment Text ****");
+
                 return sb.ToString();
             }
             else
             {
-                return log;
+                return sb.ToString();
             }
         }
     }
