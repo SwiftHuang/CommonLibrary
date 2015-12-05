@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Text;
 using System.IO;
-using Microsoft.Win32;
-using System.IO.Compression;
+using System.Text;
 
 namespace hwj.CommonLibrary.Object
 {
@@ -26,6 +25,7 @@ namespace hwj.CommonLibrary.Object
             }
             catch { return false; }
         }
+
         public static bool UnRegisterFile(string fileName, bool displayMessage)
         {
             try
@@ -40,13 +40,14 @@ namespace hwj.CommonLibrary.Object
         }
 
         #region 文件操作
+
         public static List<string> ReadFileList(string fileName)
         {
             using (StreamReader sr = new StreamReader(fileName))
             {
                 List<string> lines = new List<string>();
                 String line;
-                // Read and display lines from the file until the end of 
+                // Read and display lines from the file until the end of
                 // the file is reached.
                 while ((line = sr.ReadLine()) != null)
                 {
@@ -55,6 +56,7 @@ namespace hwj.CommonLibrary.Object
                 return lines;
             }
         }
+
         public static string ReadFile(string fileName)
         {
             using (StreamReader sr = new StreamReader(fileName, System.Text.Encoding.Default))
@@ -62,6 +64,7 @@ namespace hwj.CommonLibrary.Object
                 return sr.ReadToEnd();
             }
         }
+
         public static string ReadFile(string fileName, Encoding encoding)
         {
             using (StreamReader sr = new StreamReader(fileName, encoding))
@@ -69,20 +72,33 @@ namespace hwj.CommonLibrary.Object
                 return sr.ReadToEnd();
             }
         }
+
         /// <summary>
         /// 创建文件
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="fileName">要写入的完整文件路径。</param>
         public static void CreateFile(string fileName)
         {
             CreateFile(fileName, null);
         }
+
         /// <summary>
         /// 创建文件
         /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="text"></param>
+        /// <param name="fileName">要写入的完整文件路径。</param>
+        /// <param name="text">文本</param>
         public static void CreateFile(string fileName, string text)
+        {
+            CreateFile(fileName, text, false);
+        }
+
+        /// <summary>
+        /// 创建文件
+        /// </summary>
+        /// <param name="fileName">要写入的完整文件路径。</param>
+        /// <param name="text">文本</param>
+        /// <param name="append"> 确定是否将数据追加到文件。如果该文件存在，并且 append 为 false，则该文件被覆盖。如果该文件存在，并且 append 为 true，则数据被追加到该文件中。否则，将创建新文件。</param>
+        public static void CreateFile(string fileName, string text, bool append)
         {
             if (!File.Exists(fileName))
             {
@@ -94,12 +110,13 @@ namespace hwj.CommonLibrary.Object
             }
             if (!string.IsNullOrEmpty(text))
             {
-                using (StreamWriter sw = new StreamWriter(fileName, false, System.Text.Encoding.UTF8))
+                using (StreamWriter sw = new StreamWriter(fileName, append, System.Text.Encoding.UTF8))
                 {
                     sw.Write(text);
                 }
             }
         }
+
         /// <summary>
         /// 复制文件夹
         /// </summary>
@@ -139,8 +156,8 @@ namespace hwj.CommonLibrary.Object
                 }
             }
             return true;
-
         }
+
         /// <summary>
         /// 删除文件夹
         /// </summary>
@@ -151,6 +168,7 @@ namespace hwj.CommonLibrary.Object
             DirectoryInfo path = new DirectoryInfo(folder);
             return DeleteFolder(path);
         }
+
         /// <summary>
         /// 删除文件夹
         /// </summary>
@@ -175,6 +193,7 @@ namespace hwj.CommonLibrary.Object
         }
 
         #region Private Function
+
         private static string GetCurrentFolder(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -194,14 +213,18 @@ namespace hwj.CommonLibrary.Object
                 return arr[arr.Length - 1];
             }
         }
+
         private static string FormatFolder(string path)
         {
             return path.EndsWith("\\") ? path.Substring(0, path.Length - 1) : path;
         }
-        #endregion
-        #endregion
+
+        #endregion Private Function
+
+        #endregion 文件操作
 
         #region 文件转换
+
         public static DataSet TxtToDataSet(string fileName, bool changeRegistry)
         {
             try
@@ -228,6 +251,7 @@ namespace hwj.CommonLibrary.Object
                 throw ex;
             }
         }
+
         public static DataSet ExcelToDataSet(string path, string selectCommand, bool hasHeader)
         {
             try
@@ -282,6 +306,7 @@ namespace hwj.CommonLibrary.Object
             Stream stream = new MemoryStream(bytes);
             return stream;
         }
-        #endregion
+
+        #endregion 文件转换
     }
 }
