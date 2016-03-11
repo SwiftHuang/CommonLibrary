@@ -470,7 +470,11 @@ namespace hwj.CommonLibrary.Object
                 return string.Empty;
             }
         }
-
+        /// <summary>
+        /// 半角转全角
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static String ToSBC(String input)
         {
             // 半角转全角：
@@ -499,6 +503,11 @@ namespace hwj.CommonLibrary.Object
         // /全角空格为12288，半角空格为32
         // /其他字符半角(33-126)与全角(65281-65374)的对应关系是：均相差65248
         // /
+        /// <summary>
+        /// 全角转半角
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static String ToDBC(String input)
         {
             char[] c = input.ToCharArray();
