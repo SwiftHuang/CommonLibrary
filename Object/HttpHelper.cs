@@ -30,7 +30,7 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns>
         public static string PostAction(string url, string param, Encoding encoding)
         {
-            return PostAction(url, param, encoding);
+            return PostAction(url, param, encoding, defaultTimeOut);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace hwj.CommonLibrary.Object
         /// <param name="url">提交Url</param>
         /// <param name="param">提交参数</param>
         /// <param name="encoding">字符编码</param>
-        /// <param name="timeout">超时时间</param>
+        /// <param name="timeout">超时时间(单位:毫秒)</param>
         /// <returns></returns>
         public static string PostAction(string url, string param, Encoding encoding, int timeout)
         {
