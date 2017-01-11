@@ -22,7 +22,7 @@ namespace hwj.CommonLibrary.Object
         #region Public Function
 
         /// <summary>
-        /// 使用Post的方式提交数据（Timeout默认30秒）
+        /// 使用Post的方式提交数据（Timeout默认30秒;ContentType为application/x-www-form-urlencoded）
         /// </summary>
         /// <param name="url">提交Url</param>
         /// <param name="param">提交参数</param>
@@ -34,7 +34,7 @@ namespace hwj.CommonLibrary.Object
         }
 
         /// <summary>
-        /// 使用Post的方式提交数据（Timeout默认30秒）
+        /// 使用Post的方式提交数据（Timeout默认30秒;ContentType为application/x-www-form-urlencoded）
         /// </summary>
         /// <param name="url">提交Url</param>
         /// <param name="param">提交参数</param>
@@ -43,10 +43,37 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns>
         public static string PostAction(string url, string param, Encoding encoding, int timeout)
         {
+            return PostAction(url, postContentType, param, encoding, timeout);
+        }
+
+        /// <summary>
+        ///使用Post的方式提交Json数据（Timeout默认30秒;ContentType为application/json）
+        /// </summary>
+        /// <param name="url">提交Url</param>
+        /// <param name="param">提交参数</param>
+        /// <param name="encoding">字符编码</param>
+        /// <param name="timeout">超时时间(单位:毫秒)</param>
+        /// <returns></returns>
+        public static string PostJsonAction(string url, string param, Encoding encoding, int timeout)
+        {
+            return PostAction(url, "application/json", param, encoding, timeout);
+        }
+
+        /// <summary>
+        /// 使用Post的方式提交数据（Timeout默认30秒）
+        /// </summary>
+        /// <param name="url">提交Url</param>
+        /// <param name="contentType">Http标头</param>
+        /// <param name="param">提交参数</param>
+        /// <param name="encoding">字符编码</param>
+        /// <param name="timeout">超时时间(单位:毫秒)</param>
+        /// <returns></returns>
+        public static string PostAction(string url, string contentType, string param, Encoding encoding, int timeout)
+        {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Timeout = timeout > defaultTimeOut ? timeout : defaultTimeOut;
             request.Method = "POST";
-            request.ContentType = postContentType;
+            request.ContentType = contentType;
 
             Stream dataStream = request.GetRequestStream();
             byte[] bytes = DataToBytes(param, encoding);
