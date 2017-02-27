@@ -82,7 +82,7 @@ namespace hwj.CommonLibrary.Object.Base
             LogWarn = log4net.LogManager.GetLogger("logwarn");
 
             EmailOpened = false;
-            EmailTo = "vinsonhwj@gmail.com";
+            EmailTo = "vinsonhwj@qq.com";
             EmailBodyFormat = "{0}\r\n{1}";
         }
 

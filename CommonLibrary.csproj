@@ -86,6 +86,8 @@
     <Compile Include="Object\EmailHelper.cs" />
     <Compile Include="Object\Email\SmtpInfo.cs" />
     <Compile Include="Object\EntityHelper.cs" />
+    <Compile Include="Object\Extensions\ExDecimalHelper.cs" />
+    <Compile Include="Object\Extensions\ExDoubleHelper.cs" />
     <Compile Include="Object\Extensions\ExStringHelper.cs" />
     <Compile Include="Object\HttpHelper.cs" />
     <Compile Include="Object\LogHelper.cs">

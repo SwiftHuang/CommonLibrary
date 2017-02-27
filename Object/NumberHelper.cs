@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace hwj.CommonLibrary.Object
@@ -11,6 +10,7 @@ namespace hwj.CommonLibrary.Object
         {
             return ToString(value, null);
         }
+
         public static string ToString(object value, string format)
         {
             if (!string.IsNullOrEmpty(format))
@@ -30,6 +30,7 @@ namespace hwj.CommonLibrary.Object
                 return false;
             return Regex.IsMatch(value, @"^[+-]?\d*[.]?\d*$");
         }
+
         /// <summary>
         /// 是否整数(建议使用TryParse)
         /// </summary>
@@ -41,12 +42,14 @@ namespace hwj.CommonLibrary.Object
                 return false;
             return Regex.IsMatch(value, @"^[+-]?\d*$");
         }
+
         public static bool IsUnsign(string value)
         {
             if (string.IsNullOrEmpty(value))
                 return false;
             return Regex.IsMatch(value, @"^\d*[.]?\d*$");
         }
+
         /// <summary>
         /// 四舍五入(向上取整 2.5->3/2.4->2)
         /// </summary>
@@ -56,6 +59,7 @@ namespace hwj.CommonLibrary.Object
         {
             return (Math.Floor(valueToRound + 0.5));
         }
+
         /// <summary>
         /// 四舍五入(向上取整 2.5->3/2.4->2)
         /// </summary>
@@ -65,6 +69,7 @@ namespace hwj.CommonLibrary.Object
         {
             return (Math.Floor(valueToRound + decimal.Parse("0.5")));
         }
+
         /// <summary>
         /// 向下取整(2.5->2/2.4->2)
         /// </summary>
@@ -78,6 +83,7 @@ namespace hwj.CommonLibrary.Object
             else
                 return floorValue;
         }
+
         /// <summary>
         /// 向下取整(2.5->2/2.4->2)
         /// </summary>
@@ -91,6 +97,7 @@ namespace hwj.CommonLibrary.Object
             else
                 return floorValue;
         }
+
         /// <summary>
         /// 取整数(不进行四舍五入,只取整数)
         /// </summary>
@@ -100,6 +107,7 @@ namespace hwj.CommonLibrary.Object
         {
             return Math.Truncate(value);
         }
+
         /// <summary>
         /// 取整数(不进行四舍五入,只取整数)
         /// </summary>
@@ -109,6 +117,7 @@ namespace hwj.CommonLibrary.Object
         {
             return Math.Truncate(value);
         }
+
         /// <summary>
         /// 是否偶数值
         /// </summary>
@@ -118,6 +127,7 @@ namespace hwj.CommonLibrary.Object
         {
             return ((value % 2) == 0);
         }
+
         /// <summary>
         /// 是否奇数值
         /// </summary>
@@ -129,6 +139,7 @@ namespace hwj.CommonLibrary.Object
         }
 
         private static Function.DecimalToChinese dtc = new hwj.CommonLibrary.Function.DecimalToChinese();
+
         /// <summary>
         /// 将阿拉伯数字转为大写中文数字
         /// </summary>
@@ -138,6 +149,7 @@ namespace hwj.CommonLibrary.Object
         {
             return dtc.ConvertToChinese(Math.Round(value, 2), false);
         }
+
         /// <summary>
         /// 将阿拉伯数字转为英文
         /// </summary>
@@ -147,6 +159,7 @@ namespace hwj.CommonLibrary.Object
         {
             return hwj.CommonLibrary.Function.DecimalToEnglish.HKMoneytoEng(value);
         }
+
         /// <summary>
         /// 计算断号
         /// </summary>
@@ -158,6 +171,7 @@ namespace hwj.CommonLibrary.Object
         {
             return GetBreakSeqNum(CurrentSeqList, MinSeqNum, MaxSeqNum, 0);
         }
+
         /// <summary>
         /// 计算断号
         /// </summary>
