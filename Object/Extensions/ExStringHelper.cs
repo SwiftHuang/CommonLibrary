@@ -9,15 +9,28 @@ namespace hwj.CommonLibrary.Object.Extensions
         public static string ToUpperTrim(this string str)
         {
             if (str == null)
+            {
                 return str;
+            }
             return str.ToUpper().Trim();
         }
 
         public static string ToLowerTrim(this string str)
         {
             if (str == null)
+            {
                 return str;
+            }
             return str.ToLower().Trim();
+        }
+
+        public static string TryTrim(this string str)
+        {
+            if (str == null)
+            {
+                return str;
+            }
+            return str.Trim();
         }
     }
 }
