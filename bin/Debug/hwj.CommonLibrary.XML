@@ -337,6 +337,25 @@
             <param name="genFunReturnType">生成代码的方法的返回类型</param>
             <returns></returns>
         </member>
+        <member name="M:hwj.CommonLibrary.Object.ExcelHelper.GetExcelSheetNames(System.String,System.Boolean,System.Int32)">
+            <summary>
+            获取Excel中的Sheet.
+            </summary>
+            <param name="excelFile">文件完整路径</param>
+            <param name="hdrIsNo">HDR=Yes，这代表第一行是标题，不做为数据使用 ，如果用HDR=NO，则表示第一行不是标题，做为数据来使用。系统默认的是YES</param>
+            <param name="IMEX">0 ---输出模式;1---输入模式;2----链接模式(完全更新能力)</param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.ExcelHelper.ExcelToDataTable(System.String,System.String,System.Boolean,System.Int32)">
+            <summary>
+            获取Excel中指定Sheet的内容
+            </summary>
+            <param name="excelFile">文件完整路径</param>
+            <param name="sheetName">指定获取的Sheet名</param>
+            <param name="hdrIsNo">HDR=Yes，这代表第一行是标题，不做为数据使用 ，如果用HDR=NO，则表示第一行不是标题，做为数据来使用。系统默认的是YES</param>
+            <param name="IMEX">0 ---输出模式;1---输入模式;2----链接模式(完全更新能力)</param>
+            <returns></returns>
+        </member>
         <member name="M:hwj.CommonLibrary.Object.Extensions.ExDecimalHelper.Median(System.Collections.Generic.IList{System.Decimal})">
             <summary>
             计算中位数
@@ -363,6 +382,27 @@
             计算中位数
             </summary>
             <param name="array"></param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.Extensions.ExStringHelper.ToUpperTrim(System.String)">
+            <summary>
+            从当前 System.String 对象的开始和末尾移除所有空白字符并转大写，如Null则返回Null。
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.Extensions.ExStringHelper.ToLowerTrim(System.String)">
+            <summary>
+            从当前 System.String 对象的开始和末尾移除所有空白字符并转小写，如Null则返回Null。
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.Extensions.ExStringHelper.TryTrim(System.String)">
+            <summary>
+            从当前 System.String 对象的开始和末尾移除所有空白字符，如Null则返回Null。
+            </summary>
+            <param name="str"></param>
             <returns></returns>
         </member>
         <member name="T:hwj.CommonLibrary.Object.HttpHelper">
