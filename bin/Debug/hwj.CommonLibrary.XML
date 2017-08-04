@@ -391,6 +391,13 @@
             <param name="str"></param>
             <returns></returns>
         </member>
+        <member name="M:hwj.CommonLibrary.Object.Extensions.ExStringHelper.ToUpperTrimEmpty(System.String)">
+            <summary>
+            从当前 System.String 对象的开始和末尾移除所有空白字符并转大写，如Null则返回string.Empty。
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
         <member name="M:hwj.CommonLibrary.Object.Extensions.ExStringHelper.ToLowerTrim(System.String)">
             <summary>
             从当前 System.String 对象的开始和末尾移除所有空白字符并转小写，如Null则返回Null。
@@ -398,9 +405,23 @@
             <param name="str"></param>
             <returns></returns>
         </member>
+        <member name="M:hwj.CommonLibrary.Object.Extensions.ExStringHelper.ToLowerTrimEmpty(System.String)">
+            <summary>
+            从当前 System.String 对象的开始和末尾移除所有空白字符并转小写，如Null则返回string.Empty。
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
         <member name="M:hwj.CommonLibrary.Object.Extensions.ExStringHelper.TryTrim(System.String)">
             <summary>
             从当前 System.String 对象的开始和末尾移除所有空白字符，如Null则返回Null。
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.Extensions.ExStringHelper.TryTrimEmpty(System.String)">
+            <summary>
+            从当前 System.String 对象的开始和末尾移除所有空白字符，如Null则返回string.Empty。
             </summary>
             <param name="str"></param>
             <returns></returns>
