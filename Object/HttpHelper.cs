@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace hwj.CommonLibrary.Object
@@ -70,6 +73,7 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns>
         public static string PostAction(string url, string contentType, string param, Encoding encoding, int timeout)
         {
+            //SetServicePointManager();
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Timeout = timeout > defaultTimeOut ? timeout : defaultTimeOut;
             request.Method = "POST";
@@ -85,19 +89,19 @@ namespace hwj.CommonLibrary.Object
             return rs;
         }
 
-        //public static string GetAction(string url, Dictionary<string, string> data)
-        //{
-        //    if (data != null && data.Count > 0)
-        //    {
-        //        url = CombineQueryUrl(url, data);
-        //    }
-        //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-        //    //request.Timeout = timeOut;
-        //    //request.ContentType = GetContentType;
-        //    request.Method = "GET";
-        //    string rs = GetResponeString(request);
-        //    return rs;
-        //}
+        public static string GetAction(string url, Dictionary<string, string> data)
+        {
+            if (data != null && data.Count > 0)
+            {
+                url = CombineQueryUrl(url, data);
+            }
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            //request.Timeout = timeOut;
+            //request.ContentType = GetContentType;
+            request.Method = "GET";
+            string rs = GetResponeString(request);
+            return rs;
+        }
 
         /// <summary>
         /// 获取IP地址
@@ -137,6 +141,16 @@ namespace hwj.CommonLibrary.Object
 
         #region Private Function
 
+        private static void SetServicePointManager()
+        {
+            ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
+            ServicePointManager.CheckCertificateRevocationList = true;
+            ServicePointManager.DefaultConnectionLimit = 100;
+            ServicePointManager.Expect100Continue = false;
+        }
+
+        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors) { return true; }
+
         private static byte[] DataToBytes(string param, Encoding encoding)
         {
             byte[] bytes = new byte[0];
@@ -155,42 +169,43 @@ namespace hwj.CommonLibrary.Object
             }
         }
 
-        //private static string CombineQueryUrl(string url, Dictionary<string, string> data)
-        //{
-        //    string query = GetFormatedData(data);
-        //    if (!url.Contains("?"))
-        //    {
-        //        url += "?" + query;
-        //    }
-        //    else
-        //    {
-        //        url += "&" + query;
-        //    }
-        //    return url;
-        //}
+        private static string CombineQueryUrl(string url, Dictionary<string, string> data)
+        {
+            string query = GetFormatedData(data);
+            if (!url.Contains("?"))
+            {
+                url += "?" + query;
+            }
+            else
+            {
+                url += "&" + query;
+            }
+            return url;
+        }
 
-        //private static string GetFormatedData(Dictionary<string, string> data)
-        //{
-        //    StringBuilder sb = new StringBuilder(200);
-        //    if (data != null && data.Count > 0)
-        //    {
-        //        foreach (var i in data)
-        //        {
-        //            sb.AppendFormat("{0}={1}&", i.Key, i.Value);
-        //        }
-        //    }
-        //    string rs = sb.ToString();
-        //    if (!string.IsNullOrEmpty(rs))
-        //    {
-        //        rs = rs.TrimEnd('&');
-        //    }
-        //    return rs;
-        //}
-        //private static byte[] DataToBytes(Dictionary<string, string> data, Encoding encoding)
-        //{
-        //    string param = GetFormatedData(data);
-        //    return DataToBytes(param, encoding);
-        //}
+        private static string GetFormatedData(Dictionary<string, string> data)
+        {
+            StringBuilder sb = new StringBuilder(200);
+            if (data != null && data.Count > 0)
+            {
+                foreach (var i in data)
+                {
+                    sb.AppendFormat("{0}={1}&", i.Key, i.Value);
+                }
+            }
+            string rs = sb.ToString();
+            if (!string.IsNullOrEmpty(rs))
+            {
+                rs = rs.TrimEnd('&');
+            }
+            return rs;
+        }
+
+        private static byte[] DataToBytes(Dictionary<string, string> data, Encoding encoding)
+        {
+            string param = GetFormatedData(data);
+            return DataToBytes(param, encoding);
+        }
 
         #endregion Private Function
     }
