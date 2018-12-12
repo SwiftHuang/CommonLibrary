@@ -46,7 +46,7 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns>
         public static string PostAction(string url, string param, Encoding encoding, int timeout)
         {
-            return PostAction(url, postContentType, param, encoding, timeout);
+            return PostAction(url, postContentType, param, null, encoding, timeout);
         }
 
         /// <summary>
@@ -57,11 +57,15 @@ namespace hwj.CommonLibrary.Object
         /// <param name="encoding">字符编码</param>
         /// <param name="timeout">超时时间(单位:毫秒)</param>
         /// <returns></returns>
-        public static string PostJsonAction(string url, string param, Encoding encoding, int timeout)
+        public static string PostJsonAction(string url, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
         {
-            return PostAction(url, "application/json", param, encoding, timeout);
+            return PostAction(url, "application/json", param, header, encoding, timeout);
         }
 
+        public static string PostJsonAction(string url, string param, Encoding encoding, int timeout)
+        {
+            return PostAction(url, "application/json", param, null, encoding, timeout);
+        }
         /// <summary>
         /// 使用Post的方式提交数据（Timeout默认30秒）
         /// </summary>
@@ -73,8 +77,29 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns>
         public static string PostAction(string url, string contentType, string param, Encoding encoding, int timeout)
         {
+            return PostAction(url, contentType, param, null, encoding, timeout);
+        }
+        /// <summary>
+        /// 使用Post的方式提交数据（Timeout默认30秒）
+        /// </summary>
+        /// <param name="url">提交Url</param>
+        /// <param name="contentType">Http标头</param>
+        /// <param name="param">Http标头 list</param>
+        /// <param name="param">Heade</param>
+        /// <param name="encoding">字符编码</param>
+        /// <param name="timeout">超时时间(单位:毫秒)</param>
+        /// <returns></returns>
+        public static string PostAction(string url, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        {
             //SetServicePointManager();
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            if (header != null)
+            {
+                foreach (var item in header)
+                {
+                    request.Headers.Add(item.Key, item.Value);
+                }
+            }
             request.Timeout = timeout > defaultTimeOut ? timeout : defaultTimeOut;
             request.Method = "POST";
             request.ContentType = contentType;
@@ -91,11 +116,26 @@ namespace hwj.CommonLibrary.Object
 
         public static string GetAction(string url, Dictionary<string, string> data)
         {
+            return GetAction(url, data, null);
+        }
+        public static string GetAction(string url, Dictionary<string, string> data, Dictionary<string, string> header)
+        {
+            //SetServicePointManager();
+
             if (data != null && data.Count > 0)
             {
                 url = CombineQueryUrl(url, data);
             }
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+            if (header != null)
+            {
+                foreach (var item in header)
+                {
+                    request.Headers.Add(item.Key, item.Value);
+                }
+            }
+
             //request.Timeout = timeOut;
             //request.ContentType = GetContentType;
             request.Method = "GET";
@@ -171,42 +211,4 @@ namespace hwj.CommonLibrary.Object
 
         private static string CombineQueryUrl(string url, Dictionary<string, string> data)
         {
-            string query = GetFormatedData(data);
-            if (!url.Contains("?"))
-            {
-                url += "?" + query;
-            }
-            else
-            {
-                url += "&" + query;
-            }
-            return url;
-        }
-
-        private static string GetFormatedData(Dictionary<string, string> data)
-        {
-            StringBuilder sb = new StringBuilder(200);
-            if (data != null && data.Count > 0)
-            {
-                foreach (var i in data)
-                {
-                    sb.AppendFormat("{0}={1}&", i.Key, i.Value);
-                }
-            }
-            string rs = sb.ToString();
-            if (!string.IsNullOrEmpty(rs))
-            {
-                rs = rs.TrimEnd('&');
-            }
-            return rs;
-        }
-
-        private static byte[] DataToBytes(Dictionary<string, string> data, Encoding encoding)
-        {
-            string param = GetFormatedData(data);
-            return DataToBytes(param, encoding);
-        }
-
-        #endregion Private Function
-    }
-}
+            string query
