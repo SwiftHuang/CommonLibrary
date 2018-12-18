@@ -61,6 +61,7 @@ namespace hwj.CommonLibrary.Object
         {
             return PostAction(url, "application/json", param, header, encoding, timeout);
         }
+     
 
         public static string PostJsonAction(string url, string param, Encoding encoding, int timeout)
         {
@@ -79,6 +80,8 @@ namespace hwj.CommonLibrary.Object
         {
             return PostAction(url, contentType, param, null, encoding, timeout);
         }
+
+
         /// <summary>
         /// 使用Post的方式提交数据（Timeout默认30秒）
         /// </summary>
@@ -92,6 +95,76 @@ namespace hwj.CommonLibrary.Object
         public static string PostAction(string url, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
         {
             //SetServicePointManager();
+            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            //if (header != null)
+            //{
+            //    foreach (var item in header)
+            //    {
+            //        request.Headers.Add(item.Key, item.Value);
+            //    }
+            //}
+            //request.Timeout = timeout > defaultTimeOut ? timeout : defaultTimeOut;
+            //request.Method = "POST";
+            //request.ContentType = contentType;
+
+            //Stream dataStream = request.GetRequestStream();
+            //byte[] bytes = DataToBytes(param, encoding);
+
+            //dataStream.Write(bytes, 0, bytes.Length);
+            //dataStream.Close();
+
+            //string rs = GetResponeString(request);
+            return Action(url,"POST",contentType,param,header,encoding,timeout);
+        }
+
+        /// <summary>
+        ///使用Patch的方式提交Json数据（Timeout默认30秒;ContentType为application/json）
+        /// </summary>
+        /// <param name="url">提交Url</param>
+        /// <param name="param">提交参数</param>
+        /// <param name="encoding">字符编码</param>
+        /// <param name="timeout">超时时间(单位:毫秒)</param>
+        /// <returns></returns>
+        public static string PatchJsonAction(string url, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        {
+            return PatchAction(url, "application/json", param, header, encoding, timeout);
+        }
+
+
+        public static string PatchJsonAction(string url, string param, Encoding encoding, int timeout)
+        {
+            return PatchAction(url, "application/json", param, null, encoding, timeout);
+        }
+
+        /// <summary>
+        /// 使用PATCH的方式提交数据（Timeout默认30秒）
+        /// </summary>
+        /// <param name="url">提交Url</param>
+        /// <param name="contentType">Http标头</param>
+        /// <param name="param">Http标头 list</param>
+        /// <param name="param">Heade</param>
+        /// <param name="encoding">字符编码</param>
+        /// <param name="timeout">超时时间(单位:毫秒)</param>
+        /// <returns></returns>
+        public static string PatchAction(string url, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        {
+            
+            return Action(url, "PATCH", contentType, param, header, encoding, timeout);
+        }
+        /// <summary>
+        /// 使用不同的method方式提交数据（Timeout默认30秒）
+        /// </summary>
+        /// <param name="url">提交Url</param>
+        /// <param name="method">"POST PUT PATCH"</param>
+        /// <param name="contentType">Http标头</param>
+        /// <param name="param">Http标头 list</param>
+        /// <param name="param">Heade</param>
+        /// <param name="encoding">字符编码</param>
+        /// <param name="timeout">超时时间(单位:毫秒)</param>
+        /// <returns></returns>
+        public static string Action(string url, string method, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        {
+            SetServicePointManager();
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             if (header != null)
             {
@@ -101,7 +174,7 @@ namespace hwj.CommonLibrary.Object
                 }
             }
             request.Timeout = timeout > defaultTimeOut ? timeout : defaultTimeOut;
-            request.Method = "POST";
+            request.Method = method;
             request.ContentType = contentType;
 
             Stream dataStream = request.GetRequestStream();
@@ -113,6 +186,8 @@ namespace hwj.CommonLibrary.Object
             string rs = GetResponeString(request);
             return rs;
         }
+
+
 
         public static string GetAction(string url, Dictionary<string, string> data)
         {
@@ -177,17 +252,17 @@ namespace hwj.CommonLibrary.Object
             return IP4Address;
         }
 
-        #endregion Public Function
-
-        #region Private Function
-
-        private static void SetServicePointManager()
+        // For Https
+        public static void SetServicePointManager()
         {
             ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
             ServicePointManager.CheckCertificateRevocationList = true;
             ServicePointManager.DefaultConnectionLimit = 100;
             ServicePointManager.Expect100Continue = false;
         }
+        #endregion Public Function
+
+        #region Private Function        
 
         private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors) { return true; }
 
@@ -200,6 +275,7 @@ namespace hwj.CommonLibrary.Object
 
         private static string GetResponeString(HttpWebRequest rq)
         {
+
             HttpWebResponse httpWebResponse = (HttpWebResponse)rq.GetResponse();
             using (Stream responseStream = httpWebResponse.GetResponseStream())
             using (StreamReader sr = new StreamReader(responseStream))
@@ -211,4 +287,42 @@ namespace hwj.CommonLibrary.Object
 
         private static string CombineQueryUrl(string url, Dictionary<string, string> data)
         {
-            string query
+            string query = GetFormatedData(data);
+            if (!url.Contains("?"))
+            {
+                url += "?" + query;
+            }
+            else
+            {
+                url += "&" + query;
+            }
+            return url;
+        }
+
+        private static string GetFormatedData(Dictionary<string, string> data)
+        {
+            StringBuilder sb = new StringBuilder(200);
+            if (data != null && data.Count > 0)
+            {
+                foreach (var i in data)
+                {
+                    sb.AppendFormat("{0}={1}&", i.Key, i.Value);
+                }
+            }
+            string rs = sb.ToString();
+            if (!string.IsNullOrEmpty(rs))
+            {
+                rs = rs.TrimEnd('&');
+            }
+            return rs;
+        }
+
+        private static byte[] DataToBytes(Dictionary<string, string> data, Encoding encoding)
+        {
+            string param = GetFormatedData(data);
+            return DataToBytes(param, encoding);
+        }
+
+        #endregion Private Function
+    }
+}
