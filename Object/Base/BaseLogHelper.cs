@@ -344,6 +344,10 @@ namespace hwj.CommonLibrary.Object.Base
 
         private string FormatException(Exception ex)
         {
+            if (ex == null)
+            {
+                return string.Empty;
+            }
             StringBuilder sb = new StringBuilder();
 
             if (ex.Data != null && ex.Data.Count > 0)

@@ -61,7 +61,10 @@ namespace hwj.CommonLibrary.Object
         {
             return PostAction(url, "application/json", param, header, encoding, timeout);
         }
-     
+        //public static string PostJsonAction(string url, string param, Dictionary<string, string> header, Encoding encoding, int timeout, out HttpStatusCode statusCode)
+        //{
+        //    return PostAction(url, "application/json", param, header, encoding, timeout, out statusCode);
+        //}
 
         public static string PostJsonAction(string url, string param, Encoding encoding, int timeout)
         {
@@ -80,7 +83,6 @@ namespace hwj.CommonLibrary.Object
         {
             return PostAction(url, contentType, param, null, encoding, timeout);
         }
-
 
         /// <summary>
         /// 使用Post的方式提交数据（Timeout默认30秒）
@@ -114,8 +116,43 @@ namespace hwj.CommonLibrary.Object
             //dataStream.Close();
 
             //string rs = GetResponeString(request);
-            return Action(url,"POST",contentType,param,header,encoding,timeout);
+            return Action(url, "POST", contentType, param, header, encoding, timeout);
         }
+
+        ///// <summary>
+        ///// 使用Post的方式提交数据（Timeout默认30秒）
+        ///// </summary>
+        ///// <param name="url">提交Url</param>
+        ///// <param name="contentType">Http标头</param>
+        ///// <param name="param">Http标头 list</param>
+        ///// <param name="param">Heade</param>
+        ///// <param name="encoding">字符编码</param>
+        ///// <param name="timeout">超时时间(单位:毫秒)</param>
+        ///// <returns></returns>
+        //public static string PostAction(string url, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        //{
+        //    //SetServicePointManager();
+        //    //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+        //    //if (header != null)
+        //    //{
+        //    //    foreach (var item in header)
+        //    //    {
+        //    //        request.Headers.Add(item.Key, item.Value);
+        //    //    }
+        //    //}
+        //    //request.Timeout = timeout > defaultTimeOut ? timeout : defaultTimeOut;
+        //    //request.Method = "POST";
+        //    //request.ContentType = contentType;
+
+        //    //Stream dataStream = request.GetRequestStream();
+        //    //byte[] bytes = DataToBytes(param, encoding);
+
+        //    //dataStream.Write(bytes, 0, bytes.Length);
+        //    //dataStream.Close();
+
+        //    //string rs = GetResponeString(request);
+        //    return Action(url, "POST", contentType, param, header, encoding, timeout);
+        //}
 
         /// <summary>
         ///使用Patch的方式提交Json数据（Timeout默认30秒;ContentType为application/json）
@@ -148,9 +185,45 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns>
         public static string PatchAction(string url, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
         {
-            
+
             return Action(url, "PATCH", contentType, param, header, encoding, timeout);
         }
+        ///// <summary>
+        ///// 使用不同的method方式提交数据（Timeout默认30秒）
+        ///// </summary>
+        ///// <param name="url">提交Url</param>
+        ///// <param name="method">"POST PUT PATCH"</param>
+        ///// <param name="contentType">Http标头</param>
+        ///// <param name="param">Http标头 list</param>
+        ///// <param name="param">Heade</param>
+        ///// <param name="encoding">字符编码</param>
+        ///// <param name="timeout">超时时间(单位:毫秒)</param>
+        ///// <returns></returns>
+        //public static string Action(string url, string method, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        //{
+        //    SetServicePointManager((SecurityProtocolType)3072);
+        //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+        //    if (header != null)
+        //    {
+        //        foreach (var item in header)
+        //        {
+        //            request.Headers.Add(item.Key, item.Value);
+        //        }
+        //    }
+        //    request.Timeout = timeout > defaultTimeOut ? timeout : defaultTimeOut;
+        //    request.Method = method;
+        //    request.ContentType = contentType;
+
+        //    Stream dataStream = request.GetRequestStream();
+        //    byte[] bytes = DataToBytes(param, encoding);
+
+        //    dataStream.Write(bytes, 0, bytes.Length);
+        //    dataStream.Close();
+
+        //    string rs = GetResponeString(request);
+        //    return rs;
+        //}
+
         /// <summary>
         /// 使用不同的method方式提交数据（Timeout默认30秒）
         /// </summary>
@@ -164,7 +237,7 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns>
         public static string Action(string url, string method, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
         {
-            SetServicePointManager();
+            //SetServicePointManager((SecurityProtocolType)3072);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             if (header != null)
             {
@@ -186,8 +259,6 @@ namespace hwj.CommonLibrary.Object
             string rs = GetResponeString(request);
             return rs;
         }
-
-
 
         public static string GetAction(string url, Dictionary<string, string> data)
         {
@@ -217,6 +288,31 @@ namespace hwj.CommonLibrary.Object
             string rs = GetResponeString(request);
             return rs;
         }
+        //public static string GetAction(string url, Dictionary<string, string> data, Dictionary<string, string> header, out HttpStatusCode statusCode)
+        //{
+        //    //SetServicePointManager();
+
+        //    if (data != null && data.Count > 0)
+        //    {
+        //        url = CombineQueryUrl(url, data);
+        //    }
+        //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+        //    if (header != null)
+        //    {
+        //        foreach (var item in header)
+        //        {
+        //            request.Headers.Add(item.Key, item.Value);
+        //        }
+        //    }
+
+        //    //request.Timeout = timeOut;
+        //    //request.ContentType = GetContentType;
+        //    request.Method = "GET";
+
+        //    string rs = GetResponeString(request, out statusCode);
+        //    return rs;
+        //}
 
         /// <summary>
         /// 获取IP地址
@@ -253,16 +349,17 @@ namespace hwj.CommonLibrary.Object
         }
 
         // For Https
-        public static void SetServicePointManager()
+        public static void SetServicePointManager(SecurityProtocolType securityProtocolType)
         {
             ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
             ServicePointManager.CheckCertificateRevocationList = true;
             ServicePointManager.DefaultConnectionLimit = 100;
             ServicePointManager.Expect100Continue = false;
+            ServicePointManager.SecurityProtocol = securityProtocolType;
         }
         #endregion Public Function
 
-        #region Private Function        
+        #region Private Function
 
         private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors) { return true; }
 
@@ -275,8 +372,20 @@ namespace hwj.CommonLibrary.Object
 
         private static string GetResponeString(HttpWebRequest rq)
         {
-
-            HttpWebResponse httpWebResponse = (HttpWebResponse)rq.GetResponse();
+            HttpWebResponse httpWebResponse = null;
+            //try
+            //{
+                httpWebResponse = (HttpWebResponse)rq.GetResponse();
+               // statuscode = HttpStatusCode.OK;
+            //}
+            //catch (WebException wx)
+            //{
+            //    if (wx.Response == null)
+            //        throw;
+                 
+            //    httpWebResponse = (HttpWebResponse)wx.Response;
+            //    statuscode = httpWebResponse.StatusCode;
+            //}
             using (Stream responseStream = httpWebResponse.GetResponseStream())
             using (StreamReader sr = new StreamReader(responseStream))
             {
