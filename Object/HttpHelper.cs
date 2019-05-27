@@ -31,9 +31,9 @@ namespace hwj.CommonLibrary.Object
         /// <param name="param">提交参数</param>
         /// <param name="encoding">字符编码</param>
         /// <returns></returns>
-        public static string PostAction(string url, string param, Encoding encoding)
+        public static string PostAction(string url, string param, Encoding encoding, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
-            return PostAction(url, param, encoding, defaultTimeOut);
+            return PostAction(url, param, encoding, defaultTimeOut, decoMethods);
         }
 
         /// <summary>
@@ -44,9 +44,9 @@ namespace hwj.CommonLibrary.Object
         /// <param name="encoding">字符编码</param>
         /// <param name="timeout">超时时间(单位:毫秒)</param>
         /// <returns></returns>
-        public static string PostAction(string url, string param, Encoding encoding, int timeout)
+        public static string PostAction(string url, string param, Encoding encoding, int timeout, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
-            return PostAction(url, postContentType, param, null, encoding, timeout);
+            return PostAction(url, postContentType, param, null, encoding, timeout, decoMethods);
         }
 
         /// <summary>
@@ -57,18 +57,18 @@ namespace hwj.CommonLibrary.Object
         /// <param name="encoding">字符编码</param>
         /// <param name="timeout">超时时间(单位:毫秒)</param>
         /// <returns></returns>
-        public static string PostJsonAction(string url, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        public static string PostJsonAction(string url, string param, Dictionary<string, string> header, Encoding encoding, int timeout, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
-            return PostAction(url, "application/json", param, header, encoding, timeout);
+            return PostAction(url, "application/json", param, header, encoding, timeout, decoMethods);
         }
         //public static string PostJsonAction(string url, string param, Dictionary<string, string> header, Encoding encoding, int timeout, out HttpStatusCode statusCode)
         //{
         //    return PostAction(url, "application/json", param, header, encoding, timeout, out statusCode);
         //}
 
-        public static string PostJsonAction(string url, string param, Encoding encoding, int timeout)
+        public static string PostJsonAction(string url, string param, Encoding encoding, int timeout, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
-            return PostAction(url, "application/json", param, null, encoding, timeout);
+            return PostAction(url, "application/json", param, null, encoding, timeout, decoMethods);
         }
         /// <summary>
         /// 使用Post的方式提交数据（Timeout默认30秒）
@@ -79,9 +79,9 @@ namespace hwj.CommonLibrary.Object
         /// <param name="encoding">字符编码</param>
         /// <param name="timeout">超时时间(单位:毫秒)</param>
         /// <returns></returns>
-        public static string PostAction(string url, string contentType, string param, Encoding encoding, int timeout)
+        public static string PostAction(string url, string contentType, string param, Encoding encoding, int timeout, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
-            return PostAction(url, contentType, param, null, encoding, timeout);
+            return PostAction(url, contentType, param, null, encoding, timeout, decoMethods);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace hwj.CommonLibrary.Object
         /// <param name="encoding">字符编码</param>
         /// <param name="timeout">超时时间(单位:毫秒)</param>
         /// <returns></returns>
-        public static string PostAction(string url, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        public static string PostAction(string url, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
             //SetServicePointManager();
             //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -116,7 +116,7 @@ namespace hwj.CommonLibrary.Object
             //dataStream.Close();
 
             //string rs = GetResponeString(request);
-            return Action(url, "POST", contentType, param, header, encoding, timeout);
+            return Action(url, "POST", contentType, param, header, encoding, timeout, decoMethods);
         }
 
         ///// <summary>
@@ -162,15 +162,15 @@ namespace hwj.CommonLibrary.Object
         /// <param name="encoding">字符编码</param>
         /// <param name="timeout">超时时间(单位:毫秒)</param>
         /// <returns></returns>
-        public static string PatchJsonAction(string url, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        public static string PatchJsonAction(string url, string param, Dictionary<string, string> header, Encoding encoding, int timeout, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
-            return PatchAction(url, "application/json", param, header, encoding, timeout);
+            return PatchAction(url, "application/json", param, header, encoding, timeout, decoMethods);
         }
 
 
-        public static string PatchJsonAction(string url, string param, Encoding encoding, int timeout)
+        public static string PatchJsonAction(string url, string param, Encoding encoding, int timeout, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
-            return PatchAction(url, "application/json", param, null, encoding, timeout);
+            return PatchAction(url, "application/json", param, null, encoding, timeout, decoMethods);
         }
 
         /// <summary>
@@ -183,10 +183,10 @@ namespace hwj.CommonLibrary.Object
         /// <param name="encoding">字符编码</param>
         /// <param name="timeout">超时时间(单位:毫秒)</param>
         /// <returns></returns>
-        public static string PatchAction(string url, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        public static string PatchAction(string url, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
 
-            return Action(url, "PATCH", contentType, param, header, encoding, timeout);
+            return Action(url, "PATCH", contentType, param, header, encoding, timeout, decoMethods);
         }
         ///// <summary>
         ///// 使用不同的method方式提交数据（Timeout默认30秒）
@@ -235,7 +235,7 @@ namespace hwj.CommonLibrary.Object
         /// <param name="encoding">字符编码</param>
         /// <param name="timeout">超时时间(单位:毫秒)</param>
         /// <returns></returns>
-        public static string Action(string url, string method, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout)
+        public static string Action(string url, string method, string contentType, string param, Dictionary<string, string> header, Encoding encoding, int timeout, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
             //SetServicePointManager((SecurityProtocolType)3072);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -250,6 +250,8 @@ namespace hwj.CommonLibrary.Object
             request.Method = method;
             request.ContentType = contentType;
 
+            request.AutomaticDecompression = decoMethods;
+
             Stream dataStream = request.GetRequestStream();
             byte[] bytes = DataToBytes(param, encoding);
 
@@ -260,11 +262,11 @@ namespace hwj.CommonLibrary.Object
             return rs;
         }
 
-        public static string GetAction(string url, Dictionary<string, string> data)
+        public static string GetAction(string url, Dictionary<string, string> data, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
-            return GetAction(url, data, null);
+            return GetAction(url, data, null, decoMethods);
         }
-        public static string GetAction(string url, Dictionary<string, string> data, Dictionary<string, string> header)
+        public static string GetAction(string url, Dictionary<string, string> data, Dictionary<string, string> header, DecompressionMethods decoMethods = DecompressionMethods.None)
         {
             //SetServicePointManager();
 
@@ -285,6 +287,9 @@ namespace hwj.CommonLibrary.Object
             //request.Timeout = timeOut;
             //request.ContentType = GetContentType;
             request.Method = "GET";
+            request.AutomaticDecompression = decoMethods;
+
+
             string rs = GetResponeString(request);
             return rs;
         }
@@ -375,14 +380,14 @@ namespace hwj.CommonLibrary.Object
             HttpWebResponse httpWebResponse = null;
             //try
             //{
-                httpWebResponse = (HttpWebResponse)rq.GetResponse();
-               // statuscode = HttpStatusCode.OK;
+            httpWebResponse = (HttpWebResponse)rq.GetResponse();
+            // statuscode = HttpStatusCode.OK;
             //}
             //catch (WebException wx)
             //{
             //    if (wx.Response == null)
             //        throw;
-                 
+
             //    httpWebResponse = (HttpWebResponse)wx.Response;
             //    statuscode = httpWebResponse.StatusCode;
             //}

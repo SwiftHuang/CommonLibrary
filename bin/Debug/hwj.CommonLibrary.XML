@@ -91,9 +91,9 @@
             </summary>
             <param name="value"></param>
         </member>
-        <member name="F:hwj.CommonLibrary.Function.DecimalToChinese.EndOfInt">
+        <member name="T:hwj.CommonLibrary.Function.DecimalToChinese.NumLevel">
             <summary>
-            整(当没有 角分 时)
+            数位
             </summary>
         </member>
         <member name="F:hwj.CommonLibrary.Function.DecimalToChinese.NumLevelExponent">
@@ -109,6 +109,11 @@
         <member name="F:hwj.CommonLibrary.Function.DecimalToChinese.NumChineseCharacter">
             <summary>
             大写字符
+            </summary>
+        </member>
+        <member name="F:hwj.CommonLibrary.Function.DecimalToChinese.EndOfInt">
+            <summary>
+            整(当没有 角分 时)
             </summary>
         </member>
         <member name="M:hwj.CommonLibrary.Function.DecimalToChinese.IsValidated``1(``0)">
@@ -168,11 +173,6 @@
             </summary>
             <param name="Num"></param>
             <returns></returns>
-        </member>
-        <member name="T:hwj.CommonLibrary.Function.DecimalToChinese.NumLevel">
-            <summary>
-            数位
-            </summary>
         </member>
         <member name="M:hwj.CommonLibrary.Object.EmailHelper.Send(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean)">
             <summary>
@@ -276,13 +276,6 @@
             <param name="smtpInfos">SMTP服务器集合</param>
             <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.Object.Email.SmtpInfoList.#ctor(System.String)">
-            <summary>
-            Format:Smtp Server/User/Password|Smtp Server/User/Password|
-            eg.smtp.163.com/user@163.com/163163|smtp.163.com/user@163.com/163163
-            </summary>
-            <param name="value"></param>
-        </member>
         <member name="P:hwj.CommonLibrary.Object.Email.SmtpInfoList.LastSuccess">
             <summary>
             获取最后一次成功发送的SMTP配置。
@@ -292,6 +285,13 @@
             <summary>
             获取或设置SMTP配置发送失败后，间隔几多分钟后重新使用。
             </summary>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.Email.SmtpInfoList.#ctor(System.String)">
+            <summary>
+            Format:Smtp Server/User/Password|Smtp Server/User/Password|
+            eg.smtp.163.com/user@163.com/163163|smtp.163.com/user@163.com/163163
+            </summary>
+            <param name="value"></param>
         </member>
         <member name="M:hwj.CommonLibrary.Object.EntityHelper.EntityToString(System.Object,System.String,System.String,System.String,System.Boolean,System.Boolean)">
             <summary>
@@ -431,7 +431,7 @@
             HttpHelper
             </summary>
         </member>
-        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PostAction(System.String,System.String,System.Text.Encoding)">
+        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PostAction(System.String,System.String,System.Text.Encoding,System.Net.DecompressionMethods)">
             <summary>
             使用Post的方式提交数据（Timeout默认30秒;ContentType为application/x-www-form-urlencoded）
             </summary>
@@ -440,7 +440,7 @@
             <param name="encoding">字符编码</param>
             <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PostAction(System.String,System.String,System.Text.Encoding,System.Int32)">
+        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PostAction(System.String,System.String,System.Text.Encoding,System.Int32,System.Net.DecompressionMethods)">
             <summary>
             使用Post的方式提交数据（Timeout默认30秒;ContentType为application/x-www-form-urlencoded）
             </summary>
@@ -450,7 +450,7 @@
             <param name="timeout">超时时间(单位:毫秒)</param>
             <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PostJsonAction(System.String,System.String,System.Text.Encoding,System.Int32)">
+        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PostJsonAction(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Int32,System.Net.DecompressionMethods)">
              <summary>
             使用Post的方式提交Json数据（Timeout默认30秒;ContentType为application/json）
              </summary>
@@ -460,7 +460,7 @@
              <param name="timeout">超时时间(单位:毫秒)</param>
              <returns></returns>
         </member>
-        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PostAction(System.String,System.String,System.String,System.Text.Encoding,System.Int32)">
+        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PostAction(System.String,System.String,System.String,System.Text.Encoding,System.Int32,System.Net.DecompressionMethods)">
             <summary>
             使用Post的方式提交数据（Timeout默认30秒）
             </summary>
@@ -471,36 +471,58 @@
             <param name="timeout">超时时间(单位:毫秒)</param>
             <returns></returns>
         </member>
+        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PostAction(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Int32,System.Net.DecompressionMethods)">
+            <summary>
+            使用Post的方式提交数据（Timeout默认30秒）
+            </summary>
+            <param name="url">提交Url</param>
+            <param name="contentType">Http标头</param>
+            <param name="param">Http标头 list</param>
+            <param name="param">Heade</param>
+            <param name="encoding">字符编码</param>
+            <param name="timeout">超时时间(单位:毫秒)</param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PatchJsonAction(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Int32,System.Net.DecompressionMethods)">
+             <summary>
+            使用Patch的方式提交Json数据（Timeout默认30秒;ContentType为application/json）
+             </summary>
+             <param name="url">提交Url</param>
+             <param name="param">提交参数</param>
+             <param name="encoding">字符编码</param>
+             <param name="timeout">超时时间(单位:毫秒)</param>
+             <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.HttpHelper.PatchAction(System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Int32,System.Net.DecompressionMethods)">
+            <summary>
+            使用PATCH的方式提交数据（Timeout默认30秒）
+            </summary>
+            <param name="url">提交Url</param>
+            <param name="contentType">Http标头</param>
+            <param name="param">Http标头 list</param>
+            <param name="param">Heade</param>
+            <param name="encoding">字符编码</param>
+            <param name="timeout">超时时间(单位:毫秒)</param>
+            <returns></returns>
+        </member>
+        <member name="M:hwj.CommonLibrary.Object.HttpHelper.Action(System.String,System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Text.Encoding,System.Int32,System.Net.DecompressionMethods)">
+            <summary>
+            使用不同的method方式提交数据（Timeout默认30秒）
+            </summary>
+            <param name="url">提交Url</param>
+            <param name="method">"POST PUT PATCH"</param>
+            <param name="contentType">Http标头</param>
+            <param name="param">Http标头 list</param>
+            <param name="param">Heade</param>
+            <param name="encoding">字符编码</param>
+            <param name="timeout">超时时间(单位:毫秒)</param>
+            <returns></returns>
+        </member>
         <member name="M:hwj.CommonLibrary.Object.HttpHelper.GetIP">
             <summary>
             获取IP地址
             </summary>
             <returns></returns>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.ShowInvalidSmtpError">
-            <summary>
-            是否抛出SmtpList异常
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.EmailTo">
-            <summary>
-            多个收件人请用逗号分隔
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.EmailCC">
-            <summary>
-            多个抄送人请用逗号分隔
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.MultSmtpEnabled">
-            <summary>
-            获取或设置是否使用多个SMTP服务器的模式
-            </summary>
-        </member>
-        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.SmtpList">
-            <summary>
-            获取或设置SMTP服务器列表
-            </summary>
         </member>
         <member name="P:hwj.CommonLibrary.Object.ReturnObject.IsError">
             <summary>
@@ -608,6 +630,31 @@
         <member name="M:hwj.CommonLibrary.Object.FileHelper.FileToStream(System.String)">
             <summary>
             从文件读取 Stream
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.ShowInvalidSmtpError">
+            <summary>
+            是否抛出SmtpList异常
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.EmailTo">
+            <summary>
+            多个收件人请用逗号分隔
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.EmailCC">
+            <summary>
+            多个抄送人请用逗号分隔
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.MultSmtpEnabled">
+            <summary>
+            获取或设置是否使用多个SMTP服务器的模式
+            </summary>
+        </member>
+        <member name="P:hwj.CommonLibrary.Object.Base.LogHelper.SmtpList">
+            <summary>
+            获取或设置SMTP服务器列表
             </summary>
         </member>
         <member name="M:hwj.CommonLibrary.Object.FTPHelper.Upload(System.String,System.String,System.String,System.String)">
