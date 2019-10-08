@@ -15,9 +15,21 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns> 
         public static string Encrypt(string Text, string sKey)
         {
+            return Encrypt(Text, sKey, Encoding.Default);
+        }
+
+        /// <summary>
+        /// 加密数据
+        /// </summary>
+        /// <param name="Text"></param>
+        /// <param name="sKey"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static string Encrypt(string Text, string sKey, Encoding encoding)
+        {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
             byte[] inputByteArray;
-            inputByteArray = Encoding.Default.GetBytes(Text);
+            inputByteArray = encoding.GetBytes(Text);
             des.Key = ASCIIEncoding.ASCII.GetBytes(System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(sKey, "md5").Substring(0, 8));
             des.IV = ASCIIEncoding.ASCII.GetBytes(System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(sKey, "md5").Substring(0, 8));
             System.IO.MemoryStream ms = new System.IO.MemoryStream();
@@ -41,6 +53,18 @@ namespace hwj.CommonLibrary.Object
         /// <returns></returns> 
         public static string Decrypt(string Text, string sKey)
         {
+            return Decrypt(Text, sKey, Encoding.Default);
+        }
+
+        /// <summary>
+        /// 解密数据 
+        /// </summary>
+        /// <param name="Text"></param>
+        /// <param name="sKey"></param>
+        /// <param name="encoding"></param>
+        /// <returns></returns>
+        public static string Decrypt(string Text, string sKey, Encoding encoding)
+        {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
             int len;
             len = Text.Length / 2;
@@ -57,7 +81,7 @@ namespace hwj.CommonLibrary.Object
             CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(), CryptoStreamMode.Write);
             cs.Write(inputByteArray, 0, inputByteArray.Length);
             cs.FlushFinalBlock();
-            return Encoding.Default.GetString(ms.ToArray());
+            return encoding.GetString(ms.ToArray());
         }
         #endregion
     }
