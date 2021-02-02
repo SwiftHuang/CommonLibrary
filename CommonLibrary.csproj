@@ -64,9 +64,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net35-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Drawing" />
@@ -91,12 +88,8 @@
     <Compile Include="Object\Extensions\ExDoubleHelper.cs" />
     <Compile Include="Object\Extensions\ExStringHelper.cs" />
     <Compile Include="Object\HttpHelper.cs" />
-    <Compile Include="Object\LogHelper.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Object\ReturnObject.cs" />
     <Compile Include="Object\FileHelper.cs" />
-    <Compile Include="Object\Base\BaseLogHelper.cs" />
     <Compile Include="Object\FTPHelper.cs" />
     <Compile Include="Object\MemoryHelper.cs" />
     <Compile Include="Object\NetHelper.cs" />
@@ -119,17 +112,11 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="WebSite\JSHelper.cs" />
-    <Compile Include="WebSite\LogHelper.cs" />
     <Compile Include="WebSite\WebLogInfo.cs" />
     <Compile Include="WebSite\WebCache.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="LogHelper.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="Object\Base\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

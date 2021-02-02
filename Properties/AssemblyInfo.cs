@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CommonLibrary")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("hwj.CommonLibrary")]
+[assembly: AssemblyDescription("hwj.CommonLibrary 工具帮助类 https://github.com/SwiftHuang/CommonLibrary/tree/master")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Vinson Huang")]
-[assembly: AssemblyProduct("CommonLibrary")]
-[assembly: AssemblyCopyright("Copyright © HWJ 2009")]
+[assembly: AssemblyCompany("Vinson Huang (vinsonhwj@qq.com)")]
+[assembly: AssemblyProduct("hwj.CommonLibrary")]
+[assembly: AssemblyCopyright("Copyright © HWJ 2008 (vinsonhwj@qq.com)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,6 +32,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2.4.8")]
-[assembly: AssemblyFileVersion("1.2.4.8")]
-[assembly: log4net.Config.DOMConfigurator()] 
+[assembly: AssemblyVersion("1.2.4.9")]
+[assembly: AssemblyFileVersion("1.2.4.9")]
+//[assembly: log4net.Config.DOMConfigurator()] 
